@@ -21,7 +21,7 @@ function ConfigForm() {
     // state for checkbox
     const [overviewData, setOverviewData] = React.useState(false)
     const [hostData, setHostData] = React.useState(false)
-    const [bookRate, setBookRate] = React.useState('')
+    const [bookRate, setBookRate] = React.useState(false)
 
     const saveConfig = () => {
         console.log("Saving Configuration:", {
@@ -57,7 +57,7 @@ function ConfigForm() {
                                 placeholder='Enter location'
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
-                                className="h-7 w-50 rounded-sm border-gray-400 text-xs"
+                                className="h-7 w-50 rounded-sm border-gray-400 text-xs placeholder:text-xs"
                             />
                         </div>
                     </div>
@@ -71,7 +71,7 @@ function ConfigForm() {
                                 placeholder='# properties to scrape'
                                 value={numProperty}
                                 onChange={(e) => setNumProperty(e.target.value)}
-                                className="h-7 w-50 rounded-sm border-gray-400 text-xs"
+                                className="h-7 w-50 rounded-sm border-gray-400 text-xs placeholder:text-xs"
                             />
                         </div>
                     </div>
@@ -106,7 +106,7 @@ function ConfigForm() {
                                     onCheckedChange={setBookRate}
                                     className="border-gray-400 h-4 w-4 items-center"
                                 />
-                                <Label htmlFor="hostData" className="text-xs font-normal">Booking rate</Label>
+                                <Label htmlFor="bookRate" className="text-xs font-normal">Booking rate</Label>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@ function ConfigForm() {
             </CardContent>
 
             <CardFooter className="flex justify-end">
-                <Button onclick={saveConfig} className="flex items-center gap-2">
+                <Button onClick={saveConfig} className="flex items-center gap-2">
                     <Save className="h-4 w-4"/>
                     <p className="text-xs font-medium">Save</p>
                 </Button>
