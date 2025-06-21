@@ -17,7 +17,9 @@ function ConfigForm() {
     const [numProperty, setNumProperty] = useState('')
     const [numGuest, setNumGuest] = useState('')
 
-    
+    const [overviewData, setOverviewData] = useState(false)
+    const [hostData, setHostData] = useState(false)
+    const [bookRate, setBookRate] = useState(false)
 
 
 
