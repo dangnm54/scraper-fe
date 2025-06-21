@@ -1,15 +1,8 @@
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-
 import ConfigForm from '@/components/main/config_form'
 
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <ConfigForm />
