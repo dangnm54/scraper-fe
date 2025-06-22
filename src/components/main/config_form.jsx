@@ -40,16 +40,16 @@ function ConfigForm() {
     return (
         // <span>heheheh</span>
 
-        <Card className="w-full max-w-2xl dark:bg-zinc-900 dark:text-white">
+        <Card className="w-full size-fit p-0 py-4 dark:bg-zinc-900 dark:text-white">
             
             <CardHeader className="text-2xl font-bold">
-                <CardTitle className="text-lg font-medium">Scraper Settings</CardTitle>
+                <CardTitle className="text-lg font-medium text-center">Scraper Settings</CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-6">
                 <div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor='location' className="text-xs font-medium">Location</Label>
+                        <Label htmlFor='location' className="text-sm font-medium">Location</Label>
                         <div className="relative flex items-center gap-2">
                             <Input
                                 id='location'
@@ -63,7 +63,7 @@ function ConfigForm() {
                     </div>
 
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor='numProperty' className="text-xs font-medium">Number of properties</Label>
+                        <Label htmlFor='numProperty' className="text-sm font-medium">Number of properties</Label>
                         <div className="relative flex items-center gap-2">
                             <Input
                                 id='numProperty'
@@ -76,10 +76,10 @@ function ConfigForm() {
                         </div>
                     </div>
 
-                    <div className="space-y-4 mb-4">
-                        <Label className="text-xs font-medium">Data to collect</Label>
+                    <div className="space-y-3 mb-4">
+                        <Label className="text-sm font-medium">Data to collect</Label>
                         <div className="grid grid-rows gap-3">
-                            <div className="flex items-center flex-start gap-1">
+                            <div className="flex items-center flex-start gap-2">
                                 <Checkbox
                                     id="overviewData"
                                     checked={overviewData}
@@ -89,7 +89,7 @@ function ConfigForm() {
                                 <Label htmlFor="overviewData" className="text-xs font-normal">Overview data</Label>
                             </div>
 
-                            <div className="flex items-center flex-start gap-1">
+                            <div className="flex items-center flex-start gap-2">
                                 <Checkbox
                                     id="hostData"
                                     checked={hostData}
@@ -99,7 +99,7 @@ function ConfigForm() {
                                 <Label htmlFor="hostData" className="text-xs font-normal">Host data</Label>
                             </div>
 
-                            <div className="flex items-center flex-start gap-1">
+                            <div className="flex items-center flex-start gap-2">
                                 <Checkbox
                                     id="bookRate"
                                     checked={bookRate}
