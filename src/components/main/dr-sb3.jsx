@@ -76,7 +76,7 @@ export function AppSidebar3() {
 
     return (
         <Sidebar>
-            <SidebarHeader>
+            {/* <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg">
@@ -90,9 +90,11 @@ export function AppSidebar3() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-            </SidebarHeader>
+            </SidebarHeader> */}
+
             <SidebarContent>
-                <SidebarGroup>
+                
+                {/* <SidebarGroup>
                     <SidebarGroupLabel>Navigation</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
@@ -116,7 +118,9 @@ export function AppSidebar3() {
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
+
+
                 <SidebarGroup>
                     <SidebarGroupLabel>Scraped Files</SidebarGroupLabel>
                     <SidebarGroupContent>
@@ -150,6 +154,8 @@ export function AppSidebar3() {
                         </ScrollArea>
                     </SidebarGroupContent>
                 </SidebarGroup>
+
+                
             </SidebarContent>
             <SidebarFooter>
                 <div className="px-3 py-2">
