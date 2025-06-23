@@ -81,7 +81,7 @@ function ConfigForm() {
                                     id="overviewData"
                                     checked={overviewData}
                                     onCheckedChange={setOverviewData}
-                                    className="border-gray-400 h-4 w-4 items-center"
+                                    className="border-gray-400 size-4 items-center"
                                 />
                                 <Label htmlFor="overviewData" className="text-xs font-normal">Overview data</Label>
                             </div>
@@ -91,7 +91,7 @@ function ConfigForm() {
                                     id="hostData"
                                     checked={hostData}
                                     onCheckedChange={setHostData}
-                                    className="border-gray-400 h-4 w-4 items-center"
+                                    className="border-gray-400 size-4 items-center"
                                 />
                                 <Label htmlFor="hostData" className="text-xs font-normal">Host data</Label>
                             </div>
@@ -101,7 +101,7 @@ function ConfigForm() {
                                     id="bookRate"
                                     checked={bookRate}
                                     onCheckedChange={setBookRate}
-                                    className="border-gray-400 h-4 w-4 items-center"
+                                    className="border-gray-400 size-4 items-center"
                                 />
                                 <Label htmlFor="bookRate" className="text-xs font-normal">Booking rate</Label>
                             </div>
@@ -112,7 +112,7 @@ function ConfigForm() {
 
             <CardFooter className="flex justify-end">
                 <Button onClick={saveConfig} className="flex items-center gap-2">
-                    <Save className="h-4 w-4"/>
+                    <Save className="size-4"/>
                     <p className="text-xs font-medium">Save</p>
                 </Button>
             </CardFooter>
