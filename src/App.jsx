@@ -8,26 +8,42 @@ import SideBar from './components/main/side-bar';
 
 function App() {
 
-    // const [selectedTab, setSelectedTab] = React.useState('settings');
+    const [selectedTab, setSelectedTab] = React.useState('settings');
 
-    // const renderTab = (selectedTab) => {
-    //     switch (selectedTab) {
-    //         case 'settings':
-    //             return <ConfigForm />
-    //         case 'database':
-    //             return (<h1 className='text-white text-2xl font-medium'>{`<Results page> building...`}</h1>)
-    //         default:
-    //             return (<h1 className='text-white text-2xl font-medium'>{`<No_page_found>`}</h1>)
-    //     }
-    // }
+    const renderTab = (selectedTab) => {
+        switch (selectedTab) {
+            case 'settings':
+                return <ConfigForm />
+            case 'database':
+                return (<h1 className='text-zinc-900 text-2xl font-medium'>{`<Results page> building...`}</h1>)
+            default:
+                return (<h1 className='text-zinc-900 text-2xl font-medium'>{`<No_page_found>`}</h1>)
+        }
+    }
+
+    const renderConfigForm = () => {setSelectedTab('settings')}
+
+    const renderData = () => {setSelectedTab('database')}
 
     return (
-        <div id='main-container' className='min-h-screen w-full flex'>
-            <SidebarProvider id='dfd' defaultOpen={true}>
-                <SideBar />
+        <main id='main-container' className='flex flex-row'>
+            <SidebarProvider 
+                id='sidebar-provider' 
+                defaultOpen={true} 
+                className="max-w-fit"
+            >
+                <SideBar 
+                    renderConfigForm={renderConfigForm} 
+                    renderData={renderData} 
+                />
             </SidebarProvider>
 
-        </div>
+            <div id='main-content' className='flex-1 flex items-center justify-center'>
+                {renderTab(selectedTab)}
+            </div>
+
+
+        </main>
     )
 }
 

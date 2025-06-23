@@ -1,7 +1,7 @@
 import * as React from "react";
 // import 'C:/Users/ADMIN/Pictures/scraper-fe/src/index.css';
 
-import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart } from 'lucide-react'
+import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart, FileText } from 'lucide-react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -48,7 +48,21 @@ const sampleFiles = [
 
 
 
-function SideBar() {
+
+function SideBar(props) {
+
+   const [fileIsVisible, setFileIsVisible] = React.useState(false)
+
+   const chooseConfigForm = () => {
+      props.renderConfigForm()
+      setFileIsVisible(false)
+   }
+
+   const chooseData = () => {
+      props.renderData()
+      setFileIsVisible(true)
+   }
+
    return (
       <Sidebar id='sidebar-main' className="border-r border-gray-300">
          <SidebarHeader className="p-2 border-b bg-gray-50 border-gray-300">
@@ -76,14 +90,22 @@ function SideBar() {
                   <SidebarMenu id='sidebar-menu'>
 
                      <SidebarMenuItem id='sidebar-menu-item'>
-                        <SidebarMenuButton id='sidebar-menu-button' className='justify-start gap-2 cursor-pointer items-center'>
+                        <SidebarMenuButton 
+                           id='sidebar-menu-button' 
+                           onClick={chooseConfigForm}
+                           className='justify-start gap-2 cursor-pointer items-center'
+                        >
                            <SearchCode className="size-4" />
                            <span className='text-sm font-normal'>Run Scraper</span>
                         </SidebarMenuButton>
                      </SidebarMenuItem>
 
                      <SidebarMenuItem id='sidebar-menu-item'>
-                        <SidebarMenuButton id='sidebar-menu-button' className='justify-start gap-2 cursor-pointer items-center'>
+                        <SidebarMenuButton 
+                           id='sidebar-menu-button' 
+                           onClick={chooseData}
+                           className='justify-start gap-2 cursor-pointer items-center'
+                        >
                            <Database className="size-4" />
                            <span className='text-sm font-normal'>Data</span>
                         </SidebarMenuButton>
@@ -94,6 +116,7 @@ function SideBar() {
             </SidebarGroup>
 
             {/* File section */}
+            {fileIsVisible &&
             <SidebarGroup id='sidebar-group' className="flex flex-col flex-1 min-h-0 pb-0">
                <SidebarGroupLabel id='sidebar-group-label' className='text-xs font-medium text-gray-600'>Data files</SidebarGroupLabel>
                <SidebarGroupContent id='sidebar-group-content' className="flex-1 min-h-0">
@@ -125,7 +148,7 @@ function SideBar() {
                      </ScrollArea>
                   </div>
                </SidebarGroupContent>
-            </SidebarGroup>
+            </SidebarGroup> }
 
          </SidebarContent>
 
