@@ -9,7 +9,11 @@ import DataView from './components/main/DataPage';
 
 function App() {
 
-    const [selectedTab, setSelectedTab] = React.useState('settings');
+    const [selectedTab, setSelectedTab] = React.useState('database');
+
+    const [fileIsVisible, setFileIsVisible] = React.useState(
+        selectedTab === 'settings' ? false : true
+    )
 
     const renderTab = (selectedTab) => {
         switch (selectedTab) {
@@ -22,12 +26,18 @@ function App() {
         }
     }
 
-    const renderConfigForm = () => {setSelectedTab('settings')}
+    const renderConfigForm = () => {
+        setSelectedTab('settings')
+        setFileIsVisible(false)
+    }
 
-    const renderData = () => {setSelectedTab('database')}
+    const renderData = () => {
+        setSelectedTab('database')
+        setFileIsVisible(true)
+    }
 
     return (
-        <main id='main-container' className='flex flex-row'>
+        <main id='main-container' className='flex flex-row h-screen'>
             <SidebarProvider 
                 id='sidebar-provider' 
                 defaultOpen={true} 
@@ -36,13 +46,16 @@ function App() {
                 <SideBar 
                     renderConfigForm={renderConfigForm} 
                     renderData={renderData} 
+                    fileIsVisible={fileIsVisible}
                 />
             </SidebarProvider>
 
-            <div id='main-content' className='flex-1 flex items-center justify-center'>
+            <div 
+                id='main-content' 
+                className={`flex-1 flex ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
+            >
                 {renderTab(selectedTab)}
             </div>
-
 
         </main>
     )

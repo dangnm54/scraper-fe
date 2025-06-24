@@ -42,7 +42,7 @@ function ConfigForm() {
 
 
     return (
-
+        
         <Card className="w-full size-fit p-0 py-4 dark:bg-zinc-900 dark:text-white gap-4">
             
             <CardHeader className="pb-1 border-b-1 border-gray-300">
@@ -134,7 +134,7 @@ function ConfigForm() {
             <CardFooter className="flex items-center justify-center">
                 <Button 
                     onClick={saveConfig}
-                    className="flex gap-2 hover:bg-gray-700 w-full"
+                    className="flex gap-2 w-full cursor-pointer"
                 >
                     <CirclePlay className="size-4"/>
                     <p className="text-xs font-medium">Run</p>

@@ -48,20 +48,10 @@ const sampleFiles = [
 
 
 
-
 function SideBar(props) {
 
-   const [fileIsVisible, setFileIsVisible] = React.useState(false)
-
-   const chooseConfigForm = () => {
-      props.renderConfigForm()
-      setFileIsVisible(false)
-   }
-
-   const chooseData = () => {
-      props.renderData()
-      setFileIsVisible(true)
-   }
+   const chooseConfigForm = () => { props.renderConfigForm() }
+   const chooseData = () => { props.renderData() }
 
    return (
       <Sidebar id='sidebar-main' className="border-r border-gray-300">
@@ -116,10 +106,10 @@ function SideBar(props) {
             </SidebarGroup>
 
             {/* File section */}
-            {fileIsVisible &&
+            {props.fileIsVisible &&
             <SidebarGroup id='sidebar-group' className="flex flex-col flex-1 min-h-0 pb-0">
                <SidebarGroupLabel id='sidebar-group-label' className='text-xs font-medium text-gray-600'>Data files</SidebarGroupLabel>
-               <SidebarGroupContent id='sidebar-group-content' className="flex-1 min-h-0">
+               <SidebarGroupContent id='sidebar-group-content' className="flex-1">
                   <div className="border border-gray-200 rounded-md bg-white h-full p-2">
                      <ScrollArea id='scroll-area' className="h-full">
                         <SidebarMenu id='sidebar-menu' className="flex w-full min-w-0 flex-col gap-2">
@@ -154,7 +144,7 @@ function SideBar(props) {
 
          <SidebarFooter id='sidebar-footer'>
             <div className="px-3 py-1 text-center">
-               <span className="text-xs text-muted-foreground">Strapee @ 2023. All Rights Reserved.</span>
+               <span className="text-xs text-muted-foreground">Copyright © 2025 Strapee. All Rights Reserved.</span>
             </div>
          </SidebarFooter>
 
