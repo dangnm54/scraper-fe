@@ -1,10 +1,11 @@
-import React from 'react'
+import * as React from "react";
 import './index.css';
 
 import { SidebarProvider} from "@/components/ui/sidebar"
 
 import ConfigForm from '@/components/main/config-form'
 import SideBar from './components/main/side-bar';
+import DataView from './components/main/DataPage';
 
 function App() {
 
@@ -15,7 +16,7 @@ function App() {
             case 'settings':
                 return <ConfigForm />
             case 'database':
-                return (<h1 className='text-zinc-900 text-2xl font-medium'>{`<Results page> building...`}</h1>)
+                return <DataView />
             default:
                 return (<h1 className='text-zinc-900 text-2xl font-medium'>{`<No_page_found>`}</h1>)
         }
