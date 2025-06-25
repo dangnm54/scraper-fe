@@ -153,11 +153,13 @@ export default function DashboardPage() {
          {/* Content Area */}
          <div id="hehe" className="flex-1 !bg-blue-200 flex relative min-h-0 w-min  overflow-hidden">
             {/* Data Table */}
-            {/* <div className=" p-6 min-w-0 max-w-full overflow-x-hidden">
+            <div className=" p-6 min-w-0 max-w-full overflow-x-hidden">
                <div className="h-full bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col w-full max-w-full">
                   <div className="p-6 border-b border-gray-200 flex-shrink-0 w-full">
                      <div className="flex items-center justify-between w-full">
                         <h2 className="text-lg font-semibold text-gray-900 flex-shrink-0">CSV Preview</h2>
+
+
                         <div className="relative w-64 flex-shrink-0 ml-4">
                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
                            <input
@@ -168,6 +170,7 @@ export default function DashboardPage() {
                               onChange={(e) => setSearchTerm(e.target.value)}
                            />
                         </div>
+                        
                      </div>
                   </div>
                   <div className="flex-1 p-6 min-h-0 w-full max-w-full overflow-x-hidden">
@@ -221,12 +224,12 @@ export default function DashboardPage() {
                      </div>
                   </div>
                </div>
-            </div> */}
+            </div>
 
 
 
             {/* JSON View */}
-            <div className="w-96 p-6 pl-0 flex-shrink-0">
+            {/* <div className="w-96 p-6 pl-0 flex-shrink-0">
                <div className="h-full bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col">
                   <div className="p-6 border-b border-gray-200 flex-shrink-0">
                      <h2 className="text-lg font-semibold text-gray-900">JSON Details</h2>
@@ -246,8 +249,7 @@ export default function DashboardPage() {
                      </div>
                   </div>
                </div>
-            </div>
-
+            </div> */}
 
 
 
