@@ -61,9 +61,23 @@ const sampleData = [
         dimensions: "1.7 x 1.5 x 0.4 inches",
         warranty: "1 year",
         color: "Silver",
+        mock: "mock",
+        mock2: "mock2",
+        mock3: "mock3",
+        mock4: "mock4",
+        mock5: "mock5",
+        mock6: "mock6",
+        mock7: "mock7",
+        mock8: "mock8",
+        mock9: "mock9",
+        mock10: "mock10",
+        mock11: "mock11",
+        mock12: "mock12",
+        mock13: "mock13",
+        mock14: "mock14",
+        mock15: "mock15",
     }
 ]
-
 
 
 
@@ -75,38 +89,31 @@ function DataContent(props) {
 
 
     return (
-        <div id="content" className="flex-1 bg-yellow-100 flex flex-row">
+        <div id="content" className="flex-1 min-h-0 bg-yellow-100 flex flex-row">
 
             {/* Table section */}
-            <div id="table-content" className="flex-1 p-6 bg-blue-300">
+            <div id="table-area" className="flex-1 p-5 h-full">
                 haha
             </div>
 
 
             {/* JSON section*/}
-            <div id="content-area" className="w-96 p-6 pl-0 flex-shrink-0 bg-green-100 h-full">
-                <div id="content-box" className="h-full border-2 border-gray-200 rounded-lg flex flex-col">
+            <div id="json-area" className="w-96 p-5 pl-0 h-full bg-white">
+                <div id="json-box" className="h-full border-2 rounded-lg flex flex-col">
                     
-                    <div id="content-header" className="p-6 border-b-2 border-gray-200">
+                    <div id="json-header" className="p-5 border-b-2 h-fit flex flex-col">
                         <h2 className="text-lg font-medium text-gray-800 mb-2">JSON Detail</h2>
                         <p className="text-md text-gray-600">
                             {selectedRow ? `JSON data of selected row.` : "Click on row to view JSON data."}
                         </p>
                     </div>
 
-                    <div id="content-body" className="flex-1 p-6">
-                        <div id="content-box" className="h-full overflow-auto">
-                            <pre id="json-content" className="bg-gray-50 p-2 rounded-md border text-sm text-gray-700 whitespace-pre-wrap overflow-auto">
+                    <div id="json-body" className="flex-1 min-h-0 p-5 flex flex-col gap-2" >
+                        <pre id="json-content" className="p-2 rounded-md border text-sm bg-gray-200 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
                                 {JSON.stringify(sampleData[1], null, 2)}
-                            </pre>
-
-                        </div>
+                        </pre>
                     </div>
-
                 </div>
-
-
-
             </div>
 
 
