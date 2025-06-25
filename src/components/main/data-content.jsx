@@ -1,4 +1,6 @@
 import * as React from "react";
+import * as XLSX from "xlsx"
+
 import { useState } from "react";
 import { Search } from "lucide-react"
 
@@ -80,12 +82,15 @@ const sampleData = [
 ]
 
 
+const mockFilePath = "D:\software\other\cursor\python\airbnb_proj\file\D3_full_03_06_final.csv"
+
 
 function DataContent(props) {
 
     const [selectedFile, setSelectedFile] = useState(sampleFiles[0])
     const [selectedRow, setSelectedRow] = useState(null)
     const [searchTerm, setSearchTerm] = useState("")
+
 
 
     return (
@@ -107,6 +112,7 @@ function DataContent(props) {
                             />
                         </div>
                     </div>
+
 
                     <div id="table-body" className="flex-1 min-h-0 min-x-0 p-5 bg-green-200 overflow-x-auto overflow-y-auto">
 
@@ -145,3 +151,6 @@ function DataContent(props) {
 }
 
 export default DataContent;
+
+
+

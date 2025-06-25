@@ -86,6 +86,8 @@ export default function DashboardPage() {
    //     }
    // }, [searchParams])
 
+
+   
    // Convert data to worksheet format and create CSV preview
    const { worksheet, csvData, headers } = useMemo(() => {
       // Filter data based on search term
@@ -119,6 +121,8 @@ export default function DashboardPage() {
          headers: headers,
       }
    }, [searchTerm])
+
+
 
    const handleExportCSV = () => {
       //     // Export as CSV
@@ -170,7 +174,7 @@ export default function DashboardPage() {
                               onChange={(e) => setSearchTerm(e.target.value)}
                            />
                         </div>
-                        
+
                      </div>
                   </div>
                   <div className="flex-1 p-6 min-h-0 w-full max-w-full overflow-x-hidden">
