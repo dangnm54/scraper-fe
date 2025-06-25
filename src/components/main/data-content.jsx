@@ -96,8 +96,8 @@ function DataContent(props) {
 
                     <div id="content-body" className="flex-1 p-6">
                         <div id="content-box" className="h-full overflow-auto">
-                            <pre id="json-content" className="bg-gray-50 p-2 rounded-md border text-sm text-gray-700 whitespace-pre-wrap">
-                                {JSON.stringify(sampleData[1])}
+                            <pre id="json-content" className="bg-gray-50 p-2 rounded-md border text-sm text-gray-700 whitespace-pre-wrap overflow-auto">
+                                {JSON.stringify(sampleData[1], null, 2)}
                             </pre>
 
                         </div>
