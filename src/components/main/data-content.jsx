@@ -166,7 +166,7 @@ function DataContent(props) {
 
 
                     <div id="table-body" className="bg-blue-100 flex-1 min-h-0 min-x-0 p-5 flex overflow-hidden">
-
+ 
                         <table id="table-content" className="bg-green-100 flex-1 min-h-0 min-x-0 text-sm border-collapse verflow-auto">
 
                             <thead className="bg-gray-200 w-full sticky top-0 z-10 overflow-x-hidden">
@@ -182,9 +182,7 @@ function DataContent(props) {
                                 </tr>
                             </thead>
 
-                            <tbody>
-
-                            </tbody>
+                            <tbody></tbody>
 
                         </table>
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import './index.css';
 
-import { SidebarProvider} from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 import ConfigForm from '@/components/main/config-form'
 import SideBar from './components/main/side-bar';
@@ -37,27 +37,19 @@ function App() {
     }
 
     return (
-        <main id='main-container' className='flex flex-row h-dvh w-d'>
-            <SidebarProvider 
-                id='sidebar-provider' 
-                defaultOpen={true} 
-                className="max-w-fit"
-            >
-                <SideBar 
-                    renderConfigForm={renderConfigForm} 
-                    renderData={renderData} 
-                    fileIsVisible={fileIsVisible}
-                />
-            </SidebarProvider>
+        <SidebarProvider id='sidebar-provider' defaultOpen={true}>
 
-            <div 
-                id='main-content' 
-                className={`flex-1 flex ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
-            >
-                {renderTab(selectedTab)}
-            </div>
+            <SideBar renderConfigForm={renderConfigForm} renderData={renderData} fileIsVisible={fileIsVisible} className />
 
-        </main>
+            <main id='main-container' className='flex-1 flex flex-row overflow-auto min-w-0 bg-red-200'>
+                <div
+                    id='main-content'
+                    className={`flex-1 flex ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
+                >
+                {/* {renderTab(selectedTab)} */}
+                </div>
+            </main>
+        </SidebarProvider>
     )
 }
 
