@@ -35,14 +35,6 @@ const sampleData = [
       category: "Electronics",
       rating: 4.5,
       reviews: 1250,
-      dateScraped: "2025-04-29T14:30:00",
-      description: "High-quality wireless headphones with noise cancellation and 30-hour battery life",
-      brand: "TechBrand",
-      model: "WH-1000XM5",
-      availability: "In Stock",
-      sku: "TB-WH-1000XM5-BLK",
-      weight: "250g",
-      dimensions: "7.3 x 9.9 x 1.2 inches",
       warranty: "2 years",
       color: "Black",
    },
@@ -55,18 +47,47 @@ const sampleData = [
       category: "Wearables",
       rating: 4.3,
       reviews: 890,
-      dateScraped: "2025-04-29T14:30:00",
-      description: "Advanced fitness tracking with heart rate monitor and GPS functionality",
-      brand: "FitTech",
-      model: "FT-Watch-Pro",
-      availability: "In Stock",
-      sku: "FT-WATCH-PRO-SLV",
-      weight: "45g",
-      dimensions: "1.7 x 1.5 x 0.4 inches",
+      warranty: "1 year",
+      color: "Silver",
+   },
+   {
+      id: 3,
+      url: "https://example.com/product/3",
+      title: "Night Vision Goggles",
+      price: "$199.99",
+      inStock: true,
+      category: "Wearables",
+      rating: 4.3,
+      reviews: 343,
+      warranty: "1 year",
+      color: "Silver",
+   },
+   {
+      id: 4,
+      url: "https://example.com/product/4",
+      title: "Flying Shoes",
+      price: "$199.99",
+      inStock: true,
+      category: "Electronics",
+      rating: 4.3,
+      reviews: 623,
+      warranty: "1 year",
+      color: "Green",
+   },
+   {
+      id: 5,
+      url: "https://example.com/product/5",
+      title: "Metal Detector",
+      price: "$199.99",
+      inStock: true,
+      category: "Electronics",
+      rating: 4.3,
+      reviews: 623,
       warranty: "1 year",
       color: "Silver",
    }
 ]
+
 
 
 export default function DashboardPage() {
@@ -87,7 +108,7 @@ export default function DashboardPage() {
    // }, [searchParams])
 
 
-   
+
    // Convert data to worksheet format and create CSV preview
    const { worksheet, csvData, headers } = useMemo(() => {
       // Filter data based on search term
@@ -95,7 +116,11 @@ export default function DashboardPage() {
          (item) =>
             item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.price.toLowerCase().includes(searchTerm.toLowerCase()),
+            item.price.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.warranty.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.color.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.reviews.toString().includes(searchTerm) ||
+            item.rating.toString().includes(searchTerm)
       )
 
       // Create worksheet from filtered data
@@ -103,14 +128,22 @@ export default function DashboardPage() {
 
       // Get headers from the worksheet
       const range = XLSX.utils.decode_range(ws["!ref"] || "A1")
+      // console.log(`range: ${range}`)
+
       const headers = []
       for (let col = range.s.c; col <= range.e.c; col++) {
          const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col })
+         // console.log(`cellAddress: ${cellAddress}`)
+
          const cell = ws[cellAddress]
+         // console.log(`cell: ${cell}`)
+
          if (cell && cell.v) {
             headers.push(cell.v)
          }
       }
+
+      // console.log(`headers: ${headers}`)
 
       // Convert to CSV for preview
       const csv = XLSX.utils.sheet_to_csv(ws)

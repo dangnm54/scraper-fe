@@ -19,9 +19,9 @@ function DataView(props) {
                 </Button>
             </div>
             
-            {/* Content */}
             
-            <DataContent />
+            <DashboardPage />
+            {/* <DataContent /> */}
         
         </div>
     )

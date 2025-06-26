@@ -9,14 +9,14 @@ const sampleFiles = [
     {
         id: 1,
         name: "products_scrape_001.json",
-        date: "2025-04-29T14:30:00",
+        date: "2025-04-29",
         size: "2.4 MB",
         itemCount: 150,
     },
     {
         id: 2,
         name: "ecommerce_data_002.json",
-        date: "2025-04-28T10:15:00",
+        date: "2025-04-28",
         size: "1.8 MB",
         itemCount: 120,
     }
@@ -33,14 +33,6 @@ const sampleData = [
         category: "Electronics",
         rating: 4.5,
         reviews: 1250,
-        dateScraped: "2025-04-29T14:30:00",
-        description: "High-quality wireless headphones",
-        brand: "TechBrand",
-        model: "WH-1000XM5",
-        availability: "In Stock",
-        sku: "TB-WH-1000XM5-BLK",
-        weight: "250g",
-        dimensions: "7.3 x 9.9 x 1.2 inches",
         warranty: "2 years",
         color: "Black",
     },
@@ -53,31 +45,44 @@ const sampleData = [
         category: "Wearables",
         rating: 4.3,
         reviews: 890,
-        dateScraped: "2025-04-29T14:30:00",
-        description: "Advanced fitness tracking",
-        brand: "FitTech",
-        model: "FT-Watch-Pro",
-        availability: "In Stock",
-        sku: "FT-WATCH-PRO-SLV",
-        weight: "45g",
-        dimensions: "1.7 x 1.5 x 0.4 inches",
         warranty: "1 year",
         color: "Silver",
-        mock: "mock",
-        mock2: "mock2",
-        mock3: "mock3",
-        mock4: "mock4",
-        mock5: "mock5",
-        mock6: "mock6",
-        mock7: "mock7",
-        mock8: "mock8",
-        mock9: "mock9",
-        mock10: "mock10",
-        mock11: "mock11",
-        mock12: "mock12",
-        mock13: "mock13",
-        mock14: "mock14",
-        mock15: "mock15",
+    },
+    {
+        id: 3,
+        url: "https://example.com/product/3",
+        title: "Night Vision Goggles",
+        price: "$199.99",
+        inStock: true,
+        category: "Wearables",
+        rating: 4.3,
+        reviews: 343,
+        warranty: "1 year",
+        color: "Silver",
+    },
+    {
+        id: 4,
+        url: "https://example.com/product/4",
+        title: "Flying Shoes",
+        price: "$199.99",
+        inStock: true,
+        category: "Electronics",
+        rating: 4.3,
+        reviews: 623,
+        warranty: "1 year",
+        color: "Green",
+    },
+    {
+        id: 5,
+        url: "https://example.com/product/5",
+        title: "Metal Detector",
+        price: "$199.99",
+        inStock: true,
+        category: "Electronics",
+        rating: 4.3,
+        reviews: 623,
+        warranty: "1 year",
+        color: "Silver",
     }
 ]
 
@@ -90,6 +95,57 @@ function DataContent(props) {
     const [selectedFile, setSelectedFile] = useState(sampleFiles[0])
     const [selectedRow, setSelectedRow] = useState(null)
     const [searchTerm, setSearchTerm] = useState("")
+
+
+    // convert data to worksheet format and create CSV preview
+
+    const { csvData, headers} = useMemo( () => {
+
+        // create worksheet -> worksheet space contain all cells has content
+        const worksheet = XLSX.utils.json_to_sheet(sampleData)
+
+        // get headers from worksheet
+            // decode range so we can loop through in an ordered and controlled sequences, has number instead of A1, B4
+            // worksheet["!ref"] -> describe boundary of worksheet -> smallest range needs to loop through to meet all content-rich cell, but not sure every visited cell has content
+            // || -> 'or' operator
+            // A1 -> range A1:A1
+            // select all data available, if sheet is empty, select A1 to prevent decode_range from crashing
+            // decode_range -> return object has start (row and column) and end (row and column) | sample: { s: { c: 0, r: 0 }, e: { c: 6, r: 19 } }
+        const range = XLSX.utils.decode_range(worksheet["!ref"] || "A1")    
+        const headers = []
+
+        for (let col = range.s.c; col <= range.e.c; col++) {
+
+            // {r: 0, c: 0} is a cell address -> encode address to string "A1"
+            const cellAddress = XLSX.utils.encode_cell({r: 0, c: col})
+
+            // worksheet is a dict, key is cell address (eg: A1, B1) -> get cell object
+            // cell object contains all info of that cell (eg: value, formula, type, styleetc)
+                // .v -> value
+                // .f -> formula
+                // .t -> type
+                // .s -> style
+                // .w -> formatted text
+            const cell = worksheet[cellAddress]
+            
+            // check cell.v b/c cell object can exist without value
+            if (cell && cell.v) {
+                headers.push(cell.v)
+            }
+        }
+
+        // convert csv for preview
+
+
+
+
+
+
+
+    }, [searchTerm])
+
+
+
 
 
 
