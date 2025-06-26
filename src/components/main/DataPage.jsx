@@ -8,7 +8,7 @@ import { Download } from "lucide-react"
 function DataView(props) {
 
     return (
-        <div id="main-dataview" className="flex flex-col p-2 bg-red-300 w-full h-dvh gap-2">
+        <div id="main-dataview" className="h-dvh w-full flex flex-col p-2 bg-red-300 gap-2">
             
             {/* Header */}
             <div id="header" className="flex bg-white p-5 justify-between items-center h-fit">
@@ -20,8 +20,8 @@ function DataView(props) {
             </div>
             
             
-            <DashboardPage />
-            {/* <DataContent /> */}
+            {/* <DashboardPage /> */}
+            <DataContent />
         
         </div>
     )

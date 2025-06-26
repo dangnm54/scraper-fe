@@ -142,7 +142,6 @@ export default function DashboardPage() {
             headers.push(cell.v)
          }
       }
-
       // console.log(`headers: ${headers}`)
 
       // Convert to CSV for preview
@@ -192,10 +191,10 @@ export default function DashboardPage() {
             {/* Data Table */}
             <div className=" p-6 min-w-0 max-w-full overflow-x-hidden">
                <div className="h-full bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col w-full max-w-full">
-                  <div className="p-6 border-b border-gray-200 flex-shrink-0 w-full">
+                  
+                  {/* <div className="p-6 border-b border-gray-200 flex-shrink-0 w-full">
                      <div className="flex items-center justify-between w-full">
                         <h2 className="text-lg font-semibold text-gray-900 flex-shrink-0">CSV Preview</h2>
-
 
                         <div className="relative w-64 flex-shrink-0 ml-4">
                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
@@ -207,12 +206,14 @@ export default function DashboardPage() {
                               onChange={(e) => setSearchTerm(e.target.value)}
                            />
                         </div>
-
                      </div>
-                  </div>
+                  </div> */}
+
+
                   <div className="flex-1 p-6 min-h-0 w-full max-w-full overflow-x-hidden">
                      <div className="h-full border border-gray-200 rounded-md overflow-auto w-full">
                         <div className="min-w-max">
+                           
                            <table className="text-sm border-collapse w-full">
                               <thead className="bg-gray-50 sticky top-0 z-10">
                                  <tr>
@@ -226,6 +227,7 @@ export default function DashboardPage() {
                                     ))}
                                  </tr>
                               </thead>
+                              
                               <tbody>
                                  {csvData.map((row, rowIndex) => (
                                     <tr
@@ -252,6 +254,8 @@ export default function DashboardPage() {
                                  ))}
                               </tbody>
                            </table>
+                        
+                        
                         </div>
                         {csvData.length === 0 && (
                            <div className="flex items-center justify-center h-32 text-gray-500">

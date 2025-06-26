@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as XLSX from "xlsx"
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search } from "lucide-react"
 
 // Sample files data (same as in sidebar)
@@ -134,18 +134,13 @@ function DataContent(props) {
             }
         }
 
-        // convert csv for preview
-
-
-
-
-
+        return {
+            csvData: sampleData,
+            headers: headers
+        }
 
 
     }, [searchTerm])
-
-
-
 
 
 
@@ -170,9 +165,29 @@ function DataContent(props) {
                     </div>
 
 
-                    <div id="table-body" className="flex-1 min-h-0 min-x-0 p-5 bg-green-200 overflow-x-auto overflow-y-auto">
+                    <div id="table-body" className="bg-blue-100 flex-1 min-h-0 min-x-0 p-5 flex overflow-hidden">
 
-                        <div id="table-content" className="bg-black h-full w-full"></div>
+                        <table id="table-content" className="bg-green-100 flex-1 min-h-0 min-x-0 text-sm border-collapse verflow-auto">
+
+                            <thead className="bg-gray-200 w-full sticky top-0 z-10 overflow-x-hidden">
+                                <tr>
+                                    {headers.map( (header,index) => (
+                                        <th
+                                            key={index}
+                                            className="text-left py-3 px-4 font-medium text-gray-900 border-b border-r border-gray-900 last:border-r-0 whitespace-nowrap min-w-[150px]"
+                                        >
+                                        {header} 
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+
 
                     </div>
 

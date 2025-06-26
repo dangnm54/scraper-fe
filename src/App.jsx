@@ -37,7 +37,7 @@ function App() {
     }
 
     return (
-        <main id='main-container' className='flex flex-row h-screen'>
+        <main id='main-container' className='flex flex-row h-dvh w-d'>
             <SidebarProvider 
                 id='sidebar-provider' 
                 defaultOpen={true} 
