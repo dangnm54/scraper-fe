@@ -41,13 +41,13 @@ function App() {
 
             <SideBar renderConfigForm={renderConfigForm} renderData={renderData} fileIsVisible={fileIsVisible} className />
 
-            <main id='main-container' className='flex-1 flex flex-row overflow-auto min-w-0 bg-red-200'>
-                <div
-                    id='main-content'
-                    className={`flex-1 flex ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
-                >
-                {/* {renderTab(selectedTab)} */}
-                </div>
+            <main 
+                id='main-container'  bg-red-200
+                className="flex-1 min-w-0 flex flex-col"
+            >
+                
+                {renderTab(selectedTab)}
+                
             </main>
         </SidebarProvider>
     )

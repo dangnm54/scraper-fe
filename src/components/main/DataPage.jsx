@@ -8,10 +8,10 @@ import { Download } from "lucide-react"
 function DataView(props) {
 
     return (
-        <div id="main-dataview" className="h-dvh w-full flex flex-col p-2 bg-red-300 gap-2">
+        <div id="main-dataview" className="flex-1 p-2 bg-red-200 flex flex-col gap-2">
             
             {/* Header */}
-            <div id="header" className="flex bg-white p-5 justify-between items-center h-fit">
+            <div id="header" className="h-fit w-full bg-white p-5 flex flex-row justify-between items-center">
                 <h1 className="text-lg font-medium text-gray-900">{`File <mock_name>`}</h1>
                 <Button variant="default" className="cursor-pointer">
                     <Download className="mr-2 h-4 w-4" />
