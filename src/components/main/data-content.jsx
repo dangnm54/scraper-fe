@@ -165,11 +165,10 @@ function DataContent(props) {
                </div>
 
                <div id="table-body" className="flex-1 bg-red-100 p-5 flex flex-col">
-
-                  <div id='table-scroll-area' className='flex-1 bg-green-100 flex flex-col overflow-auto'>
+                  <div id='table-scroll-area' className='flex-1 bg-green-100 overflow-auto flex flex-col'>
                      <table id="table-content" className="flex-1 text-sm border-collapse">
 
-                        <thead className="bg-gray-200 w-full sticky top-0 z-10">
+                        <thead className="bg-gray-200 w-full sticky top-0 z-10 overflow-x-hidden">
                            <tr>
                               {headers.map((header, index) => (
                                  <th
@@ -182,12 +181,20 @@ function DataContent(props) {
                            </tr>
                         </thead>
 
-                        <tbody></tbody>
+                        <tbody>
+                           {csvData.map( (row, index) => {
+                              <tr
+                                 key={index}
+                                 className={`cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors ${selectedRow === row ? "bg-blue-50" : ""
+                                 }`}>
+
+                                 
+                              </tr>
+                           })}
+                        </tbody>
 
                      </table>
                   </div>
-
-
                </div>
 
 
@@ -207,7 +214,7 @@ function DataContent(props) {
                   </p>
                </div>
 
-               <div id="json-body" className="flex-1 min-h-0 p-5 flex flex-col gap-2" >
+               <div id="json-body" className="flex-1 min-w-0 min-h-0 p-5 flex flex-col gap-2" >
                   <pre id="json-content" className="p-2 rounded-md border text-sm bg-gray-200 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
                      {JSON.stringify(sampleData[1], null, 2)}
                   </pre>
