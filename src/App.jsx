@@ -43,7 +43,7 @@ function App() {
 
             <main 
                 id='main-container'  bg-red-200
-                className={`flex-1 min-w-0 flex flex-col ${selectedTab === 'settings' ? 'items-center ' : ''}`}
+                className={`flex-1 min-w-0 flex flex-col ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
             >
                 
                 {renderTab(selectedTab)}

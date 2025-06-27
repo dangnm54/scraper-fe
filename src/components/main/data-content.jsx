@@ -145,11 +145,11 @@ function DataContent(props) {
 
 
    return (
-      <div id="content" className="flex-1 bg-yellow-100 flex flex-row">
+      <div id="content" className="flex-1 flex flex-row">    {/* need bg */}
 
          {/* Table section */}
          <div id="table-area" className="flex-1 !min-w-0 p-5 flex flex-col">
-            <div id="table-box" className="flex-1 bg-blue-200 border-2 rounded-lg flex flex-col">
+            <div id="table-box" className="flex-1 border-2 rounded-lg flex flex-col">   {/* need bg */}
 
                <div id="table-header" className="h-fit w-full p-5 border-b-2 flex flex-row flex-start items-center">
                   <div id="search-bar" className="flex-shrink-0 h-fit w-96 flex flex-row items-center relative">
@@ -164,18 +164,20 @@ function DataContent(props) {
                   </div>
                </div>
 
-               <div id="table-body" className="flex-1 bg-red-100 p-5 flex flex-col">
-                  <div id='table-scroll-area' className='flex-1 overflow-auto flex flex-col'>
+               <div id="table-body" className="flex-1 p-5 flex flex-col">      {/* need bg */}
+                  <div id='table-scroll-area' className='flex-1 overflow-auto flex flex-col border-1 border-gray-400 rounded-xl'>
                      <table id="table-content" className="w-full h-fit text-sm border-collapse">
 
-                        <thead className="bg-gray-200 w-full sticky top-0 z-10 overflow-x-hidden">
+                        <thead className="bg-gray-100 w-full sticky top-0 z-10 overflow-x-hidden">
                            <tr>
                               {headers.map((header, index) => (
                                  <th
                                     key={index}
-                                    className="text-left py-3 px-4 font-medium text-gray-900 border-b border-r border-gray-900 last:border-r-0 whitespace-nowrap min-w-[150px]"
+                                    className="relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 border-gray-400 whitespace-nowrap min-w-[150px]"
                                  >
                                     {header}
+                                    <div className={`absolute h-2/5 w-0.5 rounded-md bg-gray-400 right-0 top-1/2 -translate-y-1/2 ${index === headers.length - 1 ? "hidden" : ""}`}>
+                                    </div>
                                  </th>
                               ))}
                            </tr>
@@ -185,14 +187,13 @@ function DataContent(props) {
                            {csvData.map( (row, rowIndex) => (
                               <tr
                                  key={rowIndex}
-                                 className={`cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors ${selectedRow === row ? "bg-blue-50" : ""
-                                 }`}
+                                 className={`cursor-pointer border-b border-gray-400 hover:bg-blue-50 transition-colors ${selectedRow === row ? "bg-cyan-50" : ""}`}
                                  onClick={() => setSelectedRow(row)}
                               >
                                  {headers.map( (header, colIndex) => (
                                     <td
                                        key={colIndex}
-                                       className="py-3 px-4 text-gray-700 border-r border-gray-100 last:border-r-0 whitespace-nowrap"
+                                       className="py-3 px-4 text-gray-700 whitespace-nowrap"
                                     >
                                        <div className="max-w-[200px] truncate">
                                           {typeof row[header] === "boolean"
@@ -226,7 +227,7 @@ function DataContent(props) {
                </div>
 
                <div id="json-body" className="flex-1 min-w-0 min-h-0 p-5 flex flex-col gap-2" >
-                  <pre id="json-content" className="p-2 rounded-md border text-sm bg-gray-200 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
+                  <pre id="json-content" className="p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
                      {JSON.stringify(sampleData[1], null, 2)}
                   </pre>
                </div>
