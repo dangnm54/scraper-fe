@@ -165,8 +165,8 @@ function DataContent(props) {
                </div>
 
                <div id="table-body" className="flex-1 bg-red-100 p-5 flex flex-col">
-                  <div id='table-scroll-area' className='flex-1 bg-green-100 overflow-auto flex flex-col'>
-                     <table id="table-content" className="flex-1 text-sm border-collapse">
+                  <div id='table-scroll-area' className='flex-1 overflow-auto flex flex-col'>
+                     <table id="table-content" className="w-full h-fit text-sm border-collapse">
 
                         <thead className="bg-gray-200 w-full sticky top-0 z-10 overflow-x-hidden">
                            <tr>
@@ -182,21 +182,32 @@ function DataContent(props) {
                         </thead>
 
                         <tbody>
-                           {csvData.map( (row, index) => {
+                           {csvData.map( (row, rowIndex) => (
                               <tr
-                                 key={index}
+                                 key={rowIndex}
                                  className={`cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors ${selectedRow === row ? "bg-blue-50" : ""
-                                 }`}>
-
-                                 
+                                 }`}
+                                 onClick={() => setSelectedRow(row)}
+                              >
+                                 {headers.map( (header, colIndex) => (
+                                    <td
+                                       key={colIndex}
+                                       className="py-3 px-4 text-gray-700 border-r border-gray-100 last:border-r-0 whitespace-nowrap"
+                                    >
+                                       <div className="max-w-[200px] truncate">
+                                          {typeof row[header] === "boolean"
+                                             ? row[header] ? "Yes" : "No"
+                                             : String(row[header] || "")}
+                                       </div>
+                                    </td>
+                                 ))}
                               </tr>
-                           })}
+                           ))}
                         </tbody>
 
                      </table>
                   </div>
                </div>
-
 
             </div>
          </div>
