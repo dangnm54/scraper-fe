@@ -1,7 +1,7 @@
 import * as React from "react";
 // import 'C:/Users/ADMIN/Pictures/scraper-fe/src/index.css';
 
-import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart, FileText } from 'lucide-react'
+import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart } from 'lucide-react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import {

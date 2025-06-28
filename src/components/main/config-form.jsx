@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label'; 
 import { Button } from '@/components/ui/button'; 
 import { Checkbox } from '@/components/ui/checkbox'; 
-import { CirclePlay } from 'lucide-react'
+import { CirclePlay, SearchCode } from 'lucide-react'
 
 
 function ConfigForm() {
@@ -42,102 +42,103 @@ function ConfigForm() {
 
 
     return (
-        <div id='form-main' className="w-fit h-fit items-center justify-center">
-        <Card className="w-full size-fit p-0 py-4 dark:bg-zinc-900 dark:text-white gap-4">
+        <div id='form-main' className="size-full items-center justify-center flex">
+        <Card id='card-main' className="w-full size-fit p-0 py-4 dark:bg-zinc-900 dark:text-white flex flex-col gap-5">
             
-            <CardHeader className="pb-1 border-b-1 border-gray-300">
-                <CardTitle className="text-base font-medium text-center text-gray-900">Scraper Settings</CardTitle>
+            <CardHeader id='card-header' className="w-full h-fit pb-4 border-b-2 border-gray-200 !flex flex-row items-center justify-center gap-4">
+                <SearchCode className="size-6" />
+                <CardTitle id='card-title' className="text-2xl font-semibold text-center text-gray-900">Scraper Settings</CardTitle>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-                <div>
-                    <div className="space-y-2 mb-5">
-                        <Label htmlFor='location' className="text-sm font-medium text-gray-700">Location</Label>
-                        <div className="relative flex items-center gap-2">
-                            <Input
-                                id='location'
-                                type='text'
-                                placeholder='Enter location'
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="h-7 w-50 rounded-sm border-gray-400 text-xs placeholder:text-xs"
-                            />
-                        </div>
+            <CardContent id='card-content' className="flex flex-col gap-2">
+                <div id='field-group' className="space-y-2 mb-5">
+                    <Label htmlFor='location' className="text-xl font-medium text-gray-800">Location</Label>
+                    <div className="relative flex items-center gap-2">
+                        <Input
+                            id='location'
+                            type='text'
+                            placeholder='eg: District 1, HCM'
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                            className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
+                </div>
 
-                    <div className="space-y-2 mb-5">
-                        <Label htmlFor='numProperty' className="text-sm font-medium text-gray-700">Number of guests</Label>
-                        <div className="relative flex items-center gap-2">
-                            <Input
-                                id='numGuest'
-                                type='number'
-                                placeholder='# guests to scrape'
-                                value={numGuest}
-                                onChange={(e) => setNumGuest(e.target.value)}
-                                className="h-7 w-50 rounded-sm border-gray-400 text-xs placeholder:text-xs"
-                            />
-                        </div>
+                <div id='field-group' className="space-y-2 mb-5">
+                    <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">Number of guests</Label>
+                    <div className="relative flex items-center gap-2">
+                        <Input
+                            id='numGuest'
+                            type='number'
+                            placeholder='eg: 2'
+                            value={numGuest}
+                            onChange={(e) => setNumGuest(e.target.value)}
+                            className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
+                </div>
 
 
-                    <div className="space-y-2 mb-5">
-                        <Label htmlFor='numProperty' className="text-sm font-medium text-gray-700">Number of properties</Label>
-                        <div className="relative flex items-center gap-2">
-                            <Input
-                                id='numProperty'
-                                type='number'
-                                placeholder='# properties to scrape'
-                                value={numProperty}
-                                onChange={(e) => setNumProperty(e.target.value)}
-                                className="h-7 w-50 rounded-sm border-gray-400 text-xs placeholder:text-xs"
-                            />
-                        </div>
+                <div id='field-groups' className="space-y-2 mb-5">
+                    <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">Number of properties</Label>
+                    <div className="relative flex items-center gap-2">
+                        <Input
+                            id='numProperty'
+                            type='number'
+                            placeholder='eg: 10'
+                            value={numProperty}
+                            onChange={(e) => setNumProperty(e.target.value)}
+                            className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
                     </div>
+                </div>
 
-                    <div className="space-y-3 mb-3">
-                        <Label className="text-sm font-medium text-gray-700">Data to collect</Label>
-                        <div className="grid grid-rows gap-3">
-                            <div className="flex items-center flex-start gap-2">
-                                <Checkbox
-                                    id="overviewData"
-                                    checked={overviewData}
-                                    onCheckedChange={setOverviewData}
-                                    className="border-gray-400 size-4 items-center"
-                                />
-                                <Label htmlFor="overviewData" className="text-xs font-normal">Overview data</Label>
-                            </div>
+                <div id='field-group' className="flex flex-col gap-0.5">
+                    <Label className="text-xl font-medium text-gray-900 mb-2">Data to collect</Label>
+                    <div className="grid grid-rows gap-3">
+                        <div id='field-item' className="flex items-center flex-start gap-2">
+                            <Checkbox
+                                id="overviewData"
+                                checked={overviewData}
+                                onCheckedChange={setOverviewData}
+                                className="border-gray-700 size-4.5"
+                            />
+                            <Label htmlFor="overviewData" className="text-md font-normal">Overview data</Label>
+                        </div>
 
-                            <div className="flex items-center flex-start gap-2">
-                                <Checkbox
-                                    id="hostData"
-                                    checked={hostData}
-                                    onCheckedChange={setHostData}
-                                    className="border-gray-400 size-4 items-center"
-                                />
-                                <Label htmlFor="hostData" className="text-xs font-normal">Host data</Label>
-                            </div>
+                        <div id='field-item' className="flex items-center flex-start gap-2">
+                            <Checkbox
+                                id="hostData"
+                                checked={hostData}
+                                onCheckedChange={setHostData}
+                                className="border-gray-700 size-4.5"
+                            />
+                            <Label htmlFor="hostData" className="text-md font-normal">Host data</Label>
+                        </div>
 
-                            <div className="flex items-center flex-start gap-2">
-                                <Checkbox
-                                    id="bookRate"
-                                    checked={bookRate}
-                                    onCheckedChange={setBookRate}
-                                    className="border-gray-400 size-4 items-center"
-                                />
-                                <Label htmlFor="bookRate" className="text-xs font-normal">Booking rate</Label>
-                            </div>
+                        <div id='field-item' className="flex items-center flex-start gap-2">
+                            <Checkbox
+                                id="bookRate"
+                                checked={bookRate}
+                                onCheckedChange={setBookRate}
+                                className="border-gray-700 size-4.5"
+                            />
+                            <Label htmlFor="bookRate" className="text-md font-normal">Booking rate</Label>
                         </div>
                     </div>
                 </div>
+
             </CardContent>
 
-            <CardFooter className="flex items-center justify-center">
+            <CardFooter id='card-footer' className="pt-4 flex items-center justify-center border-t-2 border-gray-200">
                 <Button 
+                    id='run-button'
                     onClick={saveConfig}
                     className="flex gap-2 w-full cursor-pointer"
                 >
-                    <CirclePlay className="size-4"/>
-                    <p className="text-xs font-medium">Run</p>
+                    <CirclePlay className="size-4.5"/>
+                    <p className="text-lg font-medium">Run</p>
                 </Button>
             </CardFooter>
 
