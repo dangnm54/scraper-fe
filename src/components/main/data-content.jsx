@@ -165,55 +165,56 @@ function DataContent(props) {
                </div>
 
                <div id="table-body" className="flex-1 p-5 flex flex-col">      {/* need bg */}
-                  <div id='table-scroll-area' className='flex-1 overflow-auto flex flex-col border-1 border-gray-400 rounded-xl'>
-                     <table id="table-content" className="w-full h-fit text-sm border-collapse">
+                  <div id="table-border-to-clean-scrollbar" className="size-full border-1 border-gray-400 rounded-xl shadow-md overflow-hidden flex">    {/* need bg */}
+                     <div id='table-scroll-area' className='flex-1 overflow-auto scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white flex flex-col'>
+                        <table id="table-content" className="w-full h-fit text-sm border-collapse">
 
-                        <thead className="bg-gray-100 w-full sticky top-0 z-10 overflow-x-hidden">
-                           <tr>
-                              {headers.map((header, index) => (
-                                 <th
-                                    key={index}
-                                    className="relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 border-gray-400 whitespace-nowrap min-w-[150px]"
-                                 >
-                                    {header}
-                                    <div className={`absolute h-2/5 w-0.5 rounded-md bg-gray-400 right-0 top-1/2 -translate-y-1/2 ${index === headers.length - 1 ? "hidden" : ""}`}>
-                                    </div>
-                                 </th>
-                              ))}
-                           </tr>
-                        </thead>
-
-                        <tbody>
-                           {csvData.map( (row, rowIndex) => (
-                              <tr
-                                 key={rowIndex}
-                                 className={`cursor-pointer border-b border-gray-400 hover:bg-blue-50 transition-colors ${selectedRow === row ? "bg-cyan-50" : ""}`}
-                                 onClick={() => setSelectedRow(row)}
-                              >
-                                 {headers.map( (header, colIndex) => (
-                                    <td
-                                       key={colIndex}
-                                       className="py-3 px-4 text-gray-700 whitespace-nowrap"
+                           <thead className="w-full sticky top-0 z-10 overflow-x-hidden">
+                              <tr>
+                                 {headers.map((header, index) => (
+                                    <th
+                                       key={index}
+                                       className="relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 bg-gray-100 border-gray-400 whitespace-nowrap min-w-[150px]"
                                     >
-                                       <div className="max-w-[200px] truncate">
-                                          {typeof row[header] === "boolean"
-                                             ? row[header] ? "Yes" : "No"
-                                             : String(row[header] || "")}
+                                       {header}
+                                       <div className={`absolute h-2/5 w-0.5 rounded-md bg-gray-400 right-0 top-1/2 -translate-y-1/2 ${index === headers.length - 1 ? "hidden" : ""}`}>
                                        </div>
-                                    </td>
+                                    </th>
                                  ))}
                               </tr>
-                           ))}
-                        </tbody>
+                           </thead>
 
-                     </table>
+                           <tbody>
+                              {csvData.map( (row, rowIndex) => (
+                                 <tr
+                                    key={rowIndex}
+                                    className={`cursor-pointer border-b border-gray-400 hover:bg-blue-50 transition-colors ${selectedRow === row ? "bg-cyan-50" : ""}`}
+                                    onClick={() => setSelectedRow(row)}
+                                 >
+                                    {headers.map( (header, colIndex) => (
+                                       <td
+                                          key={colIndex}
+                                          className="py-3 px-4 text-gray-700 whitespace-nowrap"
+                                       >
+                                          <div className="max-w-[200px] truncate">
+                                             {typeof row[header] === "boolean"
+                                                ? row[header] ? "Yes" : "No"
+                                                : String(row[header] || "")}
+                                          </div>
+                                       </td>
+                                    ))}
+                                 </tr>
+                              ))}
+                           </tbody>
+
+                        </table>
+                     </div>
                   </div>
+                  
                </div>
 
             </div>
          </div>
-
-
 
          {/* JSON section*/}
          <div id="json-area" className="w-96 h-full p-5 pl-0">
