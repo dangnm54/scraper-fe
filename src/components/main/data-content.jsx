@@ -26,63 +26,53 @@ const sampleFiles = [
 const sampleData = [
    {
       id: 1,
-      url: "https://example.com/product/1",
-      title: "Wireless Bluetooth Headphones",
-      price: "$79.99",
-      inStock: true,
+      title: "Bluetooth Headphones",
+      price: "$83",
+      inStock: 455,
       category: "Electronics",
-      rating: 4.5,
-      reviews: 1250,
       warranty: "2 years",
       color: "Black",
+      url: "https://example.com/product/1",
    },
    {
       id: 2,
-      url: "https://example.com/product/2",
       title: "Smart Fitness Watch",
-      price: "$199.99",
-      inStock: true,
+      price: "$16",
+      inStock: 323,
       category: "Wearables",
-      rating: 4.3,
-      reviews: 890,
       warranty: "1 year",
       color: "Silver",
+      url: "https://example.com/product/2",
    },
    {
       id: 3,
-      url: "https://example.com/product/3",
       title: "Night Vision Goggles",
-      price: "$199.99",
-      inStock: true,
+      price: "$82",
+      inStock: 123,
       category: "Wearables",
-      rating: 4.3,
-      reviews: 343,
       warranty: "1 year",
       color: "Silver",
+      url: "https://example.com/product/3",
    },
    {
       id: 4,
-      url: "https://example.com/product/4",
       title: "Flying Shoes",
-      price: "$199.99",
-      inStock: true,
+      price: "$26",
+      inStock: 454,
       category: "Electronics",
-      rating: 4.3,
-      reviews: 623,
       warranty: "1 year",
       color: "Green",
+      url: "https://example.com/product/4",
    },
    {
       id: 5,
-      url: "https://example.com/product/5",
       title: "Metal Detector",
-      price: "$199.99",
-      inStock: true,
+      price: "$64",
+      inStock: 453,
       category: "Electronics",
-      rating: 4.3,
-      reviews: 623,
       warranty: "1 year",
       color: "Silver",
+      url: "https://example.com/product/5",
    }
 ]
 
@@ -101,8 +91,18 @@ function DataContent(props) {
 
    const { csvData, headers } = useMemo(() => {
 
+      // filter data based on search term
+      const filteredData = sampleData.filter( (item) => 
+         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.price.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.inStock.toString().includes(searchTerm) ||
+         item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.warranty.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.color.toLowerCase().includes(searchTerm.toLowerCase()) 
+      )
+
       // create worksheet -> worksheet space contain all cells has content
-      const worksheet = XLSX.utils.json_to_sheet(sampleData)
+      const worksheet = XLSX.utils.json_to_sheet(filteredData)
 
       // get headers from worksheet
       // decode range so we can loop through in an ordered and controlled sequences, has number instead of A1, B4
@@ -135,7 +135,7 @@ function DataContent(props) {
       }
 
       return {
-         csvData: sampleData,
+         csvData: filteredData,
          headers: headers
       }
 
@@ -209,8 +209,7 @@ function DataContent(props) {
 
                         </table>
                      </div>
-                  </div>
-                  
+                  </div>  
                </div>
 
             </div>
@@ -221,16 +220,21 @@ function DataContent(props) {
             <div id="json-box" className="h-full border-2 rounded-lg flex flex-col">
 
                <div id="json-header" className="h-fit p-5 border-b-2 flex flex-col">
-                  <h2 className="text-lg font-medium text-gray-800 mb-2">JSON Detail</h2>
-                  <p className="text-md text-gray-600">
-                     {selectedRow ? `JSON data of selected row.` : "Click on row to view JSON data."}
-                  </p>
+                  <h2 className="text-lg font-medium text-gray-800">JSON Detail</h2>
                </div>
 
                <div id="json-body" className="flex-1 min-w-0 min-h-0 p-5 flex flex-col gap-2" >
-                  <pre id="json-content" className="p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
-                     {JSON.stringify(sampleData[1], null, 2)}
-                  </pre>
+                  { selectedRow ? 
+                     (
+                     <pre id="json-content" className="p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
+                        {JSON.stringify(selectedRow, null, 2)}
+                     </pre>
+                     ) : (
+                        <div className="flex items-center justify-center h-32 text-gray-500">
+                           Select a row to view JSON
+                        </div>
+                     )
+                  }
                </div>
             </div>
          </div>

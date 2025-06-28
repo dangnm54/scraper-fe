@@ -270,7 +270,7 @@ export default function DashboardPage() {
 
 
             {/* JSON View */}
-            {/* <div className="w-96 p-6 pl-0 flex-shrink-0">
+            <div className="w-96 p-6 pl-0 flex-shrink-0">
                <div className="h-full bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col">
                   <div className="p-6 border-b border-gray-200 flex-shrink-0">
                      <h2 className="text-lg font-semibold text-gray-900">JSON Details</h2>
@@ -290,7 +290,7 @@ export default function DashboardPage() {
                      </div>
                   </div>
                </div>
-            </div> */}
+            </div>
 
 
 
