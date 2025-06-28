@@ -3,6 +3,7 @@ import * as XLSX from "xlsx"
 
 import { useState, useMemo } from "react";
 import { Search } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 // Sample files data (same as in sidebar)
 const sampleFiles = [
@@ -30,7 +31,7 @@ const sampleData = [
       price: "$83",
       inStock: 455,
       category: "Electronics",
-      warranty: "2 years",
+      warranty: false,
       color: "Black",
       url: "https://example.com/product/1",
    },
@@ -40,7 +41,7 @@ const sampleData = [
       price: "$16",
       inStock: 323,
       category: "Wearables",
-      warranty: "1 year",
+      warranty: false,
       color: "Silver",
       url: "https://example.com/product/2",
    },
@@ -50,8 +51,8 @@ const sampleData = [
       price: "$82",
       inStock: 123,
       category: "Wearables",
-      warranty: "1 year",
-      color: "Silver",
+      warranty: true,
+      color: "Blue",
       url: "https://example.com/product/3",
    },
    {
@@ -60,7 +61,7 @@ const sampleData = [
       price: "$26",
       inStock: 454,
       category: "Electronics",
-      warranty: "1 year",
+      warranty: true,
       color: "Green",
       url: "https://example.com/product/4",
    },
@@ -70,7 +71,7 @@ const sampleData = [
       price: "$64",
       inStock: 453,
       category: "Electronics",
-      warranty: "1 year",
+      warranty: true,
       color: "Silver",
       url: "https://example.com/product/5",
    }
@@ -92,13 +93,12 @@ function DataContent(props) {
    const { csvData, headers } = useMemo(() => {
 
       // filter data based on search term
-      const filteredData = sampleData.filter( (item) => 
+      const filteredData = sampleData.filter((item) =>
          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
          item.price.toLowerCase().includes(searchTerm.toLowerCase()) ||
          item.inStock.toString().includes(searchTerm) ||
          item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.warranty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.color.toLowerCase().includes(searchTerm.toLowerCase()) 
+         item.color.toLowerCase().includes(searchTerm.toLowerCase())
       )
 
       // create worksheet -> worksheet space contain all cells has content
@@ -149,7 +149,7 @@ function DataContent(props) {
 
          {/* Table section */}
          <div id="table-area" className="flex-1 !min-w-0 p-5 flex flex-col">
-            <div id="table-box" className="flex-1 border-2 rounded-lg flex flex-col">   {/* need bg */}
+            <div id="table-box" className="flex-1 border-2 rounded-lg flex flex-col overflow-hidden">   {/* need bg */}
 
                <div id="table-header" className="h-fit w-full p-5 border-b-2 flex flex-row flex-start items-center">
                   <div id="search-bar" className="flex-shrink-0 h-fit w-96 flex flex-row items-center relative">
@@ -165,19 +165,33 @@ function DataContent(props) {
                </div>
 
                <div id="table-body" className="flex-1 p-5 flex flex-col">      {/* need bg */}
-                  <div id="table-border-to-clean-scrollbar" className="size-full border-1 border-gray-400 rounded-xl shadow-md overflow-hidden flex">    {/* need bg */}
+                  <div id="table-border-to-clean-scrollbar" className="size-full border-1 border-gray-400 rounded-xl overflow-hidden flex">    {/* need bg */}
                      <div id='table-scroll-area' className='flex-1 overflow-auto scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white flex flex-col'>
                         <table id="table-content" className="w-full h-fit text-sm border-collapse">
 
-                           <thead className="w-full sticky top-0 z-10 overflow-x-hidden">
+                           <thead className="w-full sticky top-0 z-10">
                               <tr>
                                  {headers.map((header, index) => (
                                     <th
                                        key={index}
-                                       className="relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 bg-gray-100 border-gray-400 whitespace-nowrap min-w-[150px]"
+                                       className={cn(
+                                          "relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 bg-gray-100 border-gray-400 whitespace-nowrap min-w-[120px]",
+                                          {
+                                             "sticky left-0 z-20 !min-w-[50px]": index === 0,
+                                             "sticky left-[50px] z-10 !min-w-[200px]": index === 1,
+                                          }
+                                       )}
                                     >
                                        {header}
-                                       <div className={`absolute h-2/5 w-0.5 rounded-md bg-gray-400 right-0 top-1/2 -translate-y-1/2 ${index === headers.length - 1 ? "hidden" : ""}`}>
+                                       <div
+                                          id="header-divider"
+                                          className={cn(
+                                             "absolute right-1.5 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400",
+                                             index === 0 ? "hidden" : "",
+                                             index === headers.length - 1 ? "hidden" : "",
+                                             index === 1 ? "shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" : ""
+
+                                          )}>
                                        </div>
                                     </th>
                                  ))}
@@ -185,21 +199,37 @@ function DataContent(props) {
                            </thead>
 
                            <tbody>
-                              {csvData.map( (row, rowIndex) => (
+                              {csvData.map((row, rowIndex) => (
                                  <tr
                                     key={rowIndex}
-                                    className={`cursor-pointer border-b border-gray-400 hover:bg-blue-50 transition-colors ${selectedRow === row ? "bg-cyan-50" : ""}`}
+                                    className={cn(
+                                       "group cursor-pointer border-b border-gray-400 transition-colors"
+                                    )}
                                     onClick={() => setSelectedRow(row)}
                                  >
-                                    {headers.map( (header, colIndex) => (
+                                    {headers.map((header, colIndex) => (
                                        <td
                                           key={colIndex}
-                                          className="py-3 px-4 text-gray-700 whitespace-nowrap"
+                                          className={cn(
+                                             "relative py-3 px-4 text-gray-700 whitespace-nowrap group-hover:bg-blue-50 transition-colors",
+                                             selectedRow === row ? "bg-cyan-50" : "bg-white",
+                                             {
+                                                "sticky left-0 z-20": colIndex === 0,
+                                                "sticky left-[50px] z-10": colIndex === 1,
+                                             }
+                                          )}
                                        >
-                                          <div className="max-w-[200px] truncate">
+                                          <div className="truncate">
                                              {typeof row[header] === "boolean"
                                                 ? row[header] ? "Yes" : "No"
                                                 : String(row[header] || "")}
+                                          </div>
+                                          <div
+                                             id="cell-divider"
+                                             className={colIndex === 1 ?
+                                                "absolute right-1.5 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400 shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" :
+                                                "hidden"}
+                                          >
                                           </div>
                                        </td>
                                     ))}
@@ -209,7 +239,7 @@ function DataContent(props) {
 
                         </table>
                      </div>
-                  </div>  
+                  </div>
                </div>
 
             </div>
@@ -224,11 +254,11 @@ function DataContent(props) {
                </div>
 
                <div id="json-body" className="flex-1 min-w-0 min-h-0 p-5 flex flex-col gap-2" >
-                  { selectedRow ? 
+                  {selectedRow ?
                      (
-                     <pre id="json-content" className="p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
-                        {JSON.stringify(selectedRow, null, 2)}
-                     </pre>
+                        <pre id="json-content" className="p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
+                           {JSON.stringify(selectedRow, null, 2)}
+                        </pre>
                      ) : (
                         <div className="flex items-center justify-center h-32 text-gray-500">
                            Select a row to view JSON

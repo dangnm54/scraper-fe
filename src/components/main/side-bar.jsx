@@ -117,7 +117,7 @@ function SideBar(props) {
                            {sampleFiles.map((file) => (
                               <SidebarMenuItem id='sidebar-menu-item' key={file.id}>
                                  <SidebarMenuButton id='sidebar-menu-button' className='h-auto p-3 flex-col items-start gap-2 bg-gray-100 border-1 border-gray-300'>
-                                    <div className="flex items-center justify-between w-full">
+                                    <div className="w-full flex items-center justify-between">
                                        <div>
                                           <div className="flex items-center gap-2 w-full mb-1">
                                              <FileChart className="size-4" />
