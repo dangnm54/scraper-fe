@@ -1,6 +1,6 @@
 import * as React from "react";
 import DataContent from './data-content';
-import DashboardPage from './draft';
+import DashboardPage from './dr-data-page';
 
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
