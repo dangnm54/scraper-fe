@@ -5,7 +5,7 @@ import DashboardPage from './draft';
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
 
-function DataView(props) {
+function DataPage(props) {
 
     return (
         <div id="main-dataview" className="flex-1 p-2 flex flex-col gap-2">    {/* need bg */}
@@ -27,4 +27,4 @@ function DataView(props) {
     )
 }
 
-export default DataView;
+export default DataPage;

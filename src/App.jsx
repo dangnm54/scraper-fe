@@ -5,7 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 
 import ConfigForm from '@/components/main/config-form'
 import SideBar from './components/main/side-bar';
-import DataView from './components/main/DataPage';
+import DataPage from './components/main/DataPage';
 
 function App() {
 
@@ -20,7 +20,7 @@ function App() {
             case 'settings':
                 return <ConfigForm />
             case 'database':
-                return <DataView />
+                return <DataPage />
             default:
                 return (<h1 className='text-zinc-900 text-2xl font-medium'>{`<No_page_found>`}</h1>)
         }
