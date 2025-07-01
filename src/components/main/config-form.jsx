@@ -97,15 +97,6 @@ function ConfigForm() {
                 <div id='field-group' className="flex flex-col gap-0.5">
                     <Label className="text-xl font-medium text-gray-900 mb-2">Data to collect</Label>
                     <div className="grid grid-rows gap-3">
-                        <div id='field-item' className="flex items-center flex-start gap-2">
-                            <Checkbox
-                                id="overviewData"
-                                checked={overviewData}
-                                onCheckedChange={setOverviewData}
-                                className="border-gray-700 size-4.5"
-                            />
-                            <Label htmlFor="overviewData" className="text-md font-normal">Overview data</Label>
-                        </div>
 
                         <div id='field-item' className="flex items-center flex-start gap-2">
                             <Checkbox
@@ -126,6 +117,7 @@ function ConfigForm() {
                             />
                             <Label htmlFor="bookRate" className="text-md font-normal">Booking rate</Label>
                         </div>
+                        
                     </div>
                 </div>
 
