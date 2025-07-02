@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from 'react';
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -20,25 +21,76 @@ function ConfigForm() {
    const [hostData, setHostData] = React.useState(false)
    const [bookRate, setBookRate] = React.useState(false)
 
-   const saveConfig = () => {
-      console.log("Saving Configuration:", `
-            fileName: ${fileName},
-            location: ${location},
-            numGuest: ${numGuest},
-            numProperty: ${numProperty},
-            hostData: ${hostData},
-            bookRate: ${bookRate},
-        `);
+   // const saveConfig = () => {
+   //    console.log("Saving Configuration:", `
+   //          fileName: ${fileName},
+   //          location: ${location},
+   //          numGuest: ${numGuest},
+   //          numProperty: ${numProperty},
+   //          hostData: ${hostData},
+   //          bookRate: ${bookRate},
+   //    `);
 
-      setFileName('')
-      setLocation('')
-      setNumGuest('')
-      setNumProperty('')
-      setHostData(false)
-      setBookRate(false)
+   //    setFileName('')
+   //    setLocation('')
+   //    setNumGuest('')
+   //    setNumProperty('')
+   //    setHostData(false)
+   //    setBookRate(false)
 
-      alert('Configuration Saved! Check console log for details.')
+   //    alert('Configuration Saved! Check console log for details.')
+   // }
+
+
+   const runScraper = async (event) => {
+      
+      // prevent default form submission
+      event.preventDefault()  
+
+      //construct data payload
+      const payload = {
+         file_name: fileName,
+         location: location,
+         num_guest: parseInt(numGuest),
+         num_property: parseInt(numProperty),
+         collect_host_data: hostData,
+         collect_booking_rate: bookRate,
+      }
+
+      console.log("Sent payload to BE", payload)
+
+      // make POST request
+      try {
+
+         // how FE send HTTP POST request to BE
+         const response = await fetch('http://127.0.0.1:8000/api/run', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json',},    // tells BE that body of request is JSON.
+            body: JSON.stringify(payload), // convert JS object to JSON string that BE can parse
+         })
+
+         // parse JS response from BE
+         const data = await response.json() 
+
+         // handle response
+         if (response.ok) {
+            // check if HTTP status code is 2xx (success)
+            console.log('Scraping process finished:', data)
+            alert('Scraping process finished! Message:', data.message)
+
+         } else {
+            console.log('Scraping process failed:', data)
+            alert('Error:', data.message)
+         }
+
+      } catch (error) {
+         console.error('Error:', error)
+         alert('Cannot connect to BE API, ensure BE server is running.')
+      }
    }
+
+
+
 
 
    return (
@@ -140,7 +192,7 @@ function ConfigForm() {
             <CardFooter id='card-footer' className="pt-4 flex items-center justify-center border-t-2 border-gray-200">
                <Button
                   id='run-button'
-                  onClick={saveConfig}
+                  onClick={runScraper}
                   className="flex gap-2 w-full cursor-pointer"
                >
                   <CirclePlay className="size-4.5" />
