@@ -21,26 +21,6 @@ function ConfigForm() {
    const [hostData, setHostData] = React.useState(false)
    const [bookRate, setBookRate] = React.useState(false)
 
-   // const saveConfig = () => {
-   //    console.log("Saving Configuration:", `
-   //          fileName: ${fileName},
-   //          location: ${location},
-   //          numGuest: ${numGuest},
-   //          numProperty: ${numProperty},
-   //          hostData: ${hostData},
-   //          bookRate: ${bookRate},
-   //    `);
-
-   //    setFileName('')
-   //    setLocation('')
-   //    setNumGuest('')
-   //    setNumProperty('')
-   //    setHostData(false)
-   //    setBookRate(false)
-
-   //    alert('Configuration Saved! Check console log for details.')
-   // }
-
 
    const runScraper = async (event) => {
       
@@ -87,6 +67,14 @@ function ConfigForm() {
          console.error('Error:', error)
          alert('Cannot connect to BE API, ensure BE server is running.')
       }
+
+      setFileName('')
+      setLocation('')
+      setNumGuest('')
+      setNumProperty('')
+      setHostData(false)
+      setBookRate(false)
+
    }
 
 
