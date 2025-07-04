@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
 
-import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart } from 'lucide-react'
+import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart, RotateCcw as Refresh } from 'lucide-react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -19,39 +19,12 @@ import {
 } from "@/components/ui/sidebar"
 
 
-const sampleFiles = [
-   {
-      id: 1,
-      name: "products_scrape_001.json",
-      date: "2025-04-29",
-      itemCount: 150,
-   },
-   {
-      id: 2,
-      name: "ecommerce_data_002.json",
-      date: "2025-04-28",
-      itemCount: 120,
-   },
-   {
-      id: 3,
-      name: "product_catalog_003.json",
-      date: "2025-04-27",
-      itemCount: 200,
-   },
-   {
-      id: 4,
-      name: "inventory_scrape_004.json",
-      date: "2025-04-26",
-      itemCount: 80,
-   },
-]
-
-
 
 function SideBar(props) {
    const [fetchedFiles, setFetchedFiles] = useState([]);
    const [isLoadingFiles, setIsLoadingFiles] = useState(false);
    const [fileFetchError, setFileFetchError] = useState(false);
+   const [refreshClickable, setRefreshClickable] = useState(true);
 
    const chooseConfigForm = () => { props.renderConfigForm() }
    
@@ -69,11 +42,12 @@ function SideBar(props) {
       setFetchedFiles([])
       setIsLoadingFiles(true);
       setFileFetchError(false);
+      setRefreshClickable(false);
 
       try {
          const response = await fetch('http://127.0.0.1:8000/api/data/files')
          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);  // this message stored in error.message
          }
 
          const data = await response.json()
@@ -81,12 +55,12 @@ function SideBar(props) {
          console.log("Fetched files:", data)
 
       } catch (error) {
-         console.error("Error start fetching files:", error);
-         alert('Cannot connect to BE API, ensure BE server is running.')
+         console.error("Cannot connect to BE |", error);
          setFileFetchError(true)
       
       } finally {
          setIsLoadingFiles(false)
+         setRefreshClickable(true);
       }
    }
 
@@ -94,7 +68,8 @@ function SideBar(props) {
 
    return (
       <Sidebar id='sidebar-main' className="border-r border-gray-300">
-         <SidebarHeader className="p-2 border-b bg-gray-50 border-gray-300">
+
+         <SidebarHeader id='sidebar-header' className="p-2 border-b bg-gray-50 border-gray-300">
             <SidebarMenu id='sidebar-menu'>
                <SidebarMenuItem id='sidebar-menu-item'>
                   <SidebarMenuButton id='sidebar-menu-button' size="lg">
@@ -113,7 +88,7 @@ function SideBar(props) {
          <SidebarContent id='sidebar-content' className="bg-gray-50 flex flex-col">
 
             {/* Navigation section */}
-            <SidebarGroup id='sidebar-group'>
+            <SidebarGroup id='navigation-group'>
                <SidebarGroupLabel id='sidebar-group-label' className='text-xs font-medium text-gray-600'>Navigation</SidebarGroupLabel>
                <SidebarGroupContent id='sidebar-group-content'>
                   <SidebarMenu id='sidebar-menu'>
@@ -146,9 +121,17 @@ function SideBar(props) {
 
             {/* File section */}
             {props.fileIsVisible &&
-            <SidebarGroup id='sidebar-group' className="flex flex-col flex-1 min-h-0 pb-0">
-               <SidebarGroupLabel id='sidebar-group-label' className='text-xs font-medium text-gray-600'>Data files</SidebarGroupLabel>
-               <SidebarGroupContent id='sidebar-group-content' className="flex-1">
+            <SidebarGroup id='data-group' className="flex flex-col flex-1 min-h-0 pb-0">
+
+               <SidebarGroupLabel id='data-group-label' className='flex flex-row items-center justify-between'>
+                  <div className='text-xs font-medium text-gray-600'>Data files</div>
+                  <Refresh 
+                     onClick={refreshClickable ? fetchFiles : null}
+                     className={`!size-3 ${refreshClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
+                  />
+               </SidebarGroupLabel>
+
+               <SidebarGroupContent id='file-group-content' className="flex-1">
                   <div className="border border-gray-200 rounded-md bg-white h-full p-2">
                      <ScrollArea id='scroll-area' className="h-full">
                         <SidebarMenu id='sidebar-menu-file' className="flex w-full min-w-0 flex-col gap-2">
@@ -190,7 +173,7 @@ function SideBar(props) {
 
          <SidebarFooter id='sidebar-footer'>
             <div className="px-3 py-1 text-center">
-               <span className="text-xs text-muted-foreground">Copyright © 2025 Strapee. All Rights Reserved.</span>
+               <span className="text-xs text-muted-foreground">Copyright © 2025 Strapee. <br /> All Rights Reserved.</span>
             </div>
          </SidebarFooter>
 

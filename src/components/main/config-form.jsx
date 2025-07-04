@@ -55,17 +55,15 @@ function ConfigForm() {
          // handle response
          if (response.ok) {
             // check if HTTP status code is 2xx (success)
-            console.log('Scraping process finished:', data)
-            alert('Scraping process finished! Message:', data.message)
+            console.log('Scraping finished:', data)
+            alert('Scraping finished, check console for details.')
 
          } else {
-            console.log('Scraping process failed:', data)
-            alert('Error:', data.message)
+            throw new Error(`HTTP error! status: ${response.status}`)  // this message stored in error.message
          }
 
       } catch (error) {
-         console.error('Error start scraping data:', error)
-         alert('Cannot connect to BE API, ensure BE server is running.')
+         console.error('Cannot connect to BE |', error)
       }
 
       setFileName('')
