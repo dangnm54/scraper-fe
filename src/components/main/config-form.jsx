@@ -64,7 +64,7 @@ function ConfigForm() {
          }
 
       } catch (error) {
-         console.error('Error:', error)
+         console.error('Error start scraping data:', error)
          alert('Cannot connect to BE API, ensure BE server is running.')
       }
 

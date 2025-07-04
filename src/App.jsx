@@ -39,10 +39,16 @@ function App() {
     return (
         <SidebarProvider id='sidebar-provider' defaultOpen={true}>
 
-            <SideBar renderConfigForm={renderConfigForm} renderData={renderData} fileIsVisible={fileIsVisible} className />
+            <SideBar 
+                renderConfigForm={renderConfigForm} 
+                renderData={renderData} 
+                fileIsVisible={fileIsVisible} 
+                currentTab={selectedTab}
+                className={`flex-1 min-w-0 flex flex-col ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
+            />
 
             <main 
-                id='main-container'  bg-red-200
+                id='main-container'
                 className={`flex-1 min-w-0 flex flex-col ${selectedTab === 'settings' ? 'items-center justify-center' : ''}`}
             >
                 

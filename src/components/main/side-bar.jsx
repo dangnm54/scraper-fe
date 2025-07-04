@@ -1,5 +1,5 @@
 import * as React from "react";
-// import 'C:/Users/ADMIN/Pictures/scraper-fe/src/index.css';
+import { useEffect, useState } from 'react';
 
 import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart } from 'lucide-react'
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -49,9 +49,48 @@ const sampleFiles = [
 
 
 function SideBar(props) {
+   const [fetchedFiles, setFetchedFiles] = useState([]);
+   const [isLoadingFiles, setIsLoadingFiles] = useState(false);
+   const [fileFetchError, setFileFetchError] = useState(false);
 
    const chooseConfigForm = () => { props.renderConfigForm() }
-   const chooseData = () => { props.renderData() }
+   
+   const chooseData = async () => { props.renderData() }
+
+
+   useEffect( () => {
+      if (props.currentTab === 'database') {
+      fetchFiles();
+      }
+   }, [props.currentTab])
+
+
+   const fetchFiles = async () => { 
+      setFetchedFiles([])
+      setIsLoadingFiles(true);
+      setFileFetchError(false);
+
+      try {
+         const response = await fetch('http://127.0.0.1:8000/api/data/files')
+         if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+         }
+
+         const data = await response.json()
+         setFetchedFiles(data)
+         console.log("Fetched files:", data)
+
+      } catch (error) {
+         console.error("Error start fetching files:", error);
+         alert('Cannot connect to BE API, ensure BE server is running.')
+         setFileFetchError(true)
+      
+      } finally {
+         setIsLoadingFiles(false)
+      }
+   }
+
+
 
    return (
       <Sidebar id='sidebar-main' className="border-r border-gray-300">
@@ -112,21 +151,28 @@ function SideBar(props) {
                <SidebarGroupContent id='sidebar-group-content' className="flex-1">
                   <div className="border border-gray-200 rounded-md bg-white h-full p-2">
                      <ScrollArea id='scroll-area' className="h-full">
-                        <SidebarMenu id='sidebar-menu' className="flex w-full min-w-0 flex-col gap-2">
+                        <SidebarMenu id='sidebar-menu-file' className="flex w-full min-w-0 flex-col gap-2">
 
-                           {sampleFiles.map((file) => (
+                           {isLoadingFiles && <p className="text-center text-sm text-gray-500">Fetching files...</p>}
+                           {fileFetchError && <p className="text-center text-sm text-red-500">Error fetching files! <br /> Please check BE server.</p>}
+                           {!isLoadingFiles &&
+                           !fileFetchError &&
+                           fetchedFiles.length === 0 &&
+                           <p className="text-center text-sm text-gray-500">Database is empty.</p>}
+
+                           {fetchedFiles.map((file) => (
                               <SidebarMenuItem id='sidebar-menu-item' key={file.id}>
                                  <SidebarMenuButton id='sidebar-menu-button' className='h-auto p-3 flex-col items-start gap-2 bg-gray-100 border-1 border-gray-300'>
                                     <div className="w-full flex items-center justify-between">
                                        <div>
                                           <div className="flex items-center gap-2 w-full mb-1">
                                              <FileChart className="size-4" />
-                                             <span className="text-xs font-medium truncate">{file.name}</span>
+                                             <span className="text-xs font-medium truncate">{file.file_name}</span>
                                           </div>
-                                          <span className="text-xs text-muted-foreground">{file.date}</span>
+                                          <span className="text-xs text-muted-foreground">{file.date_created}</span>
                                        </div>
                                        <Badge variant="default" className="text-xs h-4 px-1">
-                                          {file.itemCount}
+                                          {file.item_count}
                                        </Badge>
                                     </div>
 
