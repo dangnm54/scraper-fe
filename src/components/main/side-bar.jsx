@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
+import { cn } from "@/lib/utils"
 
 import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart, RotateCcw as Refresh } from 'lucide-react'
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -19,6 +20,8 @@ import {
 } from "@/components/ui/sidebar"
 
 
+// ------------------------------------------------------------------------------------------------
+
 
 function SideBar(props) {
    const [fetchedFiles, setFetchedFiles] = useState([]);
@@ -26,16 +29,19 @@ function SideBar(props) {
    const [fileFetchError, setFileFetchError] = useState(false);
    const [refreshClickable, setRefreshClickable] = useState(true);
 
-   const chooseConfigForm = () => { props.renderConfigForm() }
+
+   const clickFile = (file) => {
+      props.chooseFile(file)
+      console.log("Choose file:", file)
+   }
+
+
+   const chooseConfigForm = () => { 
+      props.renderConfigForm() 
+   }
+
    
    const chooseData = async () => { props.renderData() }
-
-
-   useEffect( () => {
-      if (props.currentTab === 'database') {
-      fetchFiles();
-      }
-   }, [props.currentTab])
 
 
    const fetchFiles = async () => { 
@@ -45,7 +51,7 @@ function SideBar(props) {
       setRefreshClickable(false);
 
       try {
-         const response = await fetch('http://127.0.0.1:8000/api/data/files')
+         const response = await fetch('http://127.0.0.1:8000/api/data/file-list')
          if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);  // this message stored in error.message
          }
@@ -53,6 +59,20 @@ function SideBar(props) {
          const data = await response.json()
          setFetchedFiles(data)
          console.log("Fetched files:", data)
+
+         if (data.length > 0 && !props.selectedFile) {
+            props.chooseFile(data[0])
+         } 
+         else if (data.length > 0 && props.selectedFile && !data.find(file => file.id === props.selectedFile.id)) {
+            props.chooseFile(data[0])
+         }
+         else if (data.length > 0 && props.selectedFile && data.find(file => file.id === props.selectedFile.id)) {
+            props.chooseFile(props.selectedFile)
+         }
+         else {
+            props.chooseFile(null)
+         }
+
 
       } catch (error) {
          console.error("Cannot connect to BE |", error);
@@ -64,6 +84,18 @@ function SideBar(props) {
       }
    }
 
+
+   // refresh file list when switch to data tab
+   useEffect( () => {
+      if (props.currentTab === 'database') {
+      fetchFiles();
+      }
+   }, [props.currentTab])
+
+
+   // useEffect( () => {
+   //    console.log("Global selected file:", props.selectedFile.id)
+   // }, [props.currentTab])
 
 
    return (
@@ -77,7 +109,7 @@ function SideBar(props) {
                         <BugIcon className="size-4 text-white" />
                      </div>
                      <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-semibold">Strapee</span>
+                        <span className="font-semibold">Scrapi</span>
                         <span className="text-xs text-muted-foreground">v1.0.0</span>
                      </div>
                   </SidebarMenuButton>
@@ -145,7 +177,14 @@ function SideBar(props) {
 
                            {fetchedFiles.map((file) => (
                               <SidebarMenuItem id='sidebar-menu-item' key={file.id}>
-                                 <SidebarMenuButton id='sidebar-menu-button' className='h-auto p-3 flex-col items-start gap-2 bg-gray-100 border-1 border-gray-300'>
+                                 <SidebarMenuButton 
+                                    id = 'sidebar-menu-button' 
+                                    onClick = {props.selectedFile && props.selectedFile.id === file.id ? null : () => clickFile(file)}
+                                    className={cn(
+                                       'h-auto p-3 flex-col items-start gap-2 bg-gray-100 border-1 border-gray-300',
+                                       props.selectedFile && props.selectedFile.id === file.id ? 'border-2 border-blue-500 cursor-not-allowed' : 'cursor-pointer'
+                                    )}
+                                 >
                                     <div className="w-full flex items-center justify-between">
                                        <div>
                                           <div className="flex items-center gap-2 w-full mb-1">

@@ -5,6 +5,12 @@ import { useState, useMemo } from "react";
 import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+
+// ------------------------------------------------------------------------------------------------
+
+
+
+
 // Sample files data (same as in sidebar)
 const sampleFiles = [
    {
