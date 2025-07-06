@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import './index.css';
 
 import { SidebarProvider } from "@/components/ui/sidebar"
@@ -15,11 +16,11 @@ function App() {
 
     const [currentTab, setCurrentTab] = React.useState('database');
 
+    const [selectedFile, setSelectedFile] = React.useState(null);
+
     const [fileIsVisible, setFileIsVisible] = React.useState(
         currentTab === 'settings' ? false : true
     )
-
-    const [selectedFile, setSelectedFile] = React.useState(null);
 
 
 
@@ -51,6 +52,11 @@ function App() {
     }
 
 
+    useEffect( () => {
+        console.log("[App] Global selected file:", selectedFile?.id)
+    }, [currentTab, selectedFile])
+
+
 
     return (
         <SidebarProvider id='sidebar-provider' defaultOpen={true}>
@@ -62,12 +68,12 @@ function App() {
                 currentTab={currentTab}
                 chooseFile={chooseFile} // onFileSelect
                 selectedFile={selectedFile}
-                className={`flex-1 min-w-0 flex flex-col ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-dvh w-fit min-w-0 flex flex-col ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
             />
 
             <main 
                 id='main-container'
-                className={`flex-1 min-w-0 flex flex-col ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-dvh max-h-[900px] w-dvw min-w-0 min-h-0 flex flex-col ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
             >
                 
                 {renderTab(currentTab)}

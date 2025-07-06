@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as XLSX from "xlsx"
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -11,147 +11,158 @@ import { cn } from "@/lib/utils"
 
 
 
-// Sample files data (same as in sidebar)
-const sampleFiles = [
-   {
-      id: 1,
-      name: "products_scrape_001.json",
-      date: "2025-04-29",
-      size: "2.4 MB",
-      itemCount: 150,
-   },
-   {
-      id: 2,
-      name: "ecommerce_data_002.json",
-      date: "2025-04-28",
-      size: "1.8 MB",
-      itemCount: 120,
-   }
-]
+// // Sample files data (same as in sidebar)
+// const sampleFiles = [
+//    {
+//       id: 1,
+//       name: "products_scrape_001.json",
+//       date: "2025-04-29",
+//       size: "2.4 MB",
+//       itemCount: 150,
+//    },
+//    {
+//       id: 2,
+//       name: "ecommerce_data_002.json",
+//       date: "2025-04-28",
+//       size: "1.8 MB",
+//       itemCount: 120,
+//    }
+// ]
 
-// Sample data for the selected file
-const sampleData = [
-   {
-      id: 1,
-      title: "Bluetooth Headphones",
-      price: "$83",
-      inStock: 455,
-      category: "Electronics",
-      warranty: false,
-      color: "Black",
-      url: "https://example.com/product/1",
-   },
-   {
-      id: 2,
-      title: "Smart Fitness Watch",
-      price: "$16",
-      inStock: 323,
-      category: "Wearables",
-      warranty: false,
-      color: "Silver",
-      url: "https://example.com/product/2",
-   },
-   {
-      id: 3,
-      title: "Night Vision Goggles",
-      price: "$82",
-      inStock: 123,
-      category: "Wearables",
-      warranty: true,
-      color: "Blue",
-      url: "https://example.com/product/3",
-   },
-   {
-      id: 4,
-      title: "Flying Shoes",
-      price: "$26",
-      inStock: 454,
-      category: "Electronics",
-      warranty: true,
-      color: "Green",
-      url: "https://example.com/product/4",
-   },
-   {
-      id: 5,
-      title: "Metal Detector",
-      price: "$64",
-      inStock: 453,
-      category: "Electronics",
-      warranty: true,
-      color: "Silver",
-      url: "https://example.com/product/5",
-   }
-]
+// // Sample data for the selected file
+// const sampleData = [
+//    {
+//       id: 1,
+//       title: "Bluetooth Headphones",
+//       price: "$83",
+//       inStock: 455,
+//       category: "Electronics",
+//       warranty: false,
+//       color: "Black",
+//       url: "https://example.com/product/1",
+//    },
+//    {
+//       id: 2,
+//       title: "Smart Fitness Watch",
+//       price: "$16",
+//       inStock: 323,
+//       category: "Wearables",
+//       warranty: false,
+//       color: "Silver",
+//       url: "https://example.com/product/2",
+//    },
+//    {
+//       id: 3,
+//       title: "Night Vision Goggles",
+//       price: "$82",
+//       inStock: 123,
+//       category: "Wearables",
+//       warranty: true,
+//       color: "Blue",
+//       url: "https://example.com/product/3",
+//    },
+//    {
+//       id: 4,
+//       title: "Flying Shoes",
+//       price: "$26",
+//       inStock: 454,
+//       category: "Electronics",
+//       warranty: true,
+//       color: "Green",
+//       url: "https://example.com/product/4",
+//    },
+//    {
+//       id: 5,
+//       title: "Metal Detector",
+//       price: "$64",
+//       inStock: 453,
+//       category: "Electronics",
+//       warranty: true,
+//       color: "Silver",
+//       url: "https://example.com/product/5",
+//    }
+// ]
 
+// const mockFilePath = "D:\software\other\cursor\python\airbnb_proj\file\D3_full_03_06_final.csv"
 
-const mockFilePath = "D:\software\other\cursor\python\airbnb_proj\file\D3_full_03_06_final.csv"
 
 
 function DataContent(props) {
 
-   const [selectedFile, setSelectedFile] = useState(sampleFiles[0])
+   const [fileDetail, setFileDetail] = useState([])
+   const [header, setHeader] = useState([])
    const [selectedRow, setSelectedRow] = useState(null)
    const [searchTerm, setSearchTerm] = useState("")
 
+   // fetch file detail
+   useEffect( () => {
+      const fetchDetail = async () => {
 
-   // convert data to worksheet format and create CSV preview
+         // reset all state when new file is loaded
+         setSelectedRow(null)
+         setSearchTerm('')
 
-   const { csvData, headers } = useMemo(() => {
+         try {
+            const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.selectedFile.id}`)
 
-      // filter data based on search term
-      const filteredData = sampleData.filter((item) =>
-         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.price.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.inStock.toString().includes(searchTerm) ||
-         item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.color.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+            if (!response.ok) {
+               throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-      // create worksheet -> worksheet space contain all cells has content
-      const worksheet = XLSX.utils.json_to_sheet(filteredData)
+            const result = await response.json()
 
-      // get headers from worksheet
-      // decode range so we can loop through in an ordered and controlled sequences, has number instead of A1, B4
-      // worksheet["!ref"] -> describe boundary of worksheet -> smallest range needs to loop through to meet all content-rich cell, but not sure every visited cell has content
-      // || -> 'or' operator
-      // A1 -> range A1:A1
-      // select all data available, if sheet is empty, select A1 to prevent decode_range from crashing
-      // decode_range -> return object has start (row and column) and end (row and column) | sample: { s: { c: 0, r: 0 }, e: { c: 6, r: 19 } }
-      const range = XLSX.utils.decode_range(worksheet["!ref"] || "A1")
-      const headers = []
+            if (result.status === 'success' && Array.isArray(result.data)) {
+               setFileDetail(result.data)
 
-      for (let col = range.s.c; col <= range.e.c; col++) {
+               if (result.data.length > 0) {
+                  setHeader(Object.keys(result.data[0]))
+               } 
+               else {
+                  setHeader([])
+               }
 
-         // {r: 0, c: 0} is a cell address -> encode address to string "A1"
-         const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col })
+               console.log('[data-content] Response has data: ', result.data)
+            
+            }
+            else {
+               throw new Error(result.message || 'BE return invalid data format.')
+            }
 
-         // worksheet is a dict, key is cell address (eg: A1, B1) -> get cell object
-         // cell object contains all info of that cell (eg: value, formula, type, styleetc)
-         // .v -> value
-         // .f -> formula
-         // .t -> type
-         // .s -> style
-         // .w -> formatted text
-         const cell = worksheet[cellAddress]
+            console.log('[data-content] File detail: ', result.data)
 
-         // check cell.v b/c cell object can exist without value
-         if (cell && cell.v) {
-            headers.push(cell.v)
+         } catch (error) {
+            console.error("[side-bar] Cannot connect to BE |", error);
+            setFileDetail([])
+            setHeader([])
          }
       }
 
-      return {
-         csvData: filteredData,
-         headers: headers
+      fetchDetail()
+
+   }, [props.selectedFile])
+
+
+   const filterdDetail = useMemo( () => {
+      if (!searchTerm) {
+         return fileDetail
       }
 
+      return fileDetail.filter((item) =>
+         item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.Utility_num?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.Rating_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.Rating_num?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         item.Rating_star?.toLowerCase().includes(searchTerm.toLowerCase()) 
+      )
 
-   }, [searchTerm])
+   }, [searchTerm, fileDetail])
+
+
 
 
 
    return (
-      <div id="content" className="flex-1 flex flex-row">    {/* need bg */}
+      <div id="content" className="flex-1 flex flex-row bg-green-100">    {/* need bg */}
 
          {/* Table section */}
          <div id="table-area" className="flex-1 !min-w-0 p-5 flex flex-col">
@@ -170,21 +181,21 @@ function DataContent(props) {
                   </div>
                </div>
 
-               <div id="table-body" className="flex-1 p-5 flex flex-col">      {/* need bg */}
-                  <div id="table-border-to-clean-scrollbar" className="size-full border-1 border-gray-400 rounded-xl overflow-hidden flex">    {/* need bg */}
-                     <div id='table-scroll-area' className='flex-1 overflow-auto scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white flex flex-col'>
+               <div id="table-body" className="flex-1 p-5 flex flex-col bg-red-200 overflow-hidden">      {/* need bg */}
+                  <div id="table-border-to-clean-scrollbar" className="h-full w-full border-1 border-gray-400 rounded-xl overflow-hidden flex bg-blue-200">    {/* need bg */}
+                     <div id='table-scroll-area' className='flex-1 overflow-scroll scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white flex flex-col'>
                         <table id="table-content" className="w-full h-fit text-sm border-collapse">
 
                            <thead className="w-full sticky top-0 z-10">
                               <tr>
-                                 {headers.map((header, index) => (
+                                 {header.map((header, index) => (
                                     <th
                                        key={index}
                                        className={cn(
-                                          "relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 bg-gray-100 border-gray-400 whitespace-nowrap min-w-[120px]",
+                                          "relative text-left py-3 px-4 text-xs font-medium text-gray-800 border-b border-r-0 border-gray-400 whitespace-nowrap min-w-[120px]",
                                           {
                                              "sticky left-0 z-20 !min-w-[50px]": index === 0,
-                                             "sticky left-[50px] z-10 !min-w-[200px]": index === 1,
+                                             "sticky left-[50px] z-10": index === 1,
                                           }
                                        )}
                                     >
@@ -194,7 +205,7 @@ function DataContent(props) {
                                           className={cn(
                                              "absolute right-1.5 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400",
                                              index === 0 ? "hidden" : "",
-                                             index === headers.length - 1 ? "hidden" : "",
+                                             index === header.length - 1 ? "hidden" : "",
                                              index === 1 ? "shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" : ""
 
                                           )}>
@@ -205,30 +216,29 @@ function DataContent(props) {
                            </thead>
 
                            <tbody>
-                              {csvData.map((row, rowIndex) => (
+                              {filterdDetail.map((row, rowIndex) => (
                                  <tr
                                     key={rowIndex}
                                     className={cn(
-                                       "group cursor-pointer border-b border-gray-400 transition-colors"
+                                       "group cursor-pointer border-b border-gray-400 transition-colors",
+                                       selectedRow === row ? "bg-cyan-50" : ""
                                     )}
                                     onClick={() => setSelectedRow(row)}
                                  >
-                                    {headers.map((header, colIndex) => (
+                                    {header.map((header, colIndex) => (
                                        <td
-                                          key={colIndex}
+                                          key={`${rowIndex}-${colIndex}`}
+                                          id={`cell-${rowIndex}-${colIndex}`}
                                           className={cn(
                                              "relative py-3 px-4 text-gray-700 whitespace-nowrap group-hover:bg-blue-50 transition-colors",
-                                             selectedRow === row ? "bg-cyan-50" : "bg-white",
                                              {
                                                 "sticky left-0 z-20": colIndex === 0,
-                                                "sticky left-[50px] z-10": colIndex === 1,
+                                                "sticky left-[50px] z-10 !min-w-[450px] !max-w-[450px]": colIndex === 1,
                                              }
                                           )}
                                        >
                                           <div className="truncate">
-                                             {typeof row[header] === "boolean"
-                                                ? row[header] ? "Yes" : "No"
-                                                : String(row[header] || "")}
+                                             { String(row[header]) || "" }
                                           </div>
                                           <div
                                              id="cell-divider"

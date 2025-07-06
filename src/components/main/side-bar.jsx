@@ -30,9 +30,10 @@ function SideBar(props) {
    const [refreshClickable, setRefreshClickable] = useState(true);
 
 
+
    const clickFile = (file) => {
       props.chooseFile(file)
-      console.log("Choose file:", file)
+      console.log("[side-bar] Choose file:", file)
    }
 
 
@@ -58,7 +59,7 @@ function SideBar(props) {
 
          const data = await response.json()
          setFetchedFiles(data)
-         console.log("Fetched files:", data)
+         console.log("[side-bar] Fetched files:", data)
 
          if (data.length > 0 && !props.selectedFile) {
             props.chooseFile(data[0])
@@ -75,7 +76,7 @@ function SideBar(props) {
 
 
       } catch (error) {
-         console.error("Cannot connect to BE |", error);
+         console.error("[side-bar] Cannot connect to BE |", error);
          setFileFetchError(true)
       
       } finally {
@@ -92,10 +93,6 @@ function SideBar(props) {
       }
    }, [props.currentTab])
 
-
-   // useEffect( () => {
-   //    console.log("Global selected file:", props.selectedFile.id)
-   // }, [props.currentTab])
 
 
    return (
@@ -179,10 +176,10 @@ function SideBar(props) {
                               <SidebarMenuItem id='sidebar-menu-item' key={file.id}>
                                  <SidebarMenuButton 
                                     id = 'sidebar-menu-button' 
-                                    onClick = {props.selectedFile && props.selectedFile.id === file.id ? null : () => clickFile(file)}
+                                    onClick = {props.selectedFile?.id === file.id ? null : () => clickFile(file)}
                                     className={cn(
                                        'h-auto p-3 flex-col items-start gap-2 bg-gray-100 border-1 border-gray-300',
-                                       props.selectedFile && props.selectedFile.id === file.id ? 'border-2 border-blue-500 cursor-not-allowed' : 'cursor-pointer'
+                                       props.selectedFile?.id === file.id ? 'border-2 border-blue-500 cursor-not-allowed' : 'cursor-pointer'
                                     )}
                                  >
                                     <div className="w-full flex items-center justify-between">
