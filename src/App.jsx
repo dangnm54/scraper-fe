@@ -73,7 +73,7 @@ function App() {
 
             <main 
                 id='main-container'
-                className={`h-dvh max-h-[900px] w-dvw min-w-0 min-h-0 flex flex-col ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-dvh min-h-0 w-dvw min-w-0 flex flex-col overflow-hidden ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
             >
                 
                 {renderTab(currentTab)}

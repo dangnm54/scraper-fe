@@ -162,11 +162,11 @@ function DataContent(props) {
 
 
    return (
-      <div id="content" className="flex-1 flex flex-row bg-green-100">    {/* need bg */}
+      <div id="content" className="w-full h-full min-h-0 flex flex-row bg-green-100 " >    {/* need bg */}
 
          {/* Table section */}
-         <div id="table-area" className="flex-1 !min-w-0 p-5 flex flex-col">
-            <div id="table-box" className="flex-1 border-2 rounded-lg flex flex-col overflow-hidden">   {/* need bg */}
+         <div id="table-area" className="h-full w-full !min-w-0 p-5 flex flex-col bg-blue-200">
+            <div id="table-box" className="flex-1 border-2 rounded-lg flex flex-col overflow-hidden ">   {/* need bg */}
 
                <div id="table-header" className="h-fit w-full p-5 border-b-2 flex flex-row flex-start items-center">
                   <div id="search-bar" className="flex-shrink-0 h-fit w-96 flex flex-row items-center relative">
@@ -181,10 +181,10 @@ function DataContent(props) {
                   </div>
                </div>
 
-               <div id="table-body" className="flex-1 p-5 flex flex-col bg-red-200 overflow-hidden">      {/* need bg */}
-                  <div id="table-border-to-clean-scrollbar" className="h-full w-full border-1 border-gray-400 rounded-xl overflow-hidden flex bg-blue-200">    {/* need bg */}
-                     <div id='table-scroll-area' className='flex-1 overflow-scroll scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white flex flex-col'>
-                        <table id="table-content" className="w-full h-fit text-sm border-collapse">
+               <div id="table-body" className="relative p-5 w-full h-full bg-red-200 overflow-hidden">      {/* need bg */}
+                  {/* <div id="table-border-to-clean-scrollbar" className="h-full min-h-0 w-full border-1 border-gray-400 rounded-xl overflow-hidden flex bg-blue-200">  */}
+                     <div id='table-scroll-area' className='h-[500px] w-full overflow-hidden scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white flex flex-col bg-yellow-200 '>
+                        <table id="table-content" className="w-full h-full  text-sm border-collapse">
 
                            <thead className="w-full sticky top-0 z-10">
                               <tr>
@@ -255,7 +255,7 @@ function DataContent(props) {
 
                         </table>
                      </div>
-                  </div>
+                  {/* </div> */}
                </div>
 
             </div>
