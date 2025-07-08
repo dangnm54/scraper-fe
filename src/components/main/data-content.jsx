@@ -105,8 +105,8 @@ function DataContent(props) {
 
                <div id="table-body" className="relative flex-1 p-5 bg-red-200 overflow-hidden">      {/* need bg */}
                   {/* <div id="table-border-to-clean-scrollbar" className="h-full min-h-0 w-full border-1 border-gray-400 rounded-xl overflow-hidden flex bg-blue-200">  */}
-                     <div id='table-scroll-area' className='h-full w-full overflow-scroll border-1 border-gray-400 rounded-xl scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white  bg-yellow-200 '>
-                        <table id="table-content" className="w-full !h-full text-sm border-collapse bg-green-100 ">
+                     <div id='table-scroll-area' className='h-[00px] w-full overflow-scroll border-1 border-gray-400 rounded-xl scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-corner-white  bg-yellow-100 '>
+                        {/* <table id="table-content" className="w-full h-fit text-sm border-collapse bg-green-100 ">
 
                            <thead className="w-full sticky top-0 z-10">
                               <tr>
@@ -175,7 +175,7 @@ function DataContent(props) {
                               ))}
                            </tbody>
 
-                        </table>
+                        // </table> */}
                      </div>
                   {/* </div> */}
                </div>

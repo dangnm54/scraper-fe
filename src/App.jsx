@@ -59,7 +59,7 @@ function App() {
 
 
     return (
-        <SidebarProvider id='sidebar-provider' defaultOpen={true}>
+        <SidebarProvider id='sidebar-provider' defaultOpen={true} className="h-dvh w-dvw flex flex-row">
 
             <SideBar 
                 renderConfigForm={renderConfigForm} 
@@ -68,12 +68,12 @@ function App() {
                 currentTab={currentTab}
                 chooseFile={chooseFile} // onFileSelect
                 selectedFile={selectedFile}
-                className={`h-dvh w-fit min-w-0 flex flex-col ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-dvh w-fit ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
             />
 
             <main 
                 id='main-container'
-                className={`h-dvh w-dvw overflow-hidden ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-dvh flex-1 ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
             >
                 
                 {renderTab(currentTab)}

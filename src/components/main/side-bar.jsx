@@ -96,7 +96,7 @@ function SideBar(props) {
 
 
    return (
-      <Sidebar id='sidebar-main' className="border-r border-gray-300">
+      <Sidebar id='sidebar-main' className="h-full w-fit border-r border-gray-300">
 
          <SidebarHeader id='sidebar-header' className="p-2 border-b bg-gray-50 border-gray-300">
             <SidebarMenu id='sidebar-menu'>
