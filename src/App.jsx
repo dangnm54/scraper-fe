@@ -5,6 +5,7 @@ import './index.css';
 import { SidebarProvider } from "@/components/ui/sidebar"
 
 import ConfigForm from '@/components/main/config-form'
+import DraftSideBar from './components/main/draft';
 import SideBar from './components/main/side-bar';
 import DataPage from './components/main/DataPage';
 
@@ -19,14 +20,14 @@ function App() {
     const [selectedFile, setSelectedFile] = React.useState(null);
 
     const [fileIsVisible, setFileIsVisible] = React.useState(
-        currentTab === 'settings' ? false : true
+        currentTab === 'form' ? false : true
     )
 
 
 
     const renderTab = (selectedTab) => {
         switch (selectedTab) {
-            case 'settings':
+            case 'form':
                 return <ConfigForm />
             case 'database':
                 return <DataPage selectedFile={selectedFile} />
@@ -35,8 +36,8 @@ function App() {
         }
     }
 
-    const renderConfigForm = () => {
-        setCurrentTab('settings')
+    const renderForm = () => {
+        setCurrentTab('form')
         setFileIsVisible(false)
         // setSelectedFile(null)
     }
@@ -59,27 +60,36 @@ function App() {
 
 
     return (
-        <SidebarProvider id='sidebar-provider' defaultOpen={true} className="h-dvh w-dvw flex flex-row">
+        <div id='layout' className="h-dvh w-dvw flex flex-row">
 
-            <SideBar 
-                renderConfigForm={renderConfigForm} 
+            {/* <DraftSideBar 
+                renderForm={renderForm} 
                 renderData={renderData} 
                 fileIsVisible={fileIsVisible} 
                 currentTab={currentTab}
                 chooseFile={chooseFile} // onFileSelect
                 selectedFile={selectedFile}
-                className={`h-dvh w-fit ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-dvh w-fit ${currentTab === 'form' ? 'items-center justify-center' : ''}`}
+            /> */}
+
+            <SideBar 
+                renderForm={renderForm}
+                renderData={renderData}
+                fileIsVisible={fileIsVisible}
+                currentTab={currentTab}
+                chooseFile={chooseFile}
+                selectedFile={selectedFile}
             />
 
-            <main 
+            {/* <main 
                 id='main-container'
-                className={`h-dvh flex-1 ${currentTab === 'settings' ? 'items-center justify-center' : ''}`}
+                className={`h-full flex-1 ${currentTab === 'form' ? 'items-center justify-center' : ''}`}
             >
                 
                 {renderTab(currentTab)}
                 
-            </main>
-        </SidebarProvider>
+            </main> */}
+        </div>
     )
 }
 
