@@ -1,0 +1,26 @@
+Clear data flow: Props down, events up
+
+min-h-0 / min-w-0 only apply to current component if all of its parent chain allow themselves to shrink (usually defualt is min-0-auto -> expand to show all content)
+
+
+
+_____truncate
+
+- truncate only works with
+    - want-truncated item -> has truncate, max-w/h-full 
+    - parent has overflow-hidden
+
+
+
+
+_____full & max-full
+
+h-full -> Make my height exactly 100% of my parent’s height
+
+max-h-full -> My max height cannot more than 100% of my parent’s height, but I can be smaller if my content is smaller or if another height constraint applies.
+
+Can max-h ever exceed the parent if you use h-full?
+    - No <- if parent has a fixed or constrained height, h-full never make child exceed parent.
+    - Yes <- if parent’s height is not set (or is auto), then h-full on child won’t have any effect, and child can grow as large as its content.
+
+However, if you use only max-h-full (without h-full) -> child will only grow up to the parent’s height, but not necessarily fill it.

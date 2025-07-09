@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils"
 
 import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart, RotateCcw as Refresh } from 'lucide-react'
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 
 
@@ -15,21 +14,16 @@ function SideBar(props) {
    const [isLoading, setIsLoading] = useState(false);
    const [isError, setIsError] = useState(false);
    const [refreshClickable, setRefreshClickable] = useState(true);
-
+   
+   const [showFile, setShowFile] = useState(
+      props.int_currentTab === 'database' ? true : false
+   );
 
 
    const clickFile = (file) => {
-      props.chooseFile(file)
-      console.log("[side-bar] Choose file:", file)
+      props.int_chooseFile(file)
+      console.log("[side-bar] Choose file:", file.id)
    }
-
-
-   const chooseForm = () => { 
-      props.renderForm() 
-   }
-
-   
-   const chooseData = async () => { props.renderData() }
 
 
    const fetchFiles = async () => { 
@@ -45,21 +39,9 @@ function SideBar(props) {
          }
 
          const data = await response.json()
-         setFileList(data)
-         console.log("[side-bar] Fetched files:", data)
 
-         if (data.length > 0 && !props.selectedFile) {
-            props.chooseFile(data[0])
-         } 
-         else if (data.length > 0 && props.selectedFile && !data.find(file => file.id === props.selectedFile.id)) {
-            props.chooseFile(data[0])
-         }
-         else if (data.length > 0 && props.selectedFile && data.find(file => file.id === props.selectedFile.id)) {
-            props.chooseFile(props.selectedFile)
-         }
-         else {
-            props.chooseFile(null)
-         }
+         console.log("[side-bar] Fetched files:", data)
+         setFileList(data)
 
       } catch (error) {
          console.error("[side-bar] Cannot connect to BE |", error);
@@ -74,16 +56,16 @@ function SideBar(props) {
 
    // refresh file list when switch to data tab
    useEffect( () => {
-      if (props.currentTab === 'database') {
-      fetchFiles();
+      if (props.int_currentTab === 'database') {
+         fetchFiles()
       }
-   }, [props.currentTab])
+   }, [props.int_currentTab])
 
 
 
    return (
 
-      <div id='sidebar-main' className="h-full w-[280px] border-r border-gray-300 flex flex-col bg-gray-50 ">
+      <div id='sidebar-main' className="h-full w-[250px] border-r border-gray-300 flex flex-col bg-gray-50 ">
 
          <div id='sidebar-header' className="w-full max-w-full h-fit p-3 px-4 border-b border-gray-300 flex flex-row items-center flex-start gap-3">
             <div className="aspect-square size-11 flex items-center justify-center rounded-lg bg-zinc-900">
@@ -105,12 +87,10 @@ function SideBar(props) {
                
                <div id='group-buttons' className='flex flex-col gap-4'>
                   <button
-                     onClick={chooseForm}
+                     onClick={() => { props.int_chooseTab('form'); setShowFile(false) }}
                      className={cn(
                         'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
-                        props.currentTab === 'form' 
-                           ? 'text-blue-900' 
-                           : 'text-gray-500'
+                        !showFile ? 'text-blue-900' : 'text-gray-500'
                      )}      
                   >
                      <SearchCode className="size-4" />
@@ -118,12 +98,10 @@ function SideBar(props) {
                   </button>
                   
                   <button
-                     onClick={chooseData}
+                     onClick={() => { props.int_chooseTab('database'); setShowFile(true) }}
                      className={cn(
                         'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
-                        props.currentTab === 'database' 
-                           ? 'text-blue-900' 
-                           : 'text-gray-500'
+                        showFile ? 'text-blue-900' : 'text-gray-500'
                      )}  
                   >
                      <Database className="size-4" />
@@ -134,6 +112,7 @@ function SideBar(props) {
             </div>
 
             {/* File section */}
+            {showFile && 
             <div id='sidebar-file-group' className='min-h-0 flex-1 w-full p-3 px-4 flex flex-col gap-2'>
 
                <div id='group-label' className='h-fit w-full flex flex-row items-center justify-between'>
@@ -157,32 +136,29 @@ function SideBar(props) {
                      <button
                         key={file.id}
                         id='file-item'
-                        onClick={props.selectedFile?.id === file.id ? null : () => clickFile(file)}
+                        onClick={props.int_selectedFile?.id === file.id ? null : () => clickFile(file)}
                         className={cn(
                            'h-fit w-full p-2 flex border-1 rounded-md',
-                           props.selectedFile?.id === file.id  
+                           props.int_selectedFile?.id === file.id  
                               ? 'bg-blue-50 border-blue-200 cursor-not-allowed' 
                               : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50 cursor-pointer'
                         )}
                      >
                         <div id='file-content-layout' className="w-full flex flex-row gap-5 items-center justify-between">
                            
-                           <div id='left-content' className='flex-1 overflow-hidden flex flex-col items-start gap-0.5'>
+                           <div id='left-content' className='w-full h-full overflow-hidden flex flex-col items-start gap-0.5'>
                            
-                              <div id='1st-line' className="flex items-start gap-2 w-full mb-1">
-                                 <FileChart className="size-4" />
-                                 <span 
-                                    title={file.file_name} 
-                                    className={cn(
-                                       'text-xs font-medium truncate',
-                                       props.selectedFile?.id === file.id 
-                                          ? 'text-blue-900 font-medium' 
-                                          : 'text-gray-500 font-normal'
-                                    )}
-                                 >
+                              <span 
+                                 title={file.file_name} 
+                                 className={cn(
+                                    'text-xs font-medium max-w-full truncate',   // max-w-full is important to show truncate, on this specific level
+                                    props.int_selectedFile?.id === file.id 
+                                       ? 'text-blue-900 font-medium' 
+                                       : 'text-gray-500 font-normal'
+                                 )}
+                              >
                                  {file.file_name.slice(0, -4)}
-                                 </span>
-                              </div>
+                              </span>
                            
                               <span id='2nd-line' className="text-xs text-muted-foreground">{file.date_created}</span>
                            
@@ -199,6 +175,7 @@ function SideBar(props) {
 
                </div>
             </div>
+            }
 
          </div>
 

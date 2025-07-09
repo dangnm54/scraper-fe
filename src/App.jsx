@@ -2,10 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import './index.css';
 
-import { SidebarProvider } from "@/components/ui/sidebar"
-
 import ConfigForm from '@/components/main/config-form'
-import DraftSideBar from './components/main/draft';
 import SideBar from './components/main/side-bar';
 import DataPage from './components/main/DataPage';
 
@@ -19,60 +16,30 @@ function App() {
 
     const [selectedFile, setSelectedFile] = React.useState(null);
 
-    const [fileIsVisible, setFileIsVisible] = React.useState(
-        currentTab === 'form' ? false : true
-    )
-
-
-
-    const renderTab = (selectedTab) => {
-        switch (selectedTab) {
-            case 'form':
-                return <ConfigForm />
-            case 'database':
-                return <DataPage selectedFile={selectedFile} />
-            default:
-                return (<h1 className='text-zinc-900 text-2xl font-medium'>{`<No_page_found>`}</h1>)
-        }
-    }
-
-    const renderForm = () => {
-        setCurrentTab('form')
-        setFileIsVisible(false)
-        // setSelectedFile(null)
-    }
-
-    const renderData = () => {
-        setCurrentTab('database')
-        setFileIsVisible(true)
-    }
-
-
-    const chooseFile = (file) => {
-        setSelectedFile(file)
-    }
-
-
     useEffect( () => {
         console.log("[App] Global selected file:", selectedFile?.id)
     }, [currentTab, selectedFile])
 
+    const Tab = {
+        form: <ConfigForm />,
+        database: <DataPage int_selectedFile={selectedFile} />
+    }
 
 
     return (
         <div id='layout' className="h-dvh w-dvw flex flex-row">
 
             <SideBar 
-                renderForm={renderForm}
-                renderData={renderData}
-                fileIsVisible={fileIsVisible}
-                currentTab={currentTab}
-                chooseFile={chooseFile}
-                selectedFile={selectedFile}
+                id = 'sidebar-component'
+                int_currentTab={currentTab}
+                int_selectedFile={selectedFile}
+                int_chooseTab={(sidebar_tab) => { setCurrentTab(sidebar_tab) }}
+                int_chooseFile={(file) => { setSelectedFile(file) }}
+
             />
 
-            <main id='main-container' className='min-w-0 min-h-0 flex-1 h-full max-h-full w-full max-w-full'> 
-                {Tab[currentTab] || <h1 className='text-zinc-900 text-2xl font-medium'>&lt;No_page_found&gt;</h1>}
+            <main id='main-container' className='min-w-0 min-h-0 flex-1 h-fullw-full'> 
+                {Tab[currentTab]}
             </main>
         </div>
     )

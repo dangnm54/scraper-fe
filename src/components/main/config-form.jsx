@@ -80,10 +80,10 @@ function ConfigForm() {
 
 
    return (
-      <div id='form-main' className="size-full items-center justify-center flex">
-         <Card id='card-main' className="w-full size-fit p-0 py-4 dark:bg-zinc-900 dark:text-white flex flex-col gap-5">
+      <div id='form-main' className="size-full flex items-center justify-center">
+         <Card id='card-main' className="size-fit p-0 py-4 border-1 border-gray-300 bg-gray-50 flex flex-col gap-5">
 
-            <CardHeader id='card-header' className="w-full h-fit pb-4 border-b-2 border-gray-200 !flex flex-row items-center justify-center gap-4">
+            <CardHeader id='card-header' className="w-full h-fit pb-4 border-b-1 border-gray-300 !flex flex-row items-center justify-center gap-4">
                <SearchCode className="size-6" />
                <CardTitle id='card-title' className="text-2xl font-semibold text-center text-gray-900">Scraper Settings</CardTitle>
             </CardHeader>
@@ -99,7 +99,7 @@ function ConfigForm() {
                         placeholder='eg: D1_HCM'
                         value={fileName}
                         onChange={(e) => setFileName(e.target.value)}
-                        className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                      />
                   </div>
                </div>
@@ -113,7 +113,7 @@ function ConfigForm() {
                         placeholder='eg: District 1, HCM'
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                      />
                   </div>
                </div>
@@ -127,7 +127,7 @@ function ConfigForm() {
                         placeholder='eg: 2'
                         value={numGuest}
                         onChange={(e) => setNumGuest(e.target.value)}
-                        className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                      />
                   </div>
                </div>
@@ -142,7 +142,7 @@ function ConfigForm() {
                         placeholder='eg: 10'
                         value={numProperty}
                         onChange={(e) => setNumProperty(e.target.value)}
-                        className="h-9 w-65 rounded-sm border-gray-600 text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                      />
                   </div>
                </div>
@@ -156,7 +156,7 @@ function ConfigForm() {
                            id="hostData"
                            checked={hostData}
                            onCheckedChange={setHostData}
-                           className="border-gray-700 size-4.5"
+                           className="border-gray-700 bg-white size-4.5"
                         />
                         <Label htmlFor="hostData" className="text-md font-normal">Host data</Label>
                      </div>
@@ -175,11 +175,11 @@ function ConfigForm() {
 
             </CardContent>
 
-            <CardFooter id='card-footer' className="pt-4 flex items-center justify-center border-t-2 border-gray-200">
+            <CardFooter id='card-footer' className="pt-4 items-center justify-center border-t-1 border-gray-300">
                <Button
                   id='run-button'
                   onClick={runScraper}
-                  className="flex gap-2 w-full cursor-pointer"
+                  className="size-full py-2 gap-2 cursor-pointer"
                >
                   <CirclePlay className="size-4.5" />
                   <p className="text-lg font-medium">Run</p>

@@ -17,51 +17,49 @@ function DataContent(props) {
    const [searchTerm, setSearchTerm] = useState("")
 
    // fetch file detail
-   useEffect( () => {
-      const fetchDetail = async () => {
+   // useEffect( () => {
+   //    const fetchDetail = async () => {
 
-         // reset all state when new file is loaded
-         setSelectedRow(null)
-         setSearchTerm('')
+   //       // reset all state when new file is loaded
+   //       setSelectedRow(null)
+   //       setSearchTerm('')
 
-         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.selectedFile.id}`)
+   //       try {
+   //          const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.int2_selectedFile.id}`)
 
-            if (!response.ok) {
-               throw new Error(`HTTP error! status: ${response.status}`);
-            }
+   //          if (!response.ok) {
+   //             throw new Error(`HTTP error! status: ${response.status}`);
+   //          }
 
-            const result = await response.json()
+   //          const result = await response.json()
 
-            if (result.status === 'success' && Array.isArray(result.data)) {
-               setFileDetail(result.data)
+   //          if (result.status === 'success' && Array.isArray(result.data)) {
+   //             setFileDetail(result.data)
 
-               if (result.data.length > 0) {
-                  setHeader(Object.keys(result.data[0]))
-               } 
-               else {
-                  setHeader([])
-               }
+   //             if (result.data.length > 0) {
+   //                setHeader(Object.keys(result.data[0]))
+   //             } 
+   //             else {
+   //                setHeader([])
+   //             }
 
-               console.log('[data-content] Response has data: ', result.data)
+   //             // console.log('[data-content] File detail: ', result.data)
             
-            }
-            else {
-               throw new Error(result.message || 'BE return invalid data format.')
-            }
+   //          }
+   //          else {
+   //             throw new Error(result.message || 'BE return invalid data format.')
+   //          }
 
-            console.log('[data-content] File detail: ', result.data)
+   //       } catch (error) {
+   //          console.error("[side-bar] Cannot connect to BE |", error);
+   //          setFileDetail([])
+   //          setHeader([])
+   //       }
+   //    }
 
-         } catch (error) {
-            console.error("[side-bar] Cannot connect to BE |", error);
-            setFileDetail([])
-            setHeader([])
-         }
-      }
+   //    fetchDetail()
 
-      fetchDetail()
-
-   }, [props.selectedFile])
+   // }, [props.int2_selectedFile])
 
 
    const filterdDetail = useMemo( () => {
@@ -84,7 +82,7 @@ function DataContent(props) {
 
 
    return (
-      <div id="content" className="flex-1 flex flex-row bg-green-100 " >    {/* need bg */}
+      <div id="data-content-main" className="min-w-0 min-h-0 size-full flex-1 flex flex-row bg-green-100 " >    {/* need bg */}
 
          {/* Table section */}
          <div id="table-area" className="flex-1 !min-w-0 p-5 bg-blue-200">
