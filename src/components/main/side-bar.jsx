@@ -83,9 +83,9 @@ function SideBar(props) {
 
    return (
 
-      <div id='sidebar-main' className="h-full w-72 border-r border-gray-300 grid grid-rows-[auto_1fr_auto] overflow-hidden">
+      <div id='sidebar-main' className="h-full w-[280px] border-r border-gray-300 flex flex-col bg-gray-50 ">
 
-         <div id='sidebar-header' className="w-full h-fit p-3 px-4 border-b border-gray-300 bg-gray-50 flex flex-row items-center flex-start gap-3">
+         <div id='sidebar-header' className="w-full max-w-full h-fit p-3 px-4 border-b border-gray-300 flex flex-row items-center flex-start gap-3">
             <div className="aspect-square size-11 flex items-center justify-center rounded-lg bg-zinc-900">
                <BugIcon className="size-6 text-white" />
             </div>
@@ -96,37 +96,47 @@ function SideBar(props) {
          </div>
 
 
-         <div id='sidebar-body' className='relative h-full w-full flex flex-col gap-2 bg-blue-200'>
+         <div id='sidebar-body' className='min-h-0 relative flex-1 w-full flex flex-col gap-2'>
 
             {/* Navigation section */}
-            <div id='sidebar-navigation-group' className='w-full h-fit p-3 px-4 pt-5 flex flex-col gap-2'>
+            <div id='sidebar-navigation-group' className='w-full h-fit p-3 px-4 pt-5 flex flex-col gap-3'>
                
                <div id='group-label' className='text-sm font-medium text-gray-600'>Navigation</div>
                
-               <div id='group-buttons' className='flex flex-col gap-1.5'>
+               <div id='group-buttons' className='flex flex-col gap-4'>
                   <button
-                     className='w-full h-fit pl-0 flex flex-row items-center gap-2 cursor-pointer'
                      onClick={chooseForm}
+                     className={cn(
+                        'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
+                        props.currentTab === 'form' 
+                           ? 'text-blue-900' 
+                           : 'text-gray-500'
+                     )}      
                   >
                      <SearchCode className="size-4" />
-                     <span className='text-lg font-normal'>Run Scraper</span>
+                     <span className='text-sm font-normal'>Run Scraper</span>
                   </button>
                   
                   <button
-                     className='w-full h-fit pl-0 flex flex-row items-center gap-2 cursor-pointer'
                      onClick={chooseData}
+                     className={cn(
+                        'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
+                        props.currentTab === 'database' 
+                           ? 'text-blue-900' 
+                           : 'text-gray-500'
+                     )}  
                   >
                      <Database className="size-4" />
-                     <span className='text-lg font-normal'>Database</span>
+                     <span className='text-sm font-normal'>Database</span>
                   </button>
                </div>
             
             </div>
 
             {/* File section */}
-            <div id='sidebar-file-group' className='w-full h-full p-3 px-4 flex flex-col gap-2 bg-red-50'>
+            <div id='sidebar-file-group' className='min-h-0 flex-1 w-full p-3 px-4 flex flex-col gap-2'>
 
-               <div id='group-label' className='flex flex-row items-center justify-between'>
+               <div id='group-label' className='h-fit w-full flex flex-row items-center justify-between'>
                   <span className='text-sm font-medium text-gray-600'>Files</span>
                   <Refresh 
                      onClick={refreshClickable ? fetchFiles : null}
@@ -134,52 +144,66 @@ function SideBar(props) {
                   /> 
                </div>
 
-               <div id='file-box' className='w-full h-full p-3 overflow-auto bg-yellow-50 border rounded-md border-gray-300 flex flex-col gap-2 items-center'>
+               <div id='file-box' className='min-h-0 flex-1 w-full p-3 overflow-auto bg-white scrollbar scrollbar-thumb-gray-300 scrollbar-track-white scrollbar-corner-white border rounded-md border-gray-300 flex flex-col gap-2 items-center'>
 
-                  {/* {isLoading && <p className="text-center text-sm text-gray-500">Fetching files...</p>}
+                  {isLoading && <p className="text-center text-sm text-gray-500">Fetching files...</p>}
                   {isError && <p className="text-center text-sm text-red-500">Error fetching files! <br /> Please check BE server.</p>}
                   {!isLoading &&
                   !isError &&
                   fileList.length === 0 &&
-                  <p className="text-center text-sm text-gray-500">Database is empty.</p>} */}
+                  <p className="text-center text-sm text-gray-500">Database is empty.</p>}
 
                   {fileList.map( (file) => (
                      <button
                         key={file.id}
-                        id='file-item'    
+                        id='file-item'
                         onClick={props.selectedFile?.id === file.id ? null : () => clickFile(file)}
                         className={cn(
-                           'h-fit w-full p-2 flex border-2 rounded-md',
-                           props.selectedFile?.id === file.id ? 'border-blue-500 cursor-not-allowed' : 'border-gray-300 cursor-pointer'
+                           'h-fit w-full p-2 flex border-1 rounded-md',
+                           props.selectedFile?.id === file.id  
+                              ? 'bg-blue-50 border-blue-200 cursor-not-allowed' 
+                              : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50 cursor-pointer'
                         )}
                      >
-                        <div id='file-content-layout' className="w-full flex flex-row items-center justify-between">
+                        <div id='file-content-layout' className="w-full flex flex-row gap-5 items-center justify-between">
                            
-                           <div id='left-content' className='flex flex-col items-start gap-0.5'>
+                           <div id='left-content' className='flex-1 overflow-hidden flex flex-col items-start gap-0.5'>
                            
-                              <div id='1st-line' className="flex items-center gap-2 w-full mb-1">
+                              <div id='1st-line' className="flex items-start gap-2 w-full mb-1">
                                  <FileChart className="size-4" />
-                                 <span className="text-xs font-medium truncate break-words">{file.file_name}</span>
+                                 <span 
+                                    title={file.file_name} 
+                                    className={cn(
+                                       'text-xs font-medium truncate',
+                                       props.selectedFile?.id === file.id 
+                                          ? 'text-blue-900 font-medium' 
+                                          : 'text-gray-500 font-normal'
+                                    )}
+                                 >
+                                 {file.file_name.slice(0, -4)}
+                                 </span>
                               </div>
                            
                               <span id='2nd-line' className="text-xs text-muted-foreground">{file.date_created}</span>
                            
                            </div>
 
-                           <Badge id='item-count' variant="default" className="text-xs h-4 px-1">
+                           <Badge id='item-count' variant="default" className="w-fit text-xs h-4 px-1">
                               {file.item_count}
                            </Badge>
 
                         </div>
+                        
                      </button>
                   ))}
+
                </div>
             </div>
 
          </div>
 
 
-         <div id='sidebar-footer' className='w-full h-fit p-3 border-t border-gray-300 bg-gray-50 flex items-center justify-center gap-3'>
+         <div id='sidebar-footer' className='w-full max-w-full h-fit p-3 border-t border-gray-300 flex items-center justify-center gap-3'>
             <span className="text-xs text-muted-foreground text-center">Copyright © 2025 Strapee. <br /> All Rights Reserved.</span>
          </div>
 

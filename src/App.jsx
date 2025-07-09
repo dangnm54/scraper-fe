@@ -62,16 +62,6 @@ function App() {
     return (
         <div id='layout' className="h-dvh w-dvw flex flex-row">
 
-            {/* <DraftSideBar 
-                renderForm={renderForm} 
-                renderData={renderData} 
-                fileIsVisible={fileIsVisible} 
-                currentTab={currentTab}
-                chooseFile={chooseFile} // onFileSelect
-                selectedFile={selectedFile}
-                className={`h-dvh w-fit ${currentTab === 'form' ? 'items-center justify-center' : ''}`}
-            /> */}
-
             <SideBar 
                 renderForm={renderForm}
                 renderData={renderData}
@@ -81,14 +71,9 @@ function App() {
                 selectedFile={selectedFile}
             />
 
-            {/* <main 
-                id='main-container'
-                className={`h-full flex-1 ${currentTab === 'form' ? 'items-center justify-center' : ''}`}
-            >
-                
-                {renderTab(currentTab)}
-                
-            </main> */}
+            <main id='main-container' className='min-w-0 min-h-0 flex-1 h-full max-h-full w-full max-w-full'> 
+                {Tab[currentTab] || <h1 className='text-zinc-900 text-2xl font-medium'>&lt;No_page_found&gt;</h1>}
+            </main>
         </div>
     )
 }
