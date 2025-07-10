@@ -19,8 +19,20 @@ h-full -> Make my height exactly 100% of my parent’s height
 
 max-h-full -> My max height cannot more than 100% of my parent’s height, but I can be smaller if my content is smaller or if another height constraint applies.
 
-Can max-h ever exceed the parent if you use h-full?
+Can max-h of child ever exceed the parent if you use h-full?
     - No <- if parent has a fixed or constrained height, h-full never make child exceed parent.
     - Yes <- if parent’s height is not set (or is auto), then h-full on child won’t have any effect, and child can grow as large as its content.
 
 However, if you use only max-h-full (without h-full) -> child will only grow up to the parent’s height, but not necessarily fill it.
+
+
+
+____flex-1 & size-full
+- flex-1
+    - flexible growth in a flex container
+    - fill space in main axis (of flex direction)
+- size-full 
+    - explicitly setting width and height to 100%. (only works if parent has explicit size)
+    - try to fill all axis
+
+- when use both -> Fills all space in both axes	

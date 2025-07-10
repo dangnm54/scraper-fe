@@ -18,6 +18,7 @@ function DataPage(props) {
     return (
         <div id="dataview-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2 bg-yellow-50">    {/* need bg */}
             {props.int_selectedFile ? (
+                
                 <>
                     {/* Header */}
                     <div id="header" className="h-fit w-full p-5 pb-0 flex flex-row justify-between items-center bg-red-100">    {/* need bg */}
@@ -34,12 +35,7 @@ function DataPage(props) {
 
             ) : (
 
-                <div 
-                    id="header" 
-                    className="h-fit w-full p-5 pb-0 flex flex-row justify-between items-center text-sm"
-                > 
-                Select file to view detail.
-                </div>
+                <div id="header" className="size-full p-5 pb-0 text-md"> Select file to view detail.</div>
             )}
         </div>
     )

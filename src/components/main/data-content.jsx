@@ -82,10 +82,10 @@ function DataContent(props) {
 
 
    return (
-      <div id="data-content-main" className="min-w-0 min-h-0 size-full flex-1 flex flex-row bg-green-100 " >    {/* need bg */}
+      <div id="data-content-main" className="min-w-0 min-h-0 flex-1 size-full flex flex-row bg-green-100 " >    {/* need bg */}
 
          {/* Table section */}
-         <div id="table-area" className="flex-1 !min-w-0 p-5 bg-blue-200">
+         <div id="table-area" className="min-w-0 min-h-0 flex-1 size-fll p-5 bg-blue-200">
             <div id="table-box" className="h-full w-full border-2 rounded-lg flex flex-col overflow-hidden ">   {/* need bg */}
 
                <div id="table-header" className="h-fit w-full p-5 border-b-2 flex flex-row flex-start items-center">
@@ -182,17 +182,17 @@ function DataContent(props) {
          </div>
 
          {/* JSON section*/}
-         <div id="json-area" className="w-96 h-full p-5 pl-0 bg-purple-100">
-            <div id="json-box" className="h-full border-2 rounded-lg flex flex-col">
+         <div id="json-area" className="min-w-0 min-h-0 w-96 h-full p-5 pl-0 bg-purple-100 flex flex-col">
+            {/* <div id="json-box" className="h-full border-2 rounded-lg flex flex-col"> */}
 
-               <div id="json-header" className="h-fit p-5 border-b-2 flex flex-col">
+               <div id="json-header" className="h-fit w-full p-5 border-2 rounded-tl-lg rounded-tr-lg flex flex-col">
                   <h2 className="text-lg font-medium text-gray-800">JSON Detail</h2>
                </div>
 
-               <div id="json-body" className="flex-1 min-w-0 min-h-0 p-5 flex flex-col gap-2" >
+               <div id="json-body" className="min-w-0 min-h-0 flex-1 size-full border-2 rounded-bl-lg border-t-0 rounded-br-lg p-5 gap-2" >
                   {selectedRow ?
                      (
-                        <pre id="json-content" className="p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-y-auto h-full">
+                        <pre id="json-content" className="min-w-0 min-h-0 size-full p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap overflow-auto">
                            {JSON.stringify(selectedRow, null, 2)}
                         </pre>
                      ) : (
@@ -202,9 +202,7 @@ function DataContent(props) {
                      )
                   }
                </div>
-            </div>
          </div>
-
 
       </div>
    )

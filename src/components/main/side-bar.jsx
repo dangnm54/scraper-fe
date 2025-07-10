@@ -144,7 +144,7 @@ function SideBar(props) {
                               : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50 cursor-pointer'
                         )}
                      >
-                        <div id='file-content-layout' className="w-full flex flex-row gap-5 items-center justify-between">
+                        <div id='file-content-layout' className="w-full flex flex-row gap-3 items-center justify-between">
                            
                            <div id='left-content' className='w-full h-full overflow-hidden flex flex-col items-start gap-0.5'>
                            

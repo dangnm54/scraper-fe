@@ -38,7 +38,7 @@ function App() {
 
             />
 
-            <main id='main-container' className='min-w-0 min-h-0 flex-1 h-fullw-full'> 
+            <main id='main-container' className='min-w-0 min-h-0 flex-1 size-full'> 
                 {Tab[currentTab]}
             </main>
         </div>
