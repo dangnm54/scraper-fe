@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils"
 function DataContent(props) {
 
    const [fileDetail, setFileDetail] = useState([])
-   const [header, setHeader] = useState([])
+   const [headers, setHeaders] = useState([])
    const [selectedRow, setSelectedRow] = useState(null)
    const [searchTerm, setSearchTerm] = useState("")
 
@@ -39,10 +39,10 @@ function DataContent(props) {
                if (result.data.length > 0) {
                   const allHeaders = Object.keys(result.data[0]);
                   const filteredHeaders = allHeaders.filter(h => h !== 'Scrape_status');
-                  setHeader(filteredHeaders);
+                  setHeaders(filteredHeaders);
                }
                else {
-                  setHeader([]);
+                  setHeaders([]);
                }
 
                console.log('[data-content] File detail: ', result.data)
@@ -55,7 +55,7 @@ function DataContent(props) {
          } catch (error) {
             console.error("[side-bar] Cannot connect to BE |", error);
             setFileDetail([])
-            setHeader([])
+            setHeaders([])
          }
       }
 
@@ -108,9 +108,11 @@ function DataContent(props) {
 
                      <thead className="w-full h-fit sticky top-0 z-20">
                         <tr>
-                           {header.map((header, index) => (
+                           {headers.map((header, index) => (
                               <th
                                  key={index}
+                                 ori_idx = {index}
+                                 par_idx = {headers.length - 1}
                                  className={cn(
                                     "relative text-left py-3 px-4 text-xs font-medium bg-gray-800 text-white border-b-1 border-r-0 border-gray-400 whitespace-nowrap min-w-[120px]",
                                     {
@@ -124,8 +126,7 @@ function DataContent(props) {
                                     id="header-divider"
                                     className={cn(
                                        "absolute right-1.5 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400",
-                                       index === 0 ? "hidden" : "",
-                                       index === header.length - 1 ? "hidden" : "",
+                                       index === headers.length - 1 ? "hidden" : "",
                                        index === 1 ? "shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" : ""
 
                                     )}>
@@ -142,7 +143,7 @@ function DataContent(props) {
                               className="size-full group cursor-pointer border-b border-gray-400 transition-colors"
                               onClick={() => setSelectedRow(row)}
                            >
-                              {header.map((header, colIndex) => (
+                              {headers.map((header, colIndex) => (
                                  <td
                                     key={`${rowIndex}-${colIndex}`}
                                     id={`cell-${rowIndex}-${colIndex}`}
@@ -157,7 +158,7 @@ function DataContent(props) {
                                     )}
                                  >
                                     <div className="truncate">
-                                       {colIndex === 2 ? (
+                                       {colIndex === 2 || colIndex === 16 ? (
                                           <a href={String(row[header])} target="_blank" rel="noopener noreferrer" className="text-blue-600 !underline">
                                              {row[header] === null || String(row[header]) === 'null' ? '-' : String(row[header])}
                                           </a>

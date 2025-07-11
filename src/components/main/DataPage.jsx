@@ -14,6 +14,27 @@ function DataPage(props) {
     //     console.log("[DataPage] Global selected file:", props.int_selectedFile)
     // }, [props.int_selectedFile])
 
+
+    const downloadFile = async () => {
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.int_selectedFile.id}`)
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`)
+            }
+        
+        } catch (error) {
+            console.error("[data-page] Cannot connect to BE |", error)
+        }
+    
+    
+    
+    }
+
+
+
+
     
     return (
         <div id="datapage-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2">    {/* need bg */}
