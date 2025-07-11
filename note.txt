@@ -36,3 +36,8 @@ ____flex-1 & size-full
     - try to fill all axis
 
 - when use both -> Fills all space in both axes	
+
+
+____overflow area
+- overflow: auto -> scrollable area includes element’s padding.
+- padding is part of area that can be scrolled

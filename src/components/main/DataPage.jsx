@@ -16,12 +16,12 @@ function DataPage(props) {
 
     
     return (
-        <div id="dataview-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2 bg-yellow-50">    {/* need bg */}
+        <div id="datapage-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2">    {/* need bg */}
             {props.int_selectedFile ? (
                 
                 <>
                     {/* Header */}
-                    <div id="header" className="h-fit w-full p-5 pb-0 flex flex-row justify-between items-center bg-red-100">    {/* need bg */}
+                    <div id="header" className="h-fit w-full p-5 pb-0 flex flex-row justify-between items-center">    {/* need bg */}
                         <h1 className="text-lg font-medium text-gray-900">{`File: ${props.int_selectedFile.file_name}`}</h1>  
                         <Button variant="default" className="cursor-pointer gap-3">
                             <Download className="size-4" />

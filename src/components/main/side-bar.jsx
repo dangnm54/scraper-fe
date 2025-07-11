@@ -65,7 +65,7 @@ function SideBar(props) {
 
    return (
 
-      <div id='sidebar-main' className="h-full w-[250px] border-r border-gray-300 flex flex-col bg-gray-50 ">
+      <div id='sidebar-main' className="h-full w-[250px] border-r border-gray-300 flex flex-col bg-gray-100">
 
          <div id='sidebar-header' className="w-full max-w-full h-fit p-3 px-4 border-b border-gray-300 flex flex-row items-center flex-start gap-3">
             <div className="aspect-square size-11 flex items-center justify-center rounded-lg bg-zinc-900">
@@ -123,7 +123,7 @@ function SideBar(props) {
                   /> 
                </div>
 
-               <div id='file-box' className='min-h-0 flex-1 w-full p-3 overflow-auto bg-white scrollbar scrollbar-thumb-gray-300 scrollbar-track-white scrollbar-corner-white border rounded-md border-gray-300 flex flex-col gap-2 items-center'>
+               <div id='file-box' className='min-h-0 flex-1 w-full p-3 overflow-auto bg-white scrollbar scrollbar-thumb-gray-300 scrollbar-track-white border rounded-lg border-gray-300 flex flex-col gap-2 items-center'>
 
                   {isLoading && <p className="text-center text-sm text-gray-500">Fetching files...</p>}
                   {isError && <p className="text-center text-sm text-red-500">Error fetching files! <br /> Please check BE server.</p>}
@@ -141,7 +141,7 @@ function SideBar(props) {
                            'h-fit w-full p-2 flex border-1 rounded-md',
                            props.int_selectedFile?.id === file.id  
                               ? 'bg-blue-50 border-blue-200 cursor-not-allowed' 
-                              : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50 cursor-pointer'
+                              : 'border-gray-300 hover:border-gray-400 hover:bg-gray-100 cursor-pointer'
                         )}
                      >
                         <div id='file-content-layout' className="w-full flex flex-row gap-3 items-center justify-between">
