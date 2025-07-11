@@ -37,10 +37,12 @@ function DataContent(props) {
                setFileDetail(result.data)
 
                if (result.data.length > 0) {
-                  setHeader(Object.keys(result.data[0]))
-               } 
+                  const allHeaders = Object.keys(result.data[0]);
+                  const filteredHeaders = allHeaders.filter(h => h !== 'Scrape_status');
+                  setHeader(filteredHeaders);
+               }
                else {
-                  setHeader([])
+                  setHeader([]);
                }
 
                console.log('[data-content] File detail: ', result.data)
@@ -69,10 +71,10 @@ function DataContent(props) {
 
       return fileDetail.filter((item) =>
          item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.Utility_num?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.Rating_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.Rating_num?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         item.Rating_star?.toLowerCase().includes(searchTerm.toLowerCase()) 
+         String(item.Utility_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.Rating_title)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.Rating_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.Rating_star)?.toLowerCase().includes(searchTerm.toLowerCase()) 
       )
 
    }, [searchTerm, fileDetail])
@@ -101,7 +103,7 @@ function DataContent(props) {
             </div>
 
             <div id="table-body" className="min-w-0 min-h-0 flex-1 size-full p-5 border-2 border-t-0 rounded-bl-lg rounded-br-lg">      {/* need bg */}
-               <div id='table-scroll-area' className='min-w-0 min-h-0 size-full overflow-auto border-1 border-gray-400 rounded-xl scrollbar scrollbar-thumb-gray-300 scrollbar-track-white scrollbar-corner-white'>       {/* need bg */}
+               <div id='table-scroll-area' className='min-w-0 min-h-0 size-full overflow-auto border-1 border-gray-400 rounded-lg scrollbar scrollbar-thumb-gray-300 scrollbar-track-white scrollbar-corner-white'>       {/* need bg */}
                   <table id="table-content" className="min-w-0 min-h-0 w-full h-fit text-sm border-collapse bg-white ">      {/* need bg */}
 
                      <thead className="w-full h-fit sticky top-0 z-20">
@@ -110,7 +112,7 @@ function DataContent(props) {
                               <th
                                  key={index}
                                  className={cn(
-                                    "relative text-left py-3 px-4 text-xs font-medium bg-gray-100 text-gray-800 border-b border-r-0 border-gray-400 whitespace-nowrap min-w-[120px]",
+                                    "relative text-left py-3 px-4 text-xs font-medium bg-gray-800 text-white border-b-1 border-r-0 border-gray-400 whitespace-nowrap min-w-[120px]",
                                     {
                                        "sticky left-0 z-10 !min-w-[50px]": index === 0,
                                        "sticky left-[50px] z-10": index === 1,
@@ -137,32 +139,37 @@ function DataContent(props) {
                         {filterdDetail.map((row, rowIndex) => (
                            <tr
                               key={rowIndex}
-                              className={cn(
-                                 "size-full group cursor-pointer border-b border-gray-400 transition-colors",
-                                 selectedRow === row ? "bg-cyan-50" : ""
-                              )}
+                              className="size-full group cursor-pointer border-b border-gray-400 transition-colors"
                               onClick={() => setSelectedRow(row)}
                            >
                               {header.map((header, colIndex) => (
                                  <td
                                     key={`${rowIndex}-${colIndex}`}
                                     id={`cell-${rowIndex}-${colIndex}`}
+                                    title={colIndex === 1 ? String(row[header]) : undefined}
                                     className={cn(
                                        "relative py-3 px-4 bg-white text-gray-700 whitespace-nowrap group-hover:bg-blue-50 transition-colors",
                                        {
                                           "sticky left-0 z-10": colIndex === 0,
-                                          "sticky left-[50px] z-10 !min-w-[450px] !max-w-[450px]": colIndex === 1,
-                                       }
+                                          "sticky left-[50px] z-10 max-w-[300px]": colIndex === 1,
+                                       },
+                                       selectedRow === row ? "bg-cyan-50" : ""
                                     )}
                                  >
                                     <div className="truncate">
-                                       { String(row[header]) || "" }
+                                       {colIndex === 2 ? (
+                                          <a href={String(row[header])} target="_blank" rel="noopener noreferrer" className="text-blue-600 !underline">
+                                             {row[header] === null || String(row[header]) === 'null' ? '-' : String(row[header])}
+                                          </a>
+                                       ) : (
+                                          row[header] === null || String(row[header]) === 'null' ? '-' : String(row[header])
+                                       )}
                                     </div>
 
                                     <div
                                        id="cell-divider"
                                        className={colIndex === 1 ?
-                                          "absolute right-1.5 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400 shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" :
+                                          "absolute right-1.5 top-1/2 -translate-y-1/2 h-full w-[1px] rounded-md bg-gray-400 shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" :
                                           "hidden"}
                                     >
                                     </div>
