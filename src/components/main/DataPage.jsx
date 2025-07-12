@@ -17,6 +17,14 @@ function DataPage(props) {
 
     const downloadFile = async () => {
 
+        `
+        - received file data from BE
+        - create an file-like object in browser's temporary memory space
+        - create temporary download link (point to the file-like object's address in browser memory)
+        - click the link to download file
+        - clean up temporary resource
+        `
+
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.int_selectedFile.id}`)
 
@@ -24,15 +32,41 @@ function DataPage(props) {
                 throw new Error(`HTTP error! Status: ${response.status}`)
             }
         
+            // using received data, create a blob object in browser's temporary memory space
+                // blob (binary large object) is file-like object of immutable data
+            const blob = await response.blob()
+
+            // create DOMString (piece of text) of a URL pointing to blob's address in browser's memory space            
+            const url = window.URL.createObjectURL(blob)
+
+            // create <a> element 
+            const link = document.createElement('a')
+
+            link.href = url
+
+            // when element has 'download' attribute, browser treat: 
+                // 'href' as download link
+                // 'file_name' as name for downloadble file
+            link.setAttribute('download', props.int_selectedFile.file_name)
+
+            // add <a> to <body>
+            document.body.appendChild(link)
+
+            // click the hidden <a> -> trigger download
+            link.click()
+
+            // after download, the temporary <a> is removed to clean up DOM
+            link.parentNode.removeChild(link)
+
+            // release temporary URL created earlier -> free up memory
+            window.URL.revokeObjectURL(url)
+
+
         } catch (error) {
             console.error("[data-page] Cannot connect to BE |", error)
-        }
-    
-    
+        }    
     
     }
-
-
 
 
     
@@ -44,7 +78,11 @@ function DataPage(props) {
                     {/* Header */}
                     <div id="header" className="h-fit w-full p-5 pb-0 flex flex-row justify-between items-center">    {/* need bg */}
                         <h1 className="text-lg font-medium text-gray-900">{`File: ${props.int_selectedFile.file_name}`}</h1>  
-                        <Button variant="default" className="cursor-pointer gap-3">
+                        <Button 
+                            onClick = {downloadFile}
+                            variant = "default" 
+                            className="cursor-pointer gap-3"
+                        >
                             <Download className="size-4" />
                             <span>CSV</span>
                         </Button>
