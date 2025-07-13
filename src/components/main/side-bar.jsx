@@ -90,22 +90,22 @@ function SideBar(props) {
                      onClick={() => { props.int_chooseTab('form'); setShowFile(false) }}
                      className={cn(
                         'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
-                        !showFile ? 'text-blue-900' : 'text-gray-500'
+                        !showFile ? 'text-blue-800' : 'text-gray-500'
                      )}      
                   >
                      <SearchCode className="size-4" />
-                     <span className='text-sm font-normal'>Run Scraper</span>
+                     <span className='text-md font-normal'>Run Scraper</span>
                   </button>
                   
                   <button
                      onClick={() => { props.int_chooseTab('database'); setShowFile(true) }}
                      className={cn(
                         'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
-                        showFile ? 'text-blue-900' : 'text-gray-500'
+                        showFile ? 'text-blue-800' : 'text-gray-500'
                      )}  
                   >
                      <Database className="size-4" />
-                     <span className='text-sm font-normal'>Database</span>
+                     <span className='text-md font-normal'>Database</span>
                   </button>
                </div>
             
