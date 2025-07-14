@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState } from 'react';
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -80,7 +79,7 @@ function ConfigForm() {
 
 
    return (
-      <div id='form-main' className="size-full flex items-center justify-center">
+      <div id='form-main' className="min-h-0 min-w-0 flex-1 size-full flex items-center justify-center">
          <Card id='card-main' className="size-fit p-0 py-4 border-1 border-gray-300 bg-gray-50 flex flex-col gap-5">
 
             <CardHeader id='card-header' className="w-full h-fit pb-4 border-b-1 border-gray-300 !flex flex-row items-center justify-center gap-4">

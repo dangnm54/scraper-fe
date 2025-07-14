@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import DataContent from './data-content';
-import DashboardPage from './dr-data-page';
 
 
 import { Button } from "@/components/ui/button"
@@ -71,7 +70,7 @@ function DataPage(props) {
 
     
     return (
-        <div id="datapage-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2">    {/* need bg */}
+        <div id="data-page-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2">    {/* need bg */}
             {props.int_selectedFile ? (
                 
                 <>

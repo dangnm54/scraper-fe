@@ -4,7 +4,8 @@ import './index.css';
 
 import ConfigForm from '@/components/main/config-form'
 import SideBar from './components/main/side-bar';
-import DataPage from './components/main/DataPage';
+import DataPage from './components/main/data-page';
+import RunPage from './components/main/run-page';
 
 
 // ------------------------------------------------------------------------------------------------
@@ -12,7 +13,7 @@ import DataPage from './components/main/DataPage';
 
 function App() {
 
-    const [currentTab, setCurrentTab] = React.useState('database');
+    const [currentTab, setCurrentTab] = React.useState('form');
 
     const [selectedFile, setSelectedFile] = React.useState(null);
 
@@ -21,7 +22,7 @@ function App() {
     }, [currentTab, selectedFile])
 
     const Tab = {
-        form: <ConfigForm />,
+        form: <RunPage />,
         database: <DataPage int_selectedFile={selectedFile} />
     }
 
