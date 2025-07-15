@@ -188,25 +188,24 @@ function DataContent(props) {
 
          {/* JSON section*/}
          <div id="json-area" className="min-w-0 min-h-0 w-96 h-full p-5 pl-0 flex flex-col">
-            {/* <div id="json-box" className="h-full border-2 rounded-lg flex flex-col"> */}
 
-               <div id="json-header" className="h-fit w-full p-5 border-2 rounded-tl-lg rounded-tr-lg flex flex-col">
-                  <h2 className="text-lg font-medium text-gray-800">JSON Detail</h2>
-               </div>
+            <div id="json-header" className="h-fit w-full p-5 border-2 rounded-tl-lg rounded-tr-lg flex flex-col">
+               <h2 className="text-lg font-medium text-gray-800">JSON Detail</h2>
+            </div>
 
-               <div id="json-body" className="min-w-0 min-h-0 flex-1 size-full border-2 rounded-bl-lg border-t-0 rounded-br-lg p-5 gap-2" >
-                  {selectedRow ?
-                     (
-                        <pre id="json-content" className="min-w-0 min-h-0 max-w-full size-full p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap break-words overflow-y-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-white">
-                           {JSON.stringify(selectedRow, null, 2)}
-                        </pre>
-                     ) : (
-                        <div className="flex items-center justify-center h-32 text-gray-500">
-                           Select a row to view JSON
-                        </div>
-                     )
-                  }
-               </div>
+            <div id="json-body" className="min-w-0 min-h-0 flex-1 size-full border-2 rounded-bl-lg border-t-0 rounded-br-lg p-5 gap-2" >
+               {selectedRow ?
+                  (
+                     <pre id="json-content" className="min-w-0 min-h-0 size-full p-2 rounded-md border border-gray-400 text-sm bg-gray-100 text-gray-700 whitespace-pre-wrap break-words overflow-y-auto scrollbar scrollbar-thumb-gray-300 scrollbar-track-white">
+                        {JSON.stringify(selectedRow, null, 2)}
+                     </pre>
+                  ) : (
+                     <div className="flex items-center justify-center h-32 text-gray-500">
+                        Select a row to view JSON
+                     </div>
+                  )
+               }
+            </div>
          </div>
 
       </div>
