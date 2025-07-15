@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { MonitorCog } from "lucide-react";
-import { error } from "console";
 
 function SSELog() {
     const [logs, setLogs] = useState([])
@@ -10,6 +9,7 @@ function SSELog() {
 
 
     useEffect( () => {
+
         eventSourceRef.current = new EventSource('http://127.0.0.1:8000/sse/logs')
 
         eventSourceRef.current.onopen = () => {
@@ -18,7 +18,7 @@ function SSELog() {
         }
 
         eventSourceRef.current.onmessage = (event) => {
-            // event.data contains message from BE
+            console.log('Received SSE event:', event)
             console.log('Received SSE message:', event.data)
             setLogs(prev => [...prev, event.data])
         }
@@ -30,14 +30,14 @@ function SSELog() {
             setLogs(prev => [...prev, `--- SSE Connection Closed ---`])
         }
 
+
         return () => {
             if (eventSourceRef.current && eventSourceRef.current.readyState != EventSource.CLOSED) {
                 eventSourceRef.current.close()
                 console.log('SSE connection closed on component unmount')
             }
         }
-
-        // [] -> only run once when component first mount (appear on screen), and clean-
+    
     }, [])
 
 
@@ -52,7 +52,8 @@ function SSELog() {
     return (
         <div id='sse-log-main' className="min-h-0 min-w-0 h-full w-3/5 overflow-hidden border-2 border-gray-300 rounded-lg flex flex-col">
             
-            <div id='log-header' className="h-fit w-full p-5 border-b-2"> 
+            <div id='log-header' className="h-fit w-full p-5 border-b-2 flex flex-row items-center justify-start gap-3"> 
+                <MonitorCog className="size-5"/>
                 <h2 className="text-lg font-medium text-gray-800">Server Logs</h2>
             </div>
 
@@ -67,11 +68,6 @@ function SSELog() {
             </pre>
 
         </div>
-
-
-
-
-
     )
 }
 

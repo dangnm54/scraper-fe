@@ -41,3 +41,125 @@ ____flex-1 & size-full
 ____overflow area
 - overflow: auto -> scrollable area includes element’s padding.
 - padding is part of area that can be scrolled
+
+
+
+
+
+_______________________________________ useRef ______________________________________________________________
+
+
+function SSELog() {
+    const [logs, setLogs] = useState([])
+    const eventSourceRef = useRef(null)
+    const logContainerRef = useRef(null)
+
+    // useRef
+        // -> create 'ref object' that is stable across render
+            // whenever the component re-render
+            // the same ref object is return by useRef instead of creating a entirely new object from scratch
+            // eg for 'stable' meaning: 
+                // if later eventSourceRef change to diff value (eg: '2' instead of 'null') 
+                // when the component (SSELog) re-render
+                // the line 'const eventSourceRef = useRef(null)' runs again
+                // but React recognized this eventSourcRef is already exist
+                // React will return the same ref object ( {current: 2} )
+        // - access value of 'ref object'
+            // myRef.current -> access current value of myRef (DOM element is also a value)
+            // use ref={} in JSX component -> hold DOM element as value
+        // - store mutable value that don't trigger re-render
+            // - store value that can change
+            // when .current value change -> don't trigger re-render -> UI won't change
+
+
+
+    useEffect( () => {
+
+        // create EventSource object (built-in browser API) -> allow FE receive SSE from BE
+            // similar to event_generator() in BE -> goal is send data
+            // EventSource in FE -> receive and parse data
+            // goal of this ref (eventSourceRef) is hold EventSource object
+            // 'new' -> create new EventSource object (new instance)
+        eventSourceRef.current = new EventSource('http://127.0.0.1:8000/sse/logs')
+
+        // event listener -> trigger when connection successfully open
+        eventSourceRef.current.onopen = () => {
+            console.log('SSE connection opened')
+            setLogs(prev => [...prev, '--- SSE Connection Opened ---'])
+        }
+
+        // event listener -> trigger everytime BE send new message
+            // 'event' object is provided by the EventSource API
+        eventSourceRef.current.onmessage = (event) => {
+
+            // event.data contains message from BE
+            console.log('Received SSE event:', event)
+            console.log('Received SSE message:', event.data)
+            
+            // prev -> current state of logs before this update
+                // [...prev, event.data] -> create new array
+                // -> so react can detect state change and re-render
+            setLogs(prev => [...prev, event.data])
+        }
+
+        // event listener -> trigger when there's error with SSE connection
+        eventSourceRef.current.onerror = (error) => {
+            console.error('SSE error:', error)
+            eventSourceRef.current.close()
+            setLogs(prev => [...prev, `--- SSE Error: ${error.message || 'Unknown error'} ---`])
+            setLogs(prev => [...prev, `--- SSE Connection Closed ---`])
+        }
+
+        // clean up fx
+            // definition: a fx that is returned from useEffect
+            // clean-up fx runs in 2 case:
+                // before the effect runs again <- based on dependencies
+                // when component (SSELog) unmounted (removed from DOM) <- eg: switching pages
+        return () => {
+            if (eventSourceRef.current && eventSourceRef.current.readyState != EventSource.CLOSED) {
+                eventSourceRef.current.close()
+                console.log('SSE connection closed on component unmount')
+            }
+        }
+
+    
+    }, [])      // [] -> only run once when component first mount (appear on screen)
+
+
+    useEffect( () => {
+        // check if logContainerRef.current refer to any HTML element -> prevent error if component isn't appear in first render in DOM
+            // logContainerRef.current -> actual HTML div that marked with ref={logContainerRef}
+            // .scrollHeight -> DOM property to tell total height of content in <div>, including content not currently visible due to scrolling
+            // .scrollTop -> DOM property to force scrollbar to very bottom
+        if (logContainerRef.current) {
+            logContainerRef.current.scrollTop = logContainerRef.scrollHeight
+        }
+    }, [logs])
+
+
+
+    return (
+        <div id='sse-log-main' className="min-h-0 min-w-0 h-full w-3/5 overflow-hidden border-2 border-gray-300 rounded-lg flex flex-col">
+            
+            <div id='log-header' className="h-fit w-full p-5 border-b-2 flex flex-row items-center justify-start gap-3"> 
+                <MonitorCog className="size-5"/>
+                <h2 className="text-lg font-medium text-gray-800">Server Logs</h2>
+            </div>
+
+            <pre 
+                id="log-content"
+                // allow direct access and interact with this <DOM element>
+                ref={logContainerRef} 
+                className="min-w-0 min-h-0 flex-1 size-full overflow-y-auto p-5 text-sm bg-gray-100 text-gray-800 whitespace-pre-wrap break-words scrollbar scrollbar-thumb-gray-300 scrollbar-track-white"
+            >
+                {logs.map( (log, index) => {
+                    <p key={index}>{log}</p>
+                })}
+            </pre>
+
+        </div>
+
+    )
+}
+
+export default SSELog
