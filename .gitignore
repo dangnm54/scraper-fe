@@ -28,7 +28,7 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-e2e/side-bar.spec.ts
 test-results/
 tests-examples/
 
+tsconfig.app.json
