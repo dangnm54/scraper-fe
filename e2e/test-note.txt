@@ -1,0 +1,151 @@
+____________ Locator Syntax ----------------------------------------------------------------
+
+Role-based Locators (Recommended - Most Resilient):
+    page.getByRole('button', { name: 'Submit' })
+    page.getByRole('link', { name: 'Read More' })
+    page.getByRole('textbox', { name: 'Username' })
+    page.getByRole('checkbox', { name: 'Remember me' })
+
+Text-based Locators:
+    page.getByText('Hello World') (finds element containing this text)
+    page.getByLabel('Username') (finds form control by its associated <label>)
+    page.getByPlaceholder('Enter your email') (finds input by placeholder text)
+    page.getByAltText('Product Image') (finds <img> by its alt attribute)
+    page.getByTitle('Tooltip text') (finds element by its title attribute)
+
+Test ID Locator (Recommended if implemented):
+    page.getByTestId('login-button') (Requires testIdAttribute configured in playwright.config.ts, e.g., 'data-testid')
+
+CSS Selectors (General Purpose):
+    page.locator('button')
+    page.locator('#my-id')
+    page.locator('.my-class')
+    page.locator('input[name="username"]')
+    page.locator('div > p.text-red')
+    page.locator('data-testid=login-button') (If using Playwright's built-in data-testid selector, page.getByTestId is preferred)
+
+XPath Selectors (Less Common, but Powerful):
+    page.locator('xpath=//button[text()="Submit"]')
+    page.locator('xpath=//input[@id="username"]')
+
+Filtering and Chaining Locators:
+    page.locator('li').filter({ hasText: 'Item 1' })
+    page.locator('.parent').getByRole('button')
+    page.locator('.item').nth(0) (selects the first matching element)
+    page.locator('.item').first()
+    page.locator('.item').last()
+
+
+
+
+____________ User Actions (Element Interactions) -------------------------------------------------
+
+Clicking:
+    await locator.click()
+    await locator.dblclick() (double-click)
+    await locator.click({ button: 'right' }) (right-click)
+    await locator.click({ modifiers: ['Shift'] }) (Shift-click)
+
+Typing/Filling:
+    await locator.fill('my_username') (clears and types)
+    await locator.press('Enter') (simulates a single key press)
+    await locator.type('partial_text', { delay: 100 }) (types with a delay between characters, generally prefer fill())
+
+Form Controls:
+    await locator.check() (checkbox/radio button)
+    await locator.uncheck() (checkbox)
+    await locator.selectOption('value1') (select by value)
+    await locator.selectOption({ label: 'Option 2' }) (select by visible text)
+    await locator.selectOption(['value1', 'value2']) (multi-select)
+
+Mouse Actions:
+    await locator.hover()
+    await locator.dragTo(targetLocator)
+
+Keyboard Actions (Global):
+    await page.keyboard.press('Tab')
+    await page.keyboard.type('some text')
+    await page.keyboard.down('Control')
+    await page.keyboard.up('Control')
+
+Navigation:
+    await page.goto('https://example.com')
+    await page.goBack()
+    await page.goForward()
+    await page.reload()
+
+Other:
+    await locator.focus()
+    await locator.clear() (clears input field content)
+    await locator.screenshot() (take a screenshot of the element)
+
+
+
+
+
+____________ Assertions (expect - Playwright's Web-First Assertions) -----------------------------------
+
+Visibility & State:
+    await expect(locator).toBeVisible()
+    await expect(locator).toBeHidden()
+    await expect(locator).toBeEnabled()
+    await expect(locator).toBeDisabled()
+    await expect(locator).toBeEditable()
+    await expect(locator).toBeChecked() (for checkboxes/radio buttons)
+
+Text Content:
+    await expect(locator).toHaveText('Exact text')
+    await expect(locator).toContainText('Partial text')
+    await expect(locator).toHaveText(/Regular Expression/) (regex match)
+
+Value & Attributes:
+    await expect(locator).toHaveValue('input value') (for input fields)
+    await expect(locator).toHaveAttribute('src', '/path/to/image.png')
+    await expect(locator).toHaveClass('my-class')
+    await expect(locator).toHaveClass(/my-regex-class/)
+
+Page-Level Assertions:
+    await expect(page).toHaveURL('https://example.com/login')
+    await expect(page).toHaveURL(/login/)
+    await expect(page).toHaveTitle('Page Title')
+    await expect(page).toHaveTitle(/Page/i)
+
+Count:
+    await expect(locator).toHaveCount(5) (number of matching elements)
+
+Screenshot/Visual Regression:
+    await expect(page).toHaveScreenshot('homepage.png')
+    await expect(locator).toHaveScreenshot('button.png')
+
+Soft Assertions:
+    expect.soft(locator).toBeVisible() (allows test to continue on failure)
+
+
+
+
+
+____________ UI Interaction Handling (Special Scenarios) -----------------------------------
+
+Handling Dialogs (Alerts, Confirms, Prompts):
+    page.once('dialog', async dialog => { ... });
+    await dialog.accept()
+    await dialog.dismiss()
+    dialog.message()
+    dialog.type()
+
+Handling Pop-up Windows/New Tabs:
+    const [popup] = await Promise.all([ page.waitForEvent('popup'), page.click('link_that_opens_popup') ]);
+    Then, interact with popup like a normal page object: await popup.waitForLoadState(); await expect(popup).toHaveURL(...);
+
+Handling Iframes:
+    const iframeLocator = page.frameLocator('#my-iframe-id');
+    Then, use iframeLocator to find elements within the iframe: await iframeLocator.getByRole('button', { name: 'Click Me' }).click();
+
+Waiting (Implicitly handled by Playwright assertions/actions, but explicit waits are sometimes needed):
+    await page.waitForLoadState('networkidle') (waits until no network activity for 500ms)
+    await page.waitForTimeout(1000) (discouraged - fixed wait)
+    await locator.waitFor({ state: 'visible' })
+
+File Uploads:
+    await locator.setInputFiles('path/to/file.txt') (for <input type="file">)
+

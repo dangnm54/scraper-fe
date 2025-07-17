@@ -55,7 +55,6 @@ function ConfigForm() {
          if (response.ok) {
             // check if HTTP status code is 2xx (success)
             console.log('Scraping finished:', data)
-            alert('Scraping finished, check console for details.')
 
          } else {
             throw new Error(`HTTP error! status: ${response.status}`)  // this message stored in error.message

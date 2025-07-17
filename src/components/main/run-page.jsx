@@ -17,7 +17,6 @@ function RunPage() {
         </div>
 
     )
-
 }
 
 export default RunPage
