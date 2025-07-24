@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { MonitorCog, RefreshCcw } from "lucide-react";
 
 function SSELog() {
@@ -11,6 +11,9 @@ function SSELog() {
 
     useEffect( () => {
 
+        setLogs([])
+        setLogs(prev => [...prev, '[FE] Establishing SSE Connection ...\n\n-----'])
+
         if (eventSourceRef.current && eventSourceRef.current.readyState !== EventSource.CLOSED) {
             eventSourceRef.current.close()
             console.log('SSE connection closed before re-establishing')
@@ -20,7 +23,7 @@ function SSELog() {
 
         eventSourceRef.current.onopen = () => {
             console.log('SSE connection opened')
-            setLogs(prev => [...prev, '--- SSE Connection Opened ---'])
+            setLogs(prev => [...prev, '[FE] SSE Connection Opened\n-----'])
         }
 
         eventSourceRef.current.onmessage = (event) => {
@@ -32,8 +35,8 @@ function SSELog() {
         eventSourceRef.current.onerror = (error) => {
             console.error('SSE error:', error)
             eventSourceRef.current.close()
-            setLogs(prev => [...prev, `--- SSE Error: ${error.message || 'Unknown error'} ---`])
-            setLogs(prev => [...prev, `--- SSE Connection Closed ---`])
+            setLogs(prev => [...prev, `[FE] SSE Error: ${error.message || 'Unknown error'}`])
+            setLogs(prev => [...prev, `-----\n[FE] SSE Connection Closed`])
         }
 
         return () => {
@@ -47,9 +50,9 @@ function SSELog() {
 
 
 
-    useEffect( () => {
+    useLayoutEffect( () => {
         if (logContainerRef.current) {
-            logContainerRef.current.scrollTop = logContainerRef.scrollHeight
+            logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight
         }
     }, [logs])
 
