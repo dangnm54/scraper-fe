@@ -22,7 +22,7 @@ function App() {
     }, [currentTab, selectedFile])
 
     const Tab = {
-        form: <RunPage />,
+        form: <RunPage app_currentTab={currentTab}/>,
         database: <DataPage int_selectedFile={selectedFile} />
     }
 

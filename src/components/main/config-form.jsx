@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,13 +17,15 @@ function ConfigForm() {
    const [location, setLocation] = React.useState('')
    const [numGuest, setNumGuest] = React.useState('')
    const [numProperty, setNumProperty] = React.useState('')
-
-   // state for checkbox
    const [hostData, setHostData] = React.useState(false)
    const [bookRate, setBookRate] = React.useState(false)
+   
+   const [runClickable, setRunClickable] = useState(true);
 
 
    const runScraper = async (event) => {
+
+      setRunClickable(false)
       
       // prevent default form submission
       event.preventDefault()  
@@ -70,6 +74,7 @@ function ConfigForm() {
       setNumProperty('')
       setHostData(false)
       setBookRate(false)
+      setRunClickable(true)
 
    }
 
@@ -176,8 +181,12 @@ function ConfigForm() {
             <CardFooter id='card-footer' className="pt-4 items-center justify-center border-t-1 border-gray-300">
                <Button
                   id='run-button'
-                  onClick={runScraper}
-                  className="size-full py-2 gap-2 cursor-pointer"
+                  onClick={ runClickable ? runScraper : null}
+                  title={ runClickable ? '' : 'Wait for current scraping to finish'}
+                  className={cn(
+                     "size-full py-2 gap-2",
+                     runClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-30'
+                  )}
                >
                   <CirclePlay className="size-4.5" />
                   <p className="text-lg font-medium">Run</p>

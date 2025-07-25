@@ -2,18 +2,28 @@ import * as React from "react";
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { MonitorCog, RefreshCcw } from "lucide-react";
 
-function SSELog() {
+function SSELog(props) {
     const [logs, setLogs] = useState([])
     const eventSourceRef = useRef(null)
     const logContainerRef = useRef(null)
-    const [refreshConnection, setRefreshConnection] = useState(false)
+    const [refreshConnection, setRefreshConnection] = useState(false);
 
 
     useEffect( () => {
+        if (props.app_currentTab !== 'form') {
+            if (eventSourceRef.current) {
+                eventSourceRef.current.close();
+                console.log('SSE connection closed because tab is not active.');
+            }
+            setLogs([]); 
+            return;
+        }
 
         setLogs([])
         setLogs(prev => [...prev, '[FE] Establishing SSE Connection ...\n\n-----'])
 
+        
+        // final check to make sure the connection is closed
         if (eventSourceRef.current && eventSourceRef.current.readyState !== EventSource.CLOSED) {
             eventSourceRef.current.close()
             console.log('SSE connection closed before re-establishing')
@@ -27,7 +37,7 @@ function SSELog() {
         }
 
         eventSourceRef.current.onmessage = (event) => {
-            console.log('Received SSE event:', event)
+            // console.log('Received SSE event:', event)
             console.log('Received SSE message:', event.data)
             setLogs(prev => [...prev, event.data])
         }
@@ -40,13 +50,15 @@ function SSELog() {
         }
 
         return () => {
-            if (eventSourceRef.current && eventSourceRef.current.readyState != EventSource.CLOSED) {
+            if (eventSourceRef.current) {
                 eventSourceRef.current.close()
-                console.log('SSE connection closed on component unmount')
+                setLogs([])
+                console.log('SSE connection closed on cleanup.')
             }
         }
+        
     
-    }, [refreshConnection])
+    }, [refreshConnection, props.app_currentTab])
 
 
 
@@ -86,7 +98,7 @@ function SSELog() {
                 className="min-w-0 min-h-0 flex-1 size-full overflow-y-auto p-5 text-sm bg-gray-100 text-gray-800 whitespace-pre-wrap break-words scrollbar scrollbar-thumb-gray-300 scrollbar-track-white"
             >
                 {logs.map( (log, index) => (
-                    <p key={index}>{log}</p>
+                    <div key={index}>{log}</div>
                 ))}
             </pre>
 
