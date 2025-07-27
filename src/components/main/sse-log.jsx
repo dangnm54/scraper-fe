@@ -1,64 +1,63 @@
 import * as React from "react";
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { MonitorCog, RefreshCcw } from "lucide-react";
+import { MonitorCog, BrushCleaning } from "lucide-react";
+
+
+// ------------------------------------------------------------------------------------------------
+
 
 function SSELog(props) {
+
     const [logs, setLogs] = useState([])
     const eventSourceRef = useRef(null)
     const logContainerRef = useRef(null)
-    const [refreshConnection, setRefreshConnection] = useState(false);
+    const [brushClickable, setBrushClickable] = useState(false)
 
+    // console.log('SSELog props:', props)
 
     useEffect( () => {
-        if (props.app_currentTab !== 'form') {
-            if (eventSourceRef.current) {
-                eventSourceRef.current.close();
-                console.log('SSE connection closed because tab is not active.');
+
+        const isScraping = props.app_runButtonClickable === false
+
+        if (isScraping) {
+
+            try {
+                setLogs(['[FE] Establishing SSE Connection ...\n-----'])
+                eventSourceRef.current = new EventSource('http://127.0.0.1:8000/sse/logs')
+
+                eventSourceRef.current.onopen = () => {
+                    setLogs(prev => [...prev, '[FE] SSE Connection Opened\n-----\n\n'])
+                    // console.log(eventSourceRef.current)
+                }
+
+                eventSourceRef.current.onmessage = (event) => {
+                    console.log('SSE message:', event.data)
+                    setLogs(prev => [...prev, event.data])
+                }
+
+                eventSourceRef.current.onerror = (error) => {
+                    console.error('SSE error:', error)
+                    setLogs(prev => [...prev, `[FE] SSE ConnectionError: ${error.message || 'Unknown error'}`])
+
+                    eventSourceRef.current.close()
+                    setLogs(prev => [...prev, `\n\n-----\n[FE] SSE Connection Closed`])
+                }
+
+            } catch (error) {
+                console.error('[sse-log] Error:', error)
             }
-            setLogs([]); 
-            return;
         }
 
-        setLogs([])
-        setLogs(prev => [...prev, '[FE] Establishing SSE Connection ...\n\n-----'])
-
-        
-        // final check to make sure the connection is closed
-        if (eventSourceRef.current && eventSourceRef.current.readyState !== EventSource.CLOSED) {
-            eventSourceRef.current.close()
-            console.log('SSE connection closed before re-establishing')
-        }
-
-        eventSourceRef.current = new EventSource('http://127.0.0.1:8000/sse/logs')
-
-        eventSourceRef.current.onopen = () => {
-            console.log('SSE connection opened')
-            setLogs(prev => [...prev, '[FE] SSE Connection Opened\n-----'])
-        }
-
-        eventSourceRef.current.onmessage = (event) => {
-            // console.log('Received SSE event:', event)
-            console.log('Received SSE message:', event.data)
-            setLogs(prev => [...prev, event.data])
-        }
-
-        eventSourceRef.current.onerror = (error) => {
-            console.error('SSE error:', error)
-            eventSourceRef.current.close()
-            setLogs(prev => [...prev, `[FE] SSE Error: ${error.message || 'Unknown error'}`])
-            setLogs(prev => [...prev, `-----\n[FE] SSE Connection Closed`])
-        }
-
+        // return fx only execute when (1) SSELog component unmount, (2) props.app_runButtonClickable change
         return () => {
             if (eventSourceRef.current) {
                 eventSourceRef.current.close()
-                setLogs([])
-                console.log('SSE connection closed on cleanup.')
+                setLogs(prev => [...prev, `\n\n-----\n[FE] SSE Connection Closed`])
+                // console.log(eventSourceRef.current)
             }
         }
-        
-    
-    }, [refreshConnection, props.app_currentTab])
+
+    }, [props.app_runButtonClickable])
 
 
 
@@ -70,9 +69,19 @@ function SSELog(props) {
 
 
 
-    const newConnection = () => {
+    useEffect( () => {
+        if (logs.length > 0 && 
+            eventSourceRef.current && 
+            eventSourceRef.current.readyState === EventSource.CLOSED
+        ) {
+            setBrushClickable(true)
+        }
+    }, [logs])
+
+
+    const cleanLog = () => {
         setLogs([])
-        setRefreshConnection(prev => !prev)
+        setBrushClickable(false)
     } 
 
 
@@ -83,15 +92,23 @@ function SSELog(props) {
     return (
         <div id='sse-log-main' className="min-h-0 min-w-0 h-full w-3/5 overflow-hidden border-2 border-gray-300 rounded-lg flex flex-col">
             
+            {/* Header */}
             <div id='log-header' className="h-fit w-full p-5 border-b-2 flex flex-row items-center justify-between gap-3"> 
                 <div id='left-content' className='flex flex-row items-center justify-start gap-3'>
                     <MonitorCog className="size-5"/>
                     <h2 className="text-lg font-medium text-gray-800">Server Logs</h2>
                 </div>
 
-                <RefreshCcw className="size-5 cursor-pointer" onClick={newConnection} />
+                <div 
+                    title="Clean message in log" 
+                    className="size-5 cursor-pointer hover:text-blue-500"
+                    hidden={!brushClickable}
+                >
+                    <BrushCleaning onClick={cleanLog}/>
+                </div>
             </div>
 
+            {/* Content */}
             <pre 
                 id="log-content"
                 ref={logContainerRef} 

@@ -16,12 +16,12 @@ function SideBar(props) {
    const [refreshClickable, setRefreshClickable] = useState(true);
    
    const [showFile, setShowFile] = useState(
-      props.int_currentTab === 'database' ? true : false
+      props.self_currentTab === 'database' ? true : false
    );
 
 
    const clickFile = (file) => {
-      props.int_chooseFile(file)
+      props.self_chooseFile(file)
       console.log("[side-bar] Choose file:", file.id)
    }
 
@@ -56,10 +56,10 @@ function SideBar(props) {
 
    // refresh file list when switch to data tab
    useEffect( () => {
-      if (props.int_currentTab === 'database') {
+      if (props.self_currentTab === 'database') {
          fetchFiles()
       }
-   }, [props.int_currentTab])
+   }, [props.self_currentTab])
 
 
 
@@ -87,10 +87,10 @@ function SideBar(props) {
                
                <div id='group-buttons' className='flex flex-col gap-4'>
                   <button
-                     onClick={() => { props.int_chooseTab('form'); setShowFile(false) }}
+                     onClick={() => { props.self_chooseTab('form'); setShowFile(false) }}
                      className={cn(
                         'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
-                        !showFile ? 'text-blue-800' : 'text-gray-500'
+                        !showFile ? 'text-blue-800' : 'text-gray-900',
                      )}      
                   >
                      <SearchCode className="size-4" />
@@ -98,10 +98,12 @@ function SideBar(props) {
                   </button>
                   
                   <button
-                     onClick={() => { props.int_chooseTab('database'); setShowFile(true) }}
+                     onClick={ props.app_runButtonClickable ? () => { props.self_chooseTab('database'); setShowFile(true) } : null }
+                     title={ props.app_runButtonClickable ? null : 'Database is locked while scraping'}
                      className={cn(
-                        'w-full h-fit pl-0 flex flex-row items-center gap-3 cursor-pointer',
-                        showFile ? 'text-blue-800' : 'text-gray-500'
+                        'w-full h-fit pl-0 flex flex-row items-center gap-3',
+                        showFile ? 'text-blue-800' : 'text-gray-900',
+                        props.app_runButtonClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
                      )}  
                   >
                      <Database className="size-4" />
@@ -136,10 +138,10 @@ function SideBar(props) {
                      <button
                         key={file.id}
                         id='file-item'
-                        onClick={props.int_selectedFile?.id === file.id ? null : () => clickFile(file)}
+                        onClick={props.self_selectedFile?.id === file.id ? null : () => clickFile(file)}
                         className={cn(
                            'h-fit w-full p-2 flex border-1 rounded-md',
-                           props.int_selectedFile?.id === file.id  
+                           props.self_selectedFile?.id === file.id  
                               ? 'bg-blue-50 border-blue-200 cursor-not-allowed' 
                               : 'border-gray-300 hover:border-gray-400 hover:bg-gray-100 cursor-pointer'
                         )}
@@ -152,7 +154,7 @@ function SideBar(props) {
                                  title={file.file_name} 
                                  className={cn(
                                     'text-xs font-medium max-w-full truncate',   // max-w-full is important to show truncate, on this specific level
-                                    props.int_selectedFile?.id === file.id 
+                                    props.self_selectedFile?.id === file.id 
                                        ? 'text-blue-900 font-medium' 
                                        : 'text-gray-500 font-normal'
                                  )}

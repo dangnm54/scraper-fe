@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CirclePlay, SearchCode } from 'lucide-react'
 
 
-function ConfigForm() {
+function ConfigForm(props) {
 
    // state for input
    const [fileName, setFileName] = React.useState('')
@@ -20,15 +20,19 @@ function ConfigForm() {
    const [hostData, setHostData] = React.useState(false)
    const [bookRate, setBookRate] = React.useState(false)
    
-   const [runClickable, setRunClickable] = useState(true);
-
 
    const runScraper = async (event) => {
-
-      setRunClickable(false)
       
-      // prevent default form submission
+      if (!fileName || !location || !numGuest || !numProperty) {
+         alert('Please fill in all required fields')
+         return
+      }
+      
+
+      // prevent full page reload when button in form is clicked
       event.preventDefault()  
+
+      props.self_setRunButtonClickable(false)
 
       //construct data payload
       const payload = {
@@ -74,7 +78,7 @@ function ConfigForm() {
       setNumProperty('')
       setHostData(false)
       setBookRate(false)
-      setRunClickable(true)
+      props.self_setRunButtonClickable(true)
 
    }
 
@@ -94,7 +98,10 @@ function ConfigForm() {
             <CardContent id='card-content' className="flex flex-col gap-2">
 
                <div id='field-group' className="space-y-2 mb-5">
-                  <Label htmlFor='location' className="text-xl font-medium text-gray-800">File name</Label>
+                  <Label htmlFor='location' className="text-xl font-medium text-gray-800">
+                     File name 
+                     <span className="text-red-500">*</span> 
+                  </Label>
                   <div className="relative flex items-center gap-2">
                      <Input
                         id='location'
@@ -108,7 +115,10 @@ function ConfigForm() {
                </div>
 
                <div id='field-group' className="space-y-2 mb-5">
-                  <Label htmlFor='location' className="text-xl font-medium text-gray-800">Location</Label>
+                  <Label htmlFor='location' className="text-xl font-medium text-gray-800">
+                     Location 
+                     <span className="text-red-500">*</span> 
+                  </Label>
                   <div className="relative flex items-center gap-2">
                      <Input
                         id='location'
@@ -122,7 +132,10 @@ function ConfigForm() {
                </div>
 
                <div id='field-group' className="space-y-2 mb-5">
-                  <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">Number of guests</Label>
+                  <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">
+                     Number of guests 
+                     <span className="text-red-500">*</span> 
+                  </Label>
                   <div className="relative flex items-center gap-2">
                      <Input
                         id='numGuest'
@@ -137,7 +150,10 @@ function ConfigForm() {
 
 
                <div id='field-groups' className="space-y-2 mb-5">
-                  <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">Number of properties</Label>
+                  <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">
+                     Number of properties 
+                     <span className="text-red-500">*</span> 
+                  </Label>
                   <div className="relative flex items-center gap-2">
                      <Input
                         id='numProperty'
@@ -181,11 +197,11 @@ function ConfigForm() {
             <CardFooter id='card-footer' className="pt-4 items-center justify-center border-t-1 border-gray-300">
                <Button
                   id='run-button'
-                  onClick={ runClickable ? runScraper : null}
-                  title={ runClickable ? '' : 'Wait for current scraping to finish'}
+                  onClick={ props.app_runButtonClickable ? runScraper : null}
+                  title={ props.app_runButtonClickable ? '' : 'Wait for current scraping to finish'}
                   className={cn(
                      "size-full py-2 gap-2",
-                     runClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-30'
+                     props.app_runButtonClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-30'
                   )}
                >
                   <CirclePlay className="size-4.5" />
