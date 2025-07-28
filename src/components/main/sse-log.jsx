@@ -21,12 +21,14 @@ function SSELog(props) {
 
         if (isScraping) {
 
+            setBrushClickable(false)
+
             try {
                 setLogs(['[FE] Establishing SSE Connection ...\n-----'])
                 eventSourceRef.current = new EventSource('http://127.0.0.1:8000/sse/logs')
 
                 eventSourceRef.current.onopen = () => {
-                    setLogs(prev => [...prev, '[FE] SSE Connection Opened\n-----\n\n'])
+                    setLogs(prev => [...prev, '[FE] SSE Connection Opened\n-----\n'])
                     // console.log(eventSourceRef.current)
                 }
 
