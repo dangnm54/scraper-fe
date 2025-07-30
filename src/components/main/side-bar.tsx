@@ -1,26 +1,44 @@
-import * as React from "react";
 import { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils"
 
-import { BugIcon, SearchCode, Database, FileChartColumnIncreasing as FileChart, RotateCcw as Refresh } from 'lucide-react'
+import { BugIcon, SearchCode, Database, RotateCcw as Refresh } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
+
+import { FileItem, FileList_Response } from '@/types/api'
+import { TabType } from '@/types/common'
 
 
 // ------------------------------------------------------------------------------------------------
 
 
-function SideBar(props) {
-   const [fileList, setFileList] = useState([]);
-   const [isLoading, setIsLoading] = useState(false);
-   const [isError, setIsError] = useState(false);
-   const [refreshClickable, setRefreshClickable] = useState(true);
+type SideBar_props = {
+   self_currentTab: TabType
+
+   // common way to passed fx as props from parent to child
+      // (tab: TabType) -> describe fx's input
+      // => void -> fx not return anything
+   self_chooseTab: (tab: TabType) => void
+   self_chooseFile: (file: FileItem) => void
+   self_selectedFile: FileItem | null
+   app_runButtonClickable: boolean
+}
+
+
+// ------------------------------------------------------------------------------------------------
+
+
+function SideBar(props: SideBar_props) {
+   const [fileList, setFileList] = useState<FileItem[]>([]);
+   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [isError, setIsError] = useState<boolean>(false);
+   const [refreshClickable, setRefreshClickable] = useState<boolean>(true);
    
-   const [showFile, setShowFile] = useState(
+   const [showFile, setShowFile] = useState<boolean>(
       props.self_currentTab === 'database' ? true : false
    );
 
 
-   const clickFile = (file) => {
+   const clickFile = (file: FileItem) => {
       props.self_chooseFile(file)
       console.log("[side-bar] Choose file:", file.id)
    }
@@ -38,7 +56,7 @@ function SideBar(props) {
             throw new Error(`HTTP error! status: ${response.status}`);  // this message stored in error.message
          }
 
-         const data = await response.json()
+         const data: FileList_Response = await response.json()
 
          console.log("[side-bar] Fetched files:", data)
          setFileList(data)
@@ -98,8 +116,8 @@ function SideBar(props) {
                   </button>
                   
                   <button
-                     onClick={ props.app_runButtonClickable ? () => { props.self_chooseTab('database'); setShowFile(true) } : null }
-                     title={ props.app_runButtonClickable ? null : 'Database is locked while scraping'}
+                     onClick={ props.app_runButtonClickable ? () => { props.self_chooseTab('database'); setShowFile(true) } : undefined }
+                     title={ props.app_runButtonClickable ? undefined : 'Database is locked while scraping'}
                      className={cn(
                         'w-full h-fit pl-0 flex flex-row items-center gap-3',
                         showFile ? 'text-blue-800' : 'text-gray-900',
@@ -120,7 +138,7 @@ function SideBar(props) {
                <div id='group-label' className='h-fit w-full flex flex-row items-center justify-between'>
                   <span className='text-sm font-medium text-gray-600'>Files</span>
                   <Refresh 
-                     onClick={refreshClickable ? fetchFiles : null}
+                     onClick={refreshClickable ? fetchFiles : undefined}
                      className={`!size-3 ${refreshClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
                   /> 
                </div>
@@ -137,8 +155,8 @@ function SideBar(props) {
                   {fileList.map( (file) => (
                      <button
                         key={file.id}
-                        id='file-item'
-                        onClick={props.self_selectedFile?.id === file.id ? null : () => clickFile(file)}
+                        id={`file-item-${file.id}`}
+                        onClick={props.self_selectedFile?.id === file.id ? undefined : () => clickFile(file)}
                         className={cn(
                            'h-fit w-full p-2 flex border-1 rounded-md',
                            props.self_selectedFile?.id === file.id  
