@@ -1,20 +1,29 @@
-import * as React from "react";
-import * as XLSX from "xlsx"
+// import * as React from "react";
+// import * as XLSX from "xlsx"
 
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { FileItem, FileDetail, FileDetailList_Response } from "@/types/api";
 
 
 // ------------------------------------------------------------------------------------------------
 
 
-function DataContent(props) {
+type DataContent_props = {
+   int2_selectedFile: FileItem
+}
 
-   const [fileDetail, setFileDetail] = useState([])
-   const [headers, setHeaders] = useState([])
-   const [selectedRow, setSelectedRow] = useState(null)
-   const [searchTerm, setSearchTerm] = useState("")
+
+// ------------------------------------------------------------------------------------------------
+
+
+function DataContent(props: DataContent_props) {
+
+   const [fileDetail, setFileDetail] = useState<FileDetail[]>([])
+   const [headers, setHeaders] = useState<string[]>([])
+   const [selectedRow, setSelectedRow] = useState<FileDetail | null>(null)
+   const [searchTerm, setSearchTerm] = useState<string>("")
 
    // fetch file detail
    useEffect( () => {
@@ -22,7 +31,7 @@ function DataContent(props) {
 
          // reset all state when new file is loaded
          setSelectedRow(null)
-         setSearchTerm('')
+         setSearchTerm("")
 
          try {
             const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.int2_selectedFile.id}`)
@@ -31,9 +40,9 @@ function DataContent(props) {
                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const result = await response.json()
+            const result: FileDetailList_Response = await response.json()
 
-            if (result.status === 'success' && Array.isArray(result.data)) {
+            if (Array.isArray(result.data)) {
                setFileDetail(result.data)
 
                if (result.data.length > 0) {
@@ -49,7 +58,7 @@ function DataContent(props) {
             
             }
             else {
-               throw new Error(result.message || 'BE return invalid data format.')
+               throw new Error(result.detail || 'BE return invalid data format.')
             }
 
          } catch (error) {
@@ -111,8 +120,8 @@ function DataContent(props) {
                            {headers.map((header, index) => (
                               <th
                                  key={index}
-                                 ori_idx = {index}
-                                 par_idx = {headers.length - 1}
+                                 data-ori-idx = {index}
+                                 data-par-idx = {headers.length - 1}
                                  className={cn(
                                     "relative text-left py-3 px-4 text-xs font-medium bg-gray-800 text-white border-b-1 border-r-0 border-gray-400 whitespace-nowrap min-w-[120px]",
                                     {

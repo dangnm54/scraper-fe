@@ -8,9 +8,7 @@ export type FileItem = {
     date_created?: string
 }
 
-
 export type FileList_Response = FileItem[]
-
 
 
 
@@ -25,8 +23,34 @@ export type ConfigForm_Payload = {
     collect_booking_rate?: boolean
 }
 
-
 export type RunScraper_Response = {
-    message: string
+    detail: string
 }
 
+
+
+// data-content ---------------------------------------------------
+
+export type FileDetail = {
+    ID: string
+    Name: string
+    Link: string
+    Scrape_status: string
+    Guest_num?: number
+    Bed_num?: number
+    Bath_num?: number
+    Location?: string
+    Rating_title?: string
+    Rating_num?: number
+    Rating_star?: number
+    [key: string]: any      
+        // can have ANY additional properties with string keys
+        // and those properties can be of ANY type.
+        // all object's keys are string, num will be converted to string
+
+}
+
+export type FileDetailList_Response = {
+    detail: string
+    data: FileDetail[]
+}
