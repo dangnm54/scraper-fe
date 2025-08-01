@@ -1,17 +1,29 @@
-import * as React from "react";
+// import * as React from "react";
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { MonitorCog, BrushCleaning } from "lucide-react";
+
+import { TabType } from '@/types/common'
 
 
 // ------------------------------------------------------------------------------------------------
 
 
-function SSELog(props) {
+type SSELog_props = {
+    app_currentTab: TabType
+    app_runButtonClickable: boolean
+}
 
-    const [logs, setLogs] = useState([])
-    const eventSourceRef = useRef(null)
-    const logContainerRef = useRef(null)
-    const [brushClickable, setBrushClickable] = useState(false)
+
+// ------------------------------------------------------------------------------------------------
+
+
+function SSELog(props: SSELog_props) {
+
+    const [logs, setLogs] = useState<string[]>([])
+    const [brushClickable, setBrushClickable] = useState<boolean>(false)
+    const eventSourceRef = useRef<EventSource | null>(null)
+    const logContainerRef = useRef<HTMLPreElement | null>(null)
+    
 
     // console.log('SSELog props:', props)
 
@@ -39,9 +51,9 @@ function SSELog(props) {
 
                 eventSourceRef.current.onerror = (error) => {
                     console.error('SSE error:', error)
-                    setLogs(prev => [...prev, `[FE] SSE ConnectionError: ${error.message || 'Unknown error'}`])
+                    setLogs(prev => [...prev, `[FE] SSE Connection Error: ${error || 'Unknown error'}`])
 
-                    eventSourceRef.current.close()
+                    eventSourceRef.current?.close()
                     setLogs(prev => [...prev, `\n\n-----\n[FE] SSE Connection Closed`])
                 }
 

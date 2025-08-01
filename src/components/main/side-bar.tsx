@@ -27,7 +27,7 @@ type SideBar_props = {
 // ------------------------------------------------------------------------------------------------
 
 
-function SideBar(props: SideBar_props) {
+export default function SideBar(props: SideBar_props) {
    const [fileList, setFileList] = useState<FileItem[]>([]);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [isError, setIsError] = useState<boolean>(false);
@@ -219,5 +219,3 @@ function SideBar(props: SideBar_props) {
 
 }
 
-
-export default SideBar

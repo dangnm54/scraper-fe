@@ -1,21 +1,31 @@
-import * as React from "react";
-// import { useEffect, useState } from "react";
-import DataContent from './data-content';
-
-
+// import { useEffect } from "react";
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
 
-function DataPage(props) {
+import DataContent from './data-content';
 
+import { FileItem } from "@/types/api";
+
+
+// ------------------------------------------------------------------------------------------------
+
+
+type DataPage_props = {
+    app_selectedFile: FileItem | null
+}
+
+
+// ------------------------------------------------------------------------------------------------
+
+
+export default function DataPage(props: DataPage_props) {
 
     // useEffect( () => {
-    //     console.log("[DataPage] Global selected file:", props.int_selectedFile)
-    // }, [props.int_selectedFile])
+    //     console.log("[DataPage] Global selected file:", props.app_selectedFile)
+    // }, [props.app_selectedFile])
 
 
     const downloadFile = async () => {
-
         `
         - received file data from BE
         - create an file-like object in browser's temporary memory space
@@ -24,8 +34,10 @@ function DataPage(props) {
         - clean up temporary resource
         `
 
+        if (!props.app_selectedFile) { return }
+
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.int_selectedFile.id}`)
+            const response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.app_selectedFile.id}`)
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`)
@@ -39,23 +51,23 @@ function DataPage(props) {
             const url = window.URL.createObjectURL(blob)
 
             // create <a> element 
-            const link = document.createElement('a')
+            const a_element = document.createElement('a')
 
-            link.href = url
+            a_element.href = url
 
             // when element has 'download' attribute, browser treat: 
                 // 'href' as download link
                 // 'file_name' as name for downloadble file
-            link.setAttribute('download', props.int_selectedFile.file_name)
+            a_element.setAttribute('download', props.app_selectedFile?.file_name || '')
 
             // add <a> to <body>
-            document.body.appendChild(link)
+            document.body.appendChild(a_element)
 
             // click the hidden <a> -> trigger download
-            link.click()
+            a_element.click()
 
             // after download, the temporary <a> is removed to clean up DOM
-            link.parentNode.removeChild(link)
+            a_element.remove()
 
             // release temporary URL created earlier -> free up memory
             window.URL.revokeObjectURL(url)
@@ -71,12 +83,12 @@ function DataPage(props) {
     
     return (
         <div id="data-page-main" className="min-w-0 min-h-0 size-full p-2 py-4 flex flex-col gap-2">    {/* need bg */}
-            {props.int_selectedFile ? (
+            {props.app_selectedFile ? (
                 
                 <>
                     {/* Header */}
                     <div id="header" className="h-fit w-full p-5 pb-0 flex flex-row justify-between items-center">    {/* need bg */}
-                        <h1 className="text-lg font-medium text-gray-900">{`File: ${props.int_selectedFile.file_name}`}</h1>  
+                        <h1 className="text-lg font-medium text-gray-900">{`File: ${props.app_selectedFile.file_name}`}</h1>  
                         <Button 
                             onClick = {downloadFile}
                             variant = "default" 
@@ -88,7 +100,7 @@ function DataPage(props) {
                     </div>
                     
                     {/* <DashboardPage /> */}
-                    <DataContent int2_selectedFile={props.int_selectedFile}/>
+                    <DataContent app_selectedFile={props.app_selectedFile}/>
                 </>
 
             ) : (
@@ -98,5 +110,3 @@ function DataPage(props) {
         </div>
     )
 }
-
-export default DataPage;

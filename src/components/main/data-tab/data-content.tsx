@@ -11,7 +11,7 @@ import { FileItem, FileDetail, FileDetailList_Response } from "@/types/api";
 
 
 type DataContent_props = {
-   int2_selectedFile: FileItem
+   app_selectedFile: FileItem
 }
 
 
@@ -34,7 +34,7 @@ function DataContent(props: DataContent_props) {
          setSearchTerm("")
 
          try {
-            const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.int2_selectedFile.id}`)
+            const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.app_selectedFile.id}`)
 
             if (!response.ok) {
                throw new Error(`HTTP error! status: ${response.status}`);
@@ -70,7 +70,7 @@ function DataContent(props: DataContent_props) {
 
       fetchDetail()
 
-   }, [props.int2_selectedFile])
+   }, [props.app_selectedFile])
 
 
    const filterdDetail = useMemo( () => {
