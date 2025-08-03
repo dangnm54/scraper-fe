@@ -201,21 +201,11 @@ export default function SideBar(props: SideBar_props) {
 
 
          <div id='sidebar-footer' className='w-full max-w-full h-fit p-3 border-t border-gray-300 flex items-center justify-center gap-3'>
-            <span className="text-xs text-muted-foreground text-center">Copyright © 2025 Strapee. <br /> All Rights Reserved.</span>
+            <span className="text-xs text-muted-foreground text-center">Copyright © 2025 Scrapi. <br /> All Rights Reserved.</span>
          </div>
-
 
       </div>
 
-
-
-
-
-
-
-
-      
    )
-
 }
 
