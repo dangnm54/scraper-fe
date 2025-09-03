@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { FileItem, FileDetail, FileDetailList_Response } from "@/types/api";
+import { FileItem, PropertyDetail, FileDetail_Response } from "@/types/api";
 
 
 // ------------------------------------------------------------------------------------------------
@@ -20,9 +20,9 @@ type DataContent_props = {
 
 function DataContent(props: DataContent_props) {
 
-   const [fileDetail, setFileDetail] = useState<FileDetail[]>([])
+   const [PropertyDetail, setFileDetail] = useState<PropertyDetail[]>([])
    const [headers, setHeaders] = useState<string[]>([])
-   const [selectedRow, setSelectedRow] = useState<FileDetail | null>(null)
+   const [selectedRow, setSelectedRow] = useState<PropertyDetail | null>(null)
    const [searchTerm, setSearchTerm] = useState<string>("")
 
    // fetch file detail
@@ -40,7 +40,7 @@ function DataContent(props: DataContent_props) {
                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const result: FileDetailList_Response = await response.json()
+            const result: FileDetail_Response = await response.json()
 
             if (Array.isArray(result.data)) {
                setFileDetail(result.data)
@@ -58,7 +58,7 @@ function DataContent(props: DataContent_props) {
             
             }
             else {
-               throw new Error(result.detail || 'BE return invalid data format.')
+               throw new Error(result.detail || 'BE has no detail message about error.')
             }
 
          } catch (error) {
@@ -75,10 +75,10 @@ function DataContent(props: DataContent_props) {
 
    const filterdDetail = useMemo( () => {
       if (!searchTerm) {
-         return fileDetail
+         return PropertyDetail
       }
 
-      return fileDetail.filter((item) =>
+      return PropertyDetail.filter((item) =>
          item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
          String(item.Utility_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
          String(item.Rating_title)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -86,7 +86,7 @@ function DataContent(props: DataContent_props) {
          String(item.Rating_star)?.toLowerCase().includes(searchTerm.toLowerCase()) 
       )
 
-   }, [searchTerm, fileDetail])
+   }, [searchTerm, PropertyDetail])
 
 
 

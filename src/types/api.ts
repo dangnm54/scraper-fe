@@ -8,6 +8,7 @@ export type FileItem = {
     date_created?: string
 }
 
+
 export type FileList_Response = FileItem[]
 
 
@@ -23,15 +24,17 @@ export type ConfigForm_Payload = {
     collect_booking_rate?: boolean
 }
 
+
 export type RunScraper_Response = {
-    detail: string
+    success: boolean
+    message: string
 }
 
 
 
 // data-content ---------------------------------------------------
 
-export type FileDetail = {
+export type PropertyDetail = {
     ID: string
     Name: string
     Link: string
@@ -50,7 +53,18 @@ export type FileDetail = {
 
 }
 
-export type FileDetailList_Response = {
+
+export type FileDetail_Response = {
     detail: string
-    data: FileDetail[]
+    data: PropertyDetail[]
+}
+
+
+
+// api response ---------------------------------------------------
+
+export interface API_Response<T> {
+    success: boolean
+    message?: string | null
+    data?: T | null
 }

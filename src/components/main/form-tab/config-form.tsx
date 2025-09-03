@@ -42,7 +42,6 @@ function ConfigForm(props: ConfigForm_props) {
          alert('Please fill in all required fields')
          return
       }
-      
 
       // prevent full page reload when button in form is clicked
       event.preventDefault()  
@@ -72,12 +71,12 @@ function ConfigForm(props: ConfigForm_props) {
          })
 
          // parse JS response from BE
-         const data: RunScraper_Response = await response.json() 
+         const content: RunScraper_Response = await response.json() 
 
          // handle response
          if (response.ok) {
             // check if HTTP status code is 2xx (success)
-            console.log('Scraping finished:', data)
+            console.log('Scraping finished:', content)
 
          } else {
             throw new Error(`HTTP error! status: ${response.status}`)  // this message stored in error.message
