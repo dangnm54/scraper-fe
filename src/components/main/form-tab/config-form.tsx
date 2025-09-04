@@ -25,7 +25,7 @@ type ConfigForm_props = {
 
 
 
-function ConfigForm(props: ConfigForm_props) {
+export default function ConfigForm(props: ConfigForm_props) {
 
    // state for input
    const [fileName, setFileName] = useState<string>('')
@@ -228,5 +228,3 @@ function ConfigForm(props: ConfigForm_props) {
       </div>
    )
 }
-
-export default ConfigForm
