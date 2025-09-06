@@ -1,89 +1,80 @@
-import { API_Response } from "@/types/api"
+import { API_Response, API_Result } from "@/types/api"
 
 const api_base_url = "http://127.0.0.1:8000"
 
 type api_client_options = {
     method?: 'GET' | 'POST'
-    header?: Record<string, string>     // Record -> dictionary type
-    body?: object       // object -> any non-primitive type (not string, number, boolean, null, undefined)
+    header?: Record<string, string>
+    body?: object
 }
 
 
 // async function -> always return a Promise
-export async function apiClient<T>(
-    api_endpoint: string, 
-    api_options: api_client_options = {}
-): Promise<T | null> {
+export async function apiClient<T>(api_endpoint: string, api_options: api_client_options = {}): Promise<API_Result<T>> {
 
-    // get method and body from options -> crt 2 variables
-        // default method is GET
     const { method = 'GET', body } = api_options
 
-
-    // create headers object
-        // 'content-type': 'application/json' -> tell BE that request's body is JSON.
-        // ...options.header -> add additional headers from options if any
     const headers = new Headers({
         'Content-Type': 'application/json',
         ...api_options.header,
     })
 
-
-    // 'fetch' has 2 arguments: 'url' (required) and 'options' (optional)
-        // if options is used -> must be RequestInit type
-        // RequestInit -> define all possible options can pass into 'fetch'         
-        // not all HTTP requests are allowed to have body (e.g. 'GET' don't have body)
     const options: RequestInit = {
         method: method,
         headers: headers,
         body: body ? JSON.stringify(body) : undefined,
     }
 
+    // 3 fundamental error to handle
+        // 1/ Network error: FE request never reach BE | occur in 'fetch' block and always have TypeError
+        // 2/ HTTP (server) error: BE crash while handling request -> response.json() will failed with syntax error
+        // 3/ Application (BE) error: BE finish handling request, return un-desired result but correct type 
+        // 4/ Data contract error: BE finish handling request, return wrong data type
+
+
+    // in this case | for BE response, if content.success is false 
+        // -> status_code always 4xx or 5xx
+        // -> data always null
+
+
     try {
         const response = await fetch(`${api_base_url}${api_endpoint}`, options)
 
-        const content: API_Response<T> = await response.json()
+        let content: API_Response<T>
 
-        // in BE response, if content.success is false -> status code is always 4xx or 5xx
+        try {
+            content = await response.json()
+        } catch (jsonError) {
+            throw new Error(`HTTP error | BE crash while handling request: ${jsonError}`)
+        }
+
+        if (typeof content.success !== 'boolean') {
+            throw new Error(`Data contract error | BE return wrong data type`)
+        }
+
         if (content.success) {
-            return content.data
+            return {message: content.message, data: content.data}
         }
         else {
-            // this error will caught by catch block
-            throw new Error(`BE error | message: ${content.message}`)
+            throw new Error(`Application error | BE return correct-typed but un-desired data: ${content.message}`)
         }
 
-    } catch (error) {
-        console.error('apiClient error:', error)
-        return null
+
+    } catch (error: Error | unknown) {
+        if (error instanceof Error && error.message === 'Failed to fetch') {
+            return {data: null, message: `Network error | Cannot connect to BE`}
+        }
+
+        // other error
+        return {
+            data: null,
+            message: error instanceof Error ? error.message : 'Unknown error'
+        }
     }
-
-    
-
-    // BE respons's content always have 3 vari of success, message, data -> should apiClient return both message and data to caller?
-    // is my current code handles all 3 cases of HTTP protocol? like network error, HTTP error, BE error? to me, HTTP error is also BE error, since if HTTP status code is 4xx or 5xx, BE always return false in success (meaning BE failed its task).
-
-
-
-
-
-        // export interface API_Response<T> {
-        //     success: boolean
-        //     message: string | null
-        //     data: T | null
-        // }
-
-
-
-
-
 }
 
 
 
 
 
-// 1/ in api_client_options, what's Record?
-// 2/ in api_client_options, why we use 'object' instead of 'any'?
-// 3/ what is Promise<T> in our apiClient function?
-// "RequestInit -> type of configuration object for fetch API" -> so in order to fetch API, we MUST has a RequestInit object?
+

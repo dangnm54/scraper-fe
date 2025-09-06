@@ -61,10 +61,15 @@ export type FileDetail_Response = {
 
 
 
-// api response ---------------------------------------------------
+// api client ---------------------------------------------------
 
 export interface API_Response<T> {
     success: boolean
+    message: string | null
+    data: T | null
+}
+
+export type API_Result<T> = {
     message: string | null
     data: T | null
 }
