@@ -25,10 +25,7 @@ export type ConfigForm_Payload = {
 }
 
 
-export type RunScraper_Response = {
-    success: boolean
-    message: string
-}
+export type RunScraper_Response = string
 
 
 
@@ -69,6 +66,7 @@ export interface API_Response<T> {
     data: T | null
 }
 
+// data only available for success response
 export type API_Result<T> = {
     message: string | null
     data: T | null

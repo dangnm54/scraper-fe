@@ -67,8 +67,8 @@ export async function apiClient<T>(api_endpoint: string, api_options: api_client
 
         // other error
         return {
-            data: null,
-            message: error instanceof Error ? error.message : 'Unknown error'
+            message: error instanceof Error ? error.message : 'Unknown error',
+            data: null
         }
     }
 }

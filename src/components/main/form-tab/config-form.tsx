@@ -9,6 +9,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CirclePlay, SearchCode } from 'lucide-react'
 
 import { ConfigForm_Payload, RunScraper_Response } from '@/types/api'
+import { apiClient } from "@/lib/api-client";
+import { API_Result } from "@/types/api";
 
 
 
@@ -61,31 +63,20 @@ export default function ConfigForm(props: ConfigForm_props) {
       console.log("Sent payload to BE", payload)
 
       // make POST request
-      try {
 
-         // how FE send HTTP POST request to BE
-         const response = await fetch('http://127.0.0.1:8000/api/run', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',},    // tells BE that body of request is JSON.
-            body: JSON.stringify(payload), // convert JS object to JSON string that BE can parse
-         })
 
-         // parse JS response from BE
-         const content: RunScraper_Response = await response.json() 
+      const api_result: API_Result<RunScraper_Response> = await apiClient(
+         '/api/run',
+         {method: 'POST', body: payload }
+      )
 
-         // handle response
-         if (response.ok) {
-            // check if HTTP status code is 2xx (success)
-            console.log('Scraping finished:', content)
-
-         } else {
-            throw new Error(`HTTP error! status: ${response.status}`)  // this message stored in error.message
-         }
-
-      } catch (error) {
-         console.error('Cannot connect to BE |', error)
+      if (!api_result.data) {
+         alert(api_result.message)
+         return
+      } else {
+         console.log(`${api_result.message}: ${api_result.data}`)
       }
-
+   
       setFileName('')
       setLocation('')
       setNumGuest('')
@@ -93,10 +84,7 @@ export default function ConfigForm(props: ConfigForm_props) {
       setHostData(false)
       setBookRate(false)
       props.self_setRunButtonClickable(true)
-
    }
-
-
 
 
 
