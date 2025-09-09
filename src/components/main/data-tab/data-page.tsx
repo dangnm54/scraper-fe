@@ -4,14 +4,14 @@ import { Download } from "lucide-react"
 
 import DataContent from './data-content';
 
-import { FileItem } from "@/types/api";
+import { FileMetadata } from "@/types/api";
 
 
 // ------------------------------------------------------------------------------------------------
 
 
 type DataPage_props = {
-    app_selectedFile: FileItem | null
+    app_selectedFile: FileMetadata | null
 }
 
 

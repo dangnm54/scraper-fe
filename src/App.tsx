@@ -6,7 +6,7 @@ import SideBar from './components/main/side-bar';
 import DataPage from './components/main/data-tab/data-page';
 import RunPage from './components/main/form-tab/run-page';
 
-import { FileItem } from './types/api';
+import { FileMetadata } from './types/api';
 import { TabType } from './types/common';
 
 
@@ -16,7 +16,7 @@ import { TabType } from './types/common';
 function App() {
 
     const [currentTab, setCurrentTab] = React.useState<TabType>('form');
-    const [selectedFile, setSelectedFile] = React.useState<FileItem | null>(null);
+    const [selectedFile, setSelectedFile] = React.useState<FileMetadata | null>(null);
     const [runButtonClickable, setRunButtonClickable] = React.useState<boolean>(true);
 
     useEffect( () => {

@@ -1,15 +1,15 @@
 
 // side-bar ------------------------------------------------------
 
-export type FileItem = {
+export type FileMetadata = {
     id: string
     file_name: string
-    item_count?: number
-    date_created?: string
+    item_count: number
+    date_created: string
 }
 
 
-export type FileList_Response = FileItem[]
+export type FileList_Response = FileMetadata[]
 
 
 

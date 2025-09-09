@@ -4,8 +4,9 @@ import { cn } from "@/lib/utils"
 import { BugIcon, SearchCode, Database, RotateCcw as Refresh } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 
-import { FileItem, FileList_Response } from '@/types/api'
+import { FileMetadata, API_Result, FileList_Response } from '@/types/api'
 import { TabType } from '@/types/common'
+import { apiClient } from "@/lib/api-client";
 
 
 // ------------------------------------------------------------------------------------------------
@@ -18,8 +19,8 @@ type SideBar_props = {
       // (tab: TabType) -> describe fx's input
       // => void -> fx not return anything
    self_chooseTab: (tab: TabType) => void
-   self_chooseFile: (file: FileItem) => void
-   self_selectedFile: FileItem | null
+   self_chooseFile: (file: FileMetadata) => void
+   self_selectedFile: FileMetadata | null
    app_runButtonClickable: boolean
 }
 
@@ -28,7 +29,7 @@ type SideBar_props = {
 
 
 export default function SideBar(props: SideBar_props) {
-   const [fileList, setFileList] = useState<FileItem[]>([]);
+   const [fileList, setFileList] = useState<FileMetadata[]>([]);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [isError, setIsError] = useState<boolean>(false);
    const [refreshClickable, setRefreshClickable] = useState<boolean>(true);
@@ -38,7 +39,7 @@ export default function SideBar(props: SideBar_props) {
    );
 
 
-   const clickFile = (file: FileItem) => {
+   const clickFile = (file: FileMetadata) => {
       props.self_chooseFile(file)
       console.log("[side-bar] Choose file:", file.id)
    }
@@ -46,30 +47,28 @@ export default function SideBar(props: SideBar_props) {
 
    const fetchFiles = async () => { 
       setFileList([])
-      setIsLoading(true);
-      setIsError(false);
+      setIsLoading(true)
+      setIsError(false)
       setRefreshClickable(false);
 
-      try {
-         const response = await fetch('http://127.0.0.1:8000/api/data/file-list')
-         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);  // this message stored in error.message
-         }
+      const api_result: API_Result<FileList_Response> = await apiClient('/api/data/file-list')
 
-         const data: FileList_Response = await response.json()
-
-         console.log("[side-bar] Fetched files:", data)
-         setFileList(data)
-
-      } catch (error) {
-         console.error("[side-bar] Cannot connect to BE |", error);
-         setIsError(true)
-      
-      } finally {
+      if (!api_result.data) {
+         alert(api_result.message)
          setIsLoading(false)
-         setRefreshClickable(true);
+         setIsError(true)
+         return
+      } else {
+         setIsLoading(false)
+         setFileList(api_result.data)
+         console.log(`message: ${api_result.message} | data: ${api_result.data}`)
       }
    }
+
+
+   // fixing isloading + iserror logic here and below tsx ui
+
+
 
 
    // refresh file list when switch to data tab

@@ -8,9 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CirclePlay, SearchCode } from 'lucide-react'
 
-import { ConfigForm_Payload, RunScraper_Response } from '@/types/api'
+import { ConfigForm_Payload, API_Result, RunScraper_Response } from '@/types/api'
 import { apiClient } from "@/lib/api-client";
-import { API_Result } from "@/types/api";
 
 
 
@@ -74,7 +73,7 @@ export default function ConfigForm(props: ConfigForm_props) {
          alert(api_result.message)
          return
       } else {
-         console.log(`${api_result.message}: ${api_result.data}`)
+         console.log(`message: ${api_result.message} | data: ${api_result.data}`)
       }
    
       setFileName('')

@@ -4,14 +4,14 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { FileItem, PropertyDetail, FileDetail_Response } from "@/types/api";
+import { FileMetadata, PropertyDetail, FileDetail_Response } from "@/types/api";
 
 
 // ------------------------------------------------------------------------------------------------
 
 
 type DataContent_props = {
-   app_selectedFile: FileItem
+   app_selectedFile: FileMetadata
 }
 
 

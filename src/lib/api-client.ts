@@ -10,7 +10,10 @@ type api_client_options = {
 
 
 // async function -> always return a Promise
-export async function apiClient<T>(api_endpoint: string, api_options: api_client_options = {}): Promise<API_Result<T>> {
+export async function apiClient<T>(
+    api_endpoint: string, 
+    api_options: api_client_options = {}
+): Promise<API_Result<T>> {
 
     const { method = 'GET', body } = api_options
 
