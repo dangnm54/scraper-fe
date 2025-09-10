@@ -29,10 +29,12 @@ type SideBar_props = {
 
 
 export default function SideBar(props: SideBar_props) {
-   const [fileList, setFileList] = useState<FileMetadata[]>([]);
-   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const [isError, setIsError] = useState<boolean>(false);
-   const [refreshClickable, setRefreshClickable] = useState<boolean>(true);
+   const [fileList, setFileList] = useState<FileMetadata[]>([])
+   const [isLoading, setIsLoading] = useState<boolean>(false)
+   const [isError, setIsError] = useState<boolean>(false)
+   const [errorMessage, setErrorMessage] = useState<string>('')
+   const [refreshClickable, setRefreshClickable] = useState<boolean>(true)
+   
    
    const [showFile, setShowFile] = useState<boolean>(
       props.self_currentTab === 'database' ? true : false
@@ -49,25 +51,25 @@ export default function SideBar(props: SideBar_props) {
       setFileList([])
       setIsLoading(true)
       setIsError(false)
+      setErrorMessage('')
       setRefreshClickable(false);
 
       const api_result: API_Result<FileList_Response> = await apiClient('/api/data/file-list')
 
+      console.log(api_result)
+
       if (!api_result.data) {
-         alert(api_result.message)
-         setIsLoading(false)
+         setErrorMessage(api_result.message)
+         console.error(api_result.message)
          setIsError(true)
-         return
       } else {
-         setIsLoading(false)
          setFileList(api_result.data)
-         console.log(`message: ${api_result.message} | data: ${api_result.data}`)
       }
+
+      setIsLoading(false)
+      setRefreshClickable(true)
+
    }
-
-
-   // fixing isloading + iserror logic here and below tsx ui
-
 
 
 
@@ -145,11 +147,7 @@ export default function SideBar(props: SideBar_props) {
                <div id='file-box' className='min-h-0 flex-1 w-full p-3 overflow-auto bg-white scrollbar scrollbar-thumb-gray-300 scrollbar-track-white border rounded-lg border-gray-300 flex flex-col gap-2 items-center'>
 
                   {isLoading && <p className="text-center text-sm text-gray-500">Fetching files...</p>}
-                  {isError && <p className="text-center text-sm text-red-500">Error fetching files! <br /> Please check BE server.</p>}
-                  {!isLoading &&
-                  !isError &&
-                  fileList.length === 0 &&
-                  <p className="text-center text-sm text-gray-500">Database is empty.</p>}
+                  {isError && <p className="text-center text-sm text-red-500"> {errorMessage} <br /> Please check BE.</p>}
 
                   {fileList.map( (file) => (
                      <button

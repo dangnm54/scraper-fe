@@ -69,13 +69,13 @@ export default function ConfigForm(props: ConfigForm_props) {
          {method: 'POST', body: payload }
       )
 
+      console.log(api_result)
+
       if (!api_result.data) {
-         alert(api_result.message)
-         return
-      } else {
-         console.log(`message: ${api_result.message} | data: ${api_result.data}`)
+         console.error(api_result.message)
       }
-   
+
+
       setFileName('')
       setLocation('')
       setNumGuest('')

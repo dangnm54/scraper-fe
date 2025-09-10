@@ -62,12 +62,12 @@ export type FileDetail_Response = {
 
 export interface API_Response<T> {
     success: boolean
-    message: string | null
+    message: string
     data: T | null
 }
 
 // data only available for success response
 export type API_Result<T> = {
-    message: string | null
+    message: string
     data: T | null
 }

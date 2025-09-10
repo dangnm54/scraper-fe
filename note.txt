@@ -8,7 +8,6 @@ _____min-h-0 & min-w-0
 
 
 _____truncate
-
 - truncate only works with
     - want-truncated item -> has truncate, max-w/h-full 
     - parent has overflow-hidden
