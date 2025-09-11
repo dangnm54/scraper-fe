@@ -75,6 +75,8 @@ export default function ConfigForm(props: ConfigForm_props) {
          console.error(api_result.message)
       }
 
+      // log message 
+
 
       setFileName('')
       setLocation('')

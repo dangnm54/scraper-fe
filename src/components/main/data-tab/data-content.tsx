@@ -4,8 +4,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { FileMetadata, PropertyDetail, FileDetail_Response } from "@/types/api";
 
+import { FileMetadata, PropertyDetail, API_Result, FileDetail_Response } from "@/types/api";
+import { apiClient } from "@/lib/api-client";
 
 // ------------------------------------------------------------------------------------------------
 
@@ -20,7 +21,7 @@ type DataContent_props = {
 
 function DataContent(props: DataContent_props) {
 
-   const [PropertyDetail, setFileDetail] = useState<PropertyDetail[]>([])
+   const [fileDetail, setFileDetail] = useState<PropertyDetail[]>([])
    const [headers, setHeaders] = useState<string[]>([])
    const [selectedRow, setSelectedRow] = useState<PropertyDetail | null>(null)
    const [searchTerm, setSearchTerm] = useState<string>("")
@@ -33,38 +34,19 @@ function DataContent(props: DataContent_props) {
          setSelectedRow(null)
          setSearchTerm("")
 
-         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/data/file-detail/${props.app_selectedFile.id}`)
+         const api_result: API_Result<FileDetail_Response> = await apiClient(`/api/data/file-detail/${props.app_selectedFile.id}`)
 
-            if (!response.ok) {
-               throw new Error(`HTTP error! status: ${response.status}`);
-            }
+         console.log(api_result)
 
-            const result: FileDetail_Response = await response.json()
+         if (!api_result.data) {
+            console.error(api_result.message)
+         } else {
+            const file_data = api_result.data.file_data
+            setFileDetail(file_data)
 
-            if (Array.isArray(result.data)) {
-               setFileDetail(result.data)
-
-               if (result.data.length > 0) {
-                  const allHeaders = Object.keys(result.data[0]);
-                  const filteredHeaders = allHeaders.filter(h => h !== 'Scrape_status');
-                  setHeaders(filteredHeaders);
-               }
-               else {
-                  setHeaders([]);
-               }
-
-               console.log('[data-content] File detail: ', result.data)
-            
-            }
-            else {
-               throw new Error(result.detail || 'BE has no detail message about error.')
-            }
-
-         } catch (error) {
-            console.error("[side-bar] Cannot connect to BE |", error);
-            setFileDetail([])
-            setHeaders([])
+            const allHeaders = Object.keys(file_data[0])
+            // const filteredHeaders = allHeaders.filter(h => h !== 'scrape_result')
+            setHeaders(allHeaders)
          }
       }
 
@@ -75,18 +57,28 @@ function DataContent(props: DataContent_props) {
 
    const filterdDetail = useMemo( () => {
       if (!searchTerm) {
-         return PropertyDetail
+         return fileDetail
       }
 
-      return PropertyDetail.filter((item) =>
-         item.Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         String(item.Utility_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         String(item.Rating_title)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         String(item.Rating_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         String(item.Rating_star)?.toLowerCase().includes(searchTerm.toLowerCase()) 
+      return fileDetail.filter((item) =>
+         item.prop_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+
+         String(item.guest_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.bed_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.bath_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.location).toLowerCase().includes(searchTerm.toLowerCase()) ||
+
+         String(item.rating_title)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.rating_star)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.rating_num)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+
+         String(item.host_name)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.host_title)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.host_rating_star)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         String(item.host_rating_num)?.toLowerCase().includes(searchTerm.toLowerCase())
       )
 
-   }, [searchTerm, PropertyDetail])
+   }, [searchTerm, fileDetail])
 
 
 

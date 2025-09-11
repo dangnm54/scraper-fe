@@ -32,28 +32,50 @@ export type RunScraper_Response = string
 // data-content ---------------------------------------------------
 
 export type PropertyDetail = {
-    ID: string
-    Name: string
-    Link: string
-    Scrape_status: string
-    Guest_num?: number
-    Bed_num?: number
-    Bath_num?: number
-    Location?: string
-    Rating_title?: string
-    Rating_num?: number
-    Rating_star?: number
-    [key: string]: any      
-        // can have ANY additional properties with string keys
-        // and those properties can be of ANY type.
-        // all object's keys are string, num will be converted to string
+    id: string
+    
+    prop_code: string
+    prop_name: string
+    prop_link: string
 
+    scrape_result: string
+
+    guest_num?: number
+    bed_num?: number
+    bath_num?: number
+    location: string
+    ggmap_link: string
+
+    rating_title?: string
+    rating_star?: number
+    rating_num?: number
+
+    host_name?: string
+    host_title ?: string
+    host_rating_star?: number
+    host_rating_num?: number
+    host_exp?: string
+    host_link?: string
+    
+    this_month_booked_rate?: number
+    next_1_month_booked_rate?: number
+    next_3_month_booked_rate?: number
+
+    // when define key-value pair as above
+        // can only access properties using exact name (eg: row.id)
+        // cannot use row['id'] -> b/c typescript don't know if string key is valid or not
+
+    [key: string]: any  
+    // tell typescript
+        // this object can have more key-value pair besides the mentioned pairs
+        // but for new pair, key must be 'string' type
+        // by this, also allow this object's properties to be accessed using 'string' keys
 }
 
 
 export type FileDetail_Response = {
-    detail: string
-    data: PropertyDetail[]
+    file_name: string
+    file_data: PropertyDetail[]
 }
 
 
@@ -65,6 +87,7 @@ export interface API_Response<T> {
     message: string
     data: T | null
 }
+
 
 // data only available for success response
 export type API_Result<T> = {
