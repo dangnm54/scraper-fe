@@ -17,7 +17,7 @@ type SSELog_props = {
 // ------------------------------------------------------------------------------------------------
 
 
-function SSELog(props: SSELog_props) {
+export default function SSELog(props: SSELog_props) {
 
     const [logs, setLogs] = useState<string[]>([])
     const [brushClickable, setBrushClickable] = useState<boolean>(false)
@@ -137,4 +137,4 @@ function SSELog(props: SSELog_props) {
     )
 }
 
-export default SSELog
+ 

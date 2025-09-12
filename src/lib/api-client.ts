@@ -41,7 +41,7 @@ export async function apiClient<T>(
 
 
     try {
-        const response = await fetch(`${api_base_url}${api_endpoint}`, options)
+        const response: Response = await fetch(`${api_base_url}${api_endpoint}`, options)
 
         let content: API_Response<T>
 

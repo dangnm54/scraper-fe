@@ -263,3 +263,86 @@ export async function apiClient<T>(api_endpoint: string, api_options: api_client
 }
 
 
+
+____________ blob for downloadable object __________________________________________________________________________________
+
+
+export default function DataPage(props: DataPage_props) {
+
+    // useEffect( () => {
+    //     console.log("[DataPage] Global selected file:", props.app_selectedFile)
+    // }, [props.app_selectedFile])
+
+    const downloadFile = async () => {
+        `
+        - received file data from BE
+        - create an file-like object in browser's temporary memory space
+        - create temporary download link (point to the file-like object's address in browser memory)
+        - click the link to download file
+        - clean up temporary resource
+        `
+
+        if (!props.app_selectedFile) { return }
+
+        try {
+            // in this app
+                // if success -> always return stream
+                // if fail -> always return JSON
+            const response: Response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.app_selectedFile.id}`)
+
+            const content_type: string = response.headers.get('content-type') || ''
+
+            if (content_type.includes('text/csv')) {
+                
+                // using received data, create a blob object in browser's temporary memory space
+                    // blob (binary large object) is file-like object of immutable data
+                const blob = await response.blob()
+
+                // create DOMString (piece of text) of a URL pointing to blob's address in browser's memory space            
+                const url = window.URL.createObjectURL(blob)
+
+                // create <a> element 
+                const a_element = document.createElement('a')
+
+                a_element.href = url
+
+                // when element has 'download' attribute, browser treat: 
+                    // 'href' as download link
+                    // 'file_name' as name for downloadble file
+                a_element.setAttribute('download', props.app_selectedFile?.file_name || '')
+
+                // add <a> to <body>
+                document.body.appendChild(a_element)
+
+                // click the hidden <a> -> trigger download
+                a_element.click()
+
+                // after download, the temporary <a> is removed to clean up DOM
+                a_element.remove()
+
+                // release temporary URL created earlier -> free up memory
+                window.URL.revokeObjectURL(url)
+
+            } else {
+                let error_message = 'Download failed'
+                try {
+                    const error_content = await response.json()
+                    error_message = error_content || error_message
+                } catch (jsonError) {
+                    console.error({message: "Data contract error | BE return wrong data type"})
+                }
+                console.error(error_message)
+            }
+
+        } catch (error: Error | unknown) {
+            if (error instanceof Error && error.message === 'Failed to fetch') {
+                return {data: null, message: `Network error | Cannot connect to BE`}
+            }
+    
+            // other error
+            return {
+                message: error instanceof Error ? error.message : 'Unknown error',
+                data: null
+            }
+        }    
+    }

@@ -4,7 +4,7 @@ import { Download } from "lucide-react"
 
 import DataContent from './data-content';
 
-import { FileMetadata } from "@/types/api";
+import { FileMetadata, API_Response } from "@/types/api";
 
 
 // ------------------------------------------------------------------------------------------------
@@ -24,7 +24,6 @@ export default function DataPage(props: DataPage_props) {
     //     console.log("[DataPage] Global selected file:", props.app_selectedFile)
     // }, [props.app_selectedFile])
 
-
     const downloadFile = async () => {
         `
         - received file data from BE
@@ -37,46 +36,52 @@ export default function DataPage(props: DataPage_props) {
         if (!props.app_selectedFile) { return }
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.app_selectedFile.id}`)
+            // in this app
+                // if success -> always return stream
+                // if fail -> always return JSON
+            const response: Response = await fetch(`http://127.0.0.1:8000/api/data/file-download/${props.app_selectedFile.id}`)
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`)
+            const content_type: string = response.headers.get('content-type') || ''
+            
+            if (content_type.includes('text/csv')) {
+                
+                const content: Blob = await response.blob()           
+                const url: string = window.URL.createObjectURL(content)
+
+                const a_element: HTMLAnchorElement = document.createElement('a')
+                a_element.href = url
+                a_element.setAttribute('download', props.app_selectedFile?.file_name || '')
+
+                document.body.appendChild(a_element)
+                a_element.click()
+                a_element.remove()
+                window.URL.revokeObjectURL(url)
+
+            } else {
+
+                let content: API_Response<null>
+
+                try {
+                    content = await response.json()
+                } catch (jsonError) {
+                    throw new Error(`HTTP error | BE crash while handling request: ${jsonError}`)
+                }
+
+                if (typeof content.success !== 'boolean') {
+                    throw new Error(`Data contract error | BE return wrong data type`)
+                }
+
+                throw new Error(`Application error | BE return un-desired data: ${content.message}`)
             }
-        
-            // using received data, create a blob object in browser's temporary memory space
-                // blob (binary large object) is file-like object of immutable data
-            const blob = await response.blob()
 
-            // create DOMString (piece of text) of a URL pointing to blob's address in browser's memory space            
-            const url = window.URL.createObjectURL(blob)
+        } catch (error: Error | unknown) {
+            if (error instanceof Error && error.message === 'Failed to fetch') {
+                console.error(`Network error | Cannot connect to BE`) 
+            }
 
-            // create <a> element 
-            const a_element = document.createElement('a')
-
-            a_element.href = url
-
-            // when element has 'download' attribute, browser treat: 
-                // 'href' as download link
-                // 'file_name' as name for downloadble file
-            a_element.setAttribute('download', props.app_selectedFile?.file_name || '')
-
-            // add <a> to <body>
-            document.body.appendChild(a_element)
-
-            // click the hidden <a> -> trigger download
-            a_element.click()
-
-            // after download, the temporary <a> is removed to clean up DOM
-            a_element.remove()
-
-            // release temporary URL created earlier -> free up memory
-            window.URL.revokeObjectURL(url)
-
-
-        } catch (error) {
-            console.error("[data-page] Cannot connect to BE |", error)
-        }    
-    
+            // other error
+            console.error(error instanceof Error ? error.message : 'Unknown error')
+        }
     }
 
 
