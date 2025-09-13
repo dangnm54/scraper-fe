@@ -9,8 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CirclePlay, SearchCode } from 'lucide-react'
 
 import { ConfigForm_Payload, API_Result, RunScraper_Response } from '@/types/api'
-import { apiClient } from "@/lib/api-client";
-
+import { apiClient_JSON } from "@/lib/api-client";
 
 
 // ------------------------------------------------------------------------------------------------
@@ -23,7 +22,6 @@ type ConfigForm_props = {
 
 
 // ------------------------------------------------------------------------------------------------
-
 
 
 export default function ConfigForm(props: ConfigForm_props) {
@@ -64,7 +62,7 @@ export default function ConfigForm(props: ConfigForm_props) {
       // make POST request
 
 
-      const api_result: API_Result<RunScraper_Response> = await apiClient(
+      const api_result: API_Result<RunScraper_Response> = await apiClient_JSON(
          '/api/run',
          {method: 'POST', body: payload }
       )

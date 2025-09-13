@@ -6,7 +6,8 @@ import { Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import { FileMetadata, PropertyDetail, API_Result, FileDetail_Response } from "@/types/api";
-import { apiClient } from "@/lib/api-client";
+import { apiClient_JSON } from "@/lib/api-client";
+
 
 // ------------------------------------------------------------------------------------------------
 
@@ -34,7 +35,7 @@ function DataContent(props: DataContent_props) {
          setSelectedRow(null)
          setSearchTerm("")
 
-         const api_result: API_Result<FileDetail_Response> = await apiClient(`/api/data/file-detail/${props.app_selectedFile.id}`)
+         const api_result: API_Result<FileDetail_Response> = await apiClient_JSON(`/api/data/file-detail/${props.app_selectedFile.id}`)
 
          console.log(api_result)
 

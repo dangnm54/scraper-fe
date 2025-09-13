@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 
 import { FileMetadata, API_Result, FileList_Response } from '@/types/api'
 import { TabType } from '@/types/common'
-import { apiClient } from "@/lib/api-client";
+import { apiClient_JSON } from "@/lib/api-client";
 
 
 // ------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ export default function SideBar(props: SideBar_props) {
       setErrorMessage('')
       setRefreshClickable(false);
 
-      const api_result: API_Result<FileList_Response> = await apiClient('/api/data/file-list')
+      const api_result: API_Result<FileList_Response> = await apiClient_JSON('/api/data/file-list')
 
       console.log(api_result)
 
