@@ -27,7 +27,9 @@ export async function apiClient_JSON<T>(
     api_options: api_client_options = {}
 ): Promise<API_Result<T>> {
 
-    const { method = 'GET', body } = api_options
+    const api_sig: string = `[${api_endpoint.replace('/api','')}]`
+
+    const { method = 'GET', body = undefined } = api_options
 
     const headers = new Headers({
         'Content-Type': 'application/json',
@@ -55,7 +57,7 @@ export async function apiClient_JSON<T>(
     try {
         const response: Response = await fetch(`${api_base_url}${api_endpoint}`, options)
 
-        const json_result: Error | API_Result<T> = await handle_json(response)
+        const json_result: Error | API_Result<T> = await handle_json(response, api_sig)
 
         if (json_result instanceof Error) {
             throw json_result
@@ -66,14 +68,14 @@ export async function apiClient_JSON<T>(
     } catch (error: Error | unknown) {
         if (error instanceof Error && error.message === 'Failed to fetch') {
             return {
-                message: `Network error | Cannot connect to BE`,
+                message: `${api_sig} Network error | Cannot connect to BE`,
                 data: null
             }
         }
 
         // other error
         return {
-            message: error instanceof Error ? error.message : 'Unknown error',
+            message: error instanceof Error ? error.message : `${api_sig} Unknown error`,
             data: null
         }
     }
@@ -96,6 +98,8 @@ export async function apiClient_Download(
     - clean up temporary resource
     `
 
+    const api_sig: string = `[${api_endpoint.replace('/api','')}]`
+
     try {
         // in download_api of this app
             // if success -> always return stream
@@ -111,8 +115,11 @@ export async function apiClient_Download(
         
         if (content_type.includes('text/csv')) {
             
-            const content: Blob = await response.blob()           
-            const url: string = window.URL.createObjectURL(content)
+            const blob: Blob = await response.blob()           
+
+            // const csv_blob: Blob = new Blob([blob], { type: "text/csv;charset=utf-8" });
+
+            const url: string = window.URL.createObjectURL(blob)
 
             const a_element: HTMLAnchorElement = document.createElement('a')
             a_element.href = url
@@ -124,20 +131,20 @@ export async function apiClient_Download(
             window.URL.revokeObjectURL(url)
 
             return {
-                message: 'File download successfully',
+                message: `${api_sig} File download successfully`,
                 data: 'this string means file downloaded successfully'
             }
 
         } else {
 
-            const json_result: Error | API_Result<null> = await handle_json(response, 'download')
+            const json_result: Error | API_Result<null> = await handle_json(response, api_sig, 'download')
 
             console.log(json_result)
 
             if (json_result instanceof Error) {
                 throw json_result
             } else {
-                throw new Error('JSON handling error | json of download api should never be API_Result object')
+                throw new Error(`${api_sig} JSON handling error | json of download api should never be API_Result object`)
             }
 
         }
@@ -145,14 +152,14 @@ export async function apiClient_Download(
     } catch (error: Error | unknown) {
         if (error instanceof Error && error.message === 'Failed to fetch') {
             return {
-                message: `Network error | Cannot connect to BE`,
+                message: `${api_sig} Network error | Cannot connect to BE`,
                 data: null
             }
         }
 
         // other error
         return {
-            message: error instanceof Error ? error.message : 'Unknown error',
+            message: error instanceof Error ? error.message : `${api_sig} Unknown error`,
             data: null
         }
     }
@@ -162,6 +169,7 @@ export async function apiClient_Download(
 
 async function handle_json<T>(
     response: Response, 
+    api_sig: string,
     mode: handle_json_mode = 'json'
 ): Promise<Error | API_Result<T>> {
 
@@ -170,24 +178,24 @@ async function handle_json<T>(
     try {
         content = await response.json()
     } catch (jsonError) {
-        return new Error(`HTTP error | BE crash while handling request: ${jsonError}`)
+        return new Error(`${api_sig} HTTP error | BE crash while handling request: ${jsonError}`)
     }
 
     if (typeof content.success !== 'boolean') {
-        return new Error(`Data contract error | BE return wrong data type in failed case`)
+        return new Error(`${api_sig} Data contract error | BE return wrong data type in failed case`)
     }
 
     // for apiClient_Download
-    if (mode='download') {
-        return new Error(`Application error | BE return un-desired data: ${content.message}`)
+    if (mode === 'download') {
+        return new Error(`${api_sig} Application error | BE return un-desired data: ${content.message}`)
     }
 
     // for apiClient_JSON
     if (content.success) {
-        return {message: content.message, data: content.data}
+        return {message: `${api_sig} ${content.message}`, data: content.data}
     }
     else {
-        return new Error(`Application error | BE return correct-typed but un-desired data: ${content.message}`)
+        return new Error(`${api_sig} Application error | BE return correct-typed but un-desired data: ${content.message}`)
     }
 
 }

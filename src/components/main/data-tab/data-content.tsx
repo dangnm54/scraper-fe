@@ -46,8 +46,8 @@ function DataContent(props: DataContent_props) {
             setFileDetail(file_data)
 
             const allHeaders = Object.keys(file_data[0])
-            // const filteredHeaders = allHeaders.filter(h => h !== 'scrape_result')
-            setHeaders(allHeaders)
+            const filteredHeaders = allHeaders.filter(h => h !== 'id')
+            setHeaders(filteredHeaders)
          }
       }
 
@@ -118,8 +118,8 @@ function DataContent(props: DataContent_props) {
                                  className={cn(
                                     "relative text-left py-3 px-4 text-xs font-medium bg-gray-800 text-white border-b-1 border-r-0 border-gray-400 whitespace-nowrap min-w-[120px]",
                                     {
-                                       "sticky left-0 z-10 !min-w-[50px]": index === 0,
-                                       "sticky left-[50px] z-10": index === 1,
+                                       "sticky left-0 z-10 !min-w-[100px]": index === 0,
+                                       "sticky left-[100px] z-10": index === 1,
                                     }
                                  )}
                               >
@@ -127,7 +127,7 @@ function DataContent(props: DataContent_props) {
                                  <div
                                     id="header-divider"
                                     className={cn(
-                                       "absolute right-1.5 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400",
+                                       "absolute right-1 top-1/2 -translate-y-1/2 h-2/5 w-0.5 rounded-md bg-gray-400",
                                        index === headers.length - 1 ? "hidden" : "",
                                        index === 1 ? "shadow-[-1px_0px_2px_rgba(0,0,0,0.25)]" : ""
 
@@ -153,8 +153,8 @@ function DataContent(props: DataContent_props) {
                                     className={cn(
                                        "relative py-3 px-4 bg-white text-gray-700 whitespace-nowrap group-hover:bg-blue-50 transition-colors",
                                        {
-                                          "sticky left-0 z-10": colIndex === 0,
-                                          "sticky left-[50px] z-10 max-w-[300px]": colIndex === 1,
+                                          "sticky left-0 z-10 !min-w-[100px]": colIndex === 0,
+                                          "sticky left-[100px] z-10 max-w-[300px]": colIndex === 1,
                                        },
                                        selectedRow === row ? "bg-cyan-50" : ""
                                     )}

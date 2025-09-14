@@ -32,5 +32,5 @@ test-results/
 tests-examples/
 
 tsconfig.app.json
-note.txt
-context.txt
+
+note/

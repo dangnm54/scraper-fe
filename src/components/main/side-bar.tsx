@@ -147,7 +147,7 @@ export default function SideBar(props: SideBar_props) {
                <div id='file-box' className='min-h-0 flex-1 w-full p-3 overflow-auto bg-white scrollbar scrollbar-thumb-gray-300 scrollbar-track-white border rounded-lg border-gray-300 flex flex-col gap-2 items-center'>
 
                   {isLoading && <p className="text-center text-sm text-gray-500">Fetching files...</p>}
-                  {isError && <p className="text-center text-sm text-red-500"> {errorMessage} <br /> Please check BE.</p>}
+                  {isError && <p className="text-center text-sm text-red-500"> {errorMessage} </p>}
 
                   {fileList.map( (file) => (
                      <button
