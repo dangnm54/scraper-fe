@@ -113,7 +113,10 @@ export async function apiClient_Download(
 
         const content_type: string = response.headers.get('content-type') || ''
         
-        if (content_type.includes('text/csv')) {
+        if (
+            content_type.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            || content_type.includes('application/octet-stream') // fallback for some servers
+        )  {
             
             const blob: Blob = await response.blob()           
 
