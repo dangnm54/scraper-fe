@@ -27,7 +27,7 @@ export async function apiClient_JSON<T>(
     api_options: api_client_options = {}
 ): Promise<API_Result<T>> {
 
-    const api_sig: string = `[${api_endpoint.replace('/api','')}]`
+    const api_sig: string = `[${api_endpoint.replace('/api','')} |]`
 
     const { method = 'GET', body = undefined } = api_options
 
@@ -98,7 +98,7 @@ export async function apiClient_Download(
     - clean up temporary resource
     `
 
-    const api_sig: string = `[${api_endpoint.replace('/api','')}]`
+    const api_sig: string = `[${api_endpoint.replace('/api','')} |]`
 
     try {
         // in download_api of this app
