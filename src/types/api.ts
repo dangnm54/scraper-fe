@@ -93,4 +93,5 @@ export interface API_Response<T> {
 export type API_Result<T> = {
     message: string
     data: T | null
+    raw_data: object | null
 }
