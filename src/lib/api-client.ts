@@ -6,7 +6,8 @@ import { API_Response, API_Result } from "@/types/api"
 
 
 // const api_base_url = "http://127.0.0.1:8000"   // uvicorn
-const api_base_url = "http://localhost:8000/"   // docker
+// const api_base_url = "http://localhost:8000"   // docker
+export const api_base_url = "https://scraper-be-production.up.railway.app"   // railway
 
 
 type api_client_options = {

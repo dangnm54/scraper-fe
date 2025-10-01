@@ -61,28 +61,31 @@ export default function ConfigForm(props: ConfigForm_props) {
 
       // make POST request
 
+      try {
+         const api_result: API_Result<RunScraper_Response> = await apiClient_JSON(
+            '/api/run',
+            {method: 'POST', body: payload }
+         )
 
-      const api_result: API_Result<RunScraper_Response> = await apiClient_JSON(
-         '/api/run',
-         {method: 'POST', body: payload }
-      )
+         console.log(api_result)
 
-      console.log(api_result)
+         if (!api_result.data) {
+            console.error(api_result.message)
+         }
 
-      if (!api_result.data) {
-         console.error(api_result.message)
+      } catch (error) {
+         console.error('[config-form] UnexpectedError:', error)
+      
+      } finally {
+         setFileName('')
+         setLocation('')
+         setNumGuest('')
+         setNumProperty('')
+         setHostData(false)
+         setBookRate(false)
+         props.self_setRunButtonClickable(true)
       }
-
-      // log message 
-
-
-      setFileName('')
-      setLocation('')
-      setNumGuest('')
-      setNumProperty('')
-      setHostData(false)
-      setBookRate(false)
-      props.self_setRunButtonClickable(true)
+      
    }
 
 
@@ -168,7 +171,7 @@ export default function ConfigForm(props: ConfigForm_props) {
                      </div>
                   </div>
 
-                  <div id='data-collect-group' className="flex flex-col gap-0.5">
+                  <div id='data-collect-group' className="flex flex-col gap-0.5 mb-5">
                      <Label className="text-xl font-medium text-gray-900 mb-2">Data to collect</Label>
                      <div className="grid grid-rows gap-3">
 

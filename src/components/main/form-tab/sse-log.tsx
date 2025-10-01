@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { MonitorCog, BrushCleaning } from "lucide-react";
 
 import { TabType } from '@/types/common'
-
+import { api_base_url } from "@/lib/api-client";
 
 // ------------------------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ export default function SSELog(props: SSELog_props) {
 
             try {
                 setLogs(['[FE] Establishing SSE Connection ...\n-----'])
-                eventSourceRef.current = new EventSource('http://127.0.0.1:8000/sse/logs')
+                eventSourceRef.current = new EventSource(`${api_base_url}/sse/logs`)
 
                 eventSourceRef.current.onopen = () => {
                     setLogs(prev => [...prev, '[FE] SSE Connection Opened\n-----\n'])
@@ -128,13 +128,18 @@ export default function SSELog(props: SSELog_props) {
                 ref={logContainerRef} 
                 className="min-w-0 min-h-0 flex-1 size-full overflow-y-auto p-5 text-sm bg-gray-100 text-gray-800 whitespace-pre-wrap break-words scrollbar scrollbar-thumb-gray-300 scrollbar-track-white"
             >
-                {logs.map( (log, index) => (
-                    <div key={index}>{log}</div>
-                ))}
+                {logs.length === 0 ? 
+                    (
+                        <div className="h-1/2 w-full flex items-center justify-center text-gray-500">This will show logs when Scrapi is running.</div>
+                    ) : (
+                        logs.map( (log, index) => (
+                            <div key={index}>{log}</div>
+                        ))
+                    )
+                }
+
             </pre>
 
         </div>
     )
 }
-
- 
