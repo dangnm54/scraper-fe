@@ -130,7 +130,7 @@ export default function SSELog(props: SSELog_props) {
             >
                 {logs.length === 0 ? 
                     (
-                        <div className="h-1/2 w-full flex items-center justify-center text-gray-500">This will show logs when Scrapi is running.</div>
+                        <div className="h-1/2 w-full flex items-center justify-center text-gray-500 text-lg">This will show logs of Scrapi during scraping process.</div>
                     ) : (
                         logs.map( (log, index) => (
                             <div key={index}>{log}</div>
