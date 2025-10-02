@@ -72,7 +72,6 @@ export default function SideBar(props: SideBar_props) {
    }
 
 
-
    // refresh file list when switch to data tab
    useEffect( () => {
       if (props.self_currentTab === 'database') {

@@ -34,3 +34,4 @@ tests-examples/
 tsconfig.app.json
 
 note/
+.env
