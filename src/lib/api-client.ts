@@ -13,6 +13,7 @@ import { API_Response, API_Result } from "@/types/api"
 
 export let api_base_url: string | undefined = import.meta.env.VITE_API_BASE_URL
 if (!api_base_url) {
+    console.error("API base url is not set in .env file -> use default railway url")
     api_base_url = "https://scraper-be-production.up.railway.app"
 }
 
