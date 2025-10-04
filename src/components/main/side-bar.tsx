@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from "@/lib/utils"
 
-import { BugIcon, SearchCode, Database, RotateCcw as Refresh } from 'lucide-react'
+import { BugIcon, SearchCode, Database, RotateCcw as Refresh, BrushCleaning as Brush   } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 
 import { FileMetadata, API_Result, FileList_Response } from '@/types/api'
@@ -101,7 +101,7 @@ export default function SideBar(props: SideBar_props) {
             {/* Navigation section */}
             <div id='sidebar-navigation-group' className='w-full h-fit p-3 px-4 pt-5 flex flex-col gap-3'>
                
-               <div id='group-label' className='text-sm font-medium text-gray-600'>Navigation</div>
+               <div id='group-label-navigation' className='text-sm font-medium text-gray-600'>Navigation</div>
                
                <div id='group-buttons' className='flex flex-col gap-4'>
                   <button
@@ -135,12 +135,18 @@ export default function SideBar(props: SideBar_props) {
             {showFile && 
             <div id='sidebar-file-group' className='min-h-0 flex-1 w-full p-3 px-4 flex flex-col gap-2'>
 
-               <div id='group-label' className='h-fit w-full flex flex-row items-center justify-between'>
+               <div id='group-label-file' className='h-fit w-full flex flex-row items-center justify-between'>
                   <span className='text-sm font-medium text-gray-600'>Files</span>
-                  <Refresh 
-                     onClick={refreshClickable ? fetchFiles : undefined}
-                     className={`!size-3 ${refreshClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
-                  /> 
+                  <div id='icon-group' className='flex flex-row flex-end gap-3'>
+                     <Brush 
+                        onClick={undefined}
+                        className={`!size-4`}
+                     /> 
+                     <Refresh 
+                        onClick={refreshClickable ? fetchFiles : undefined}
+                        className={`!size-4 ${refreshClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
+                     /> 
+                  </div>
                </div>
 
                <div id='file-box' className='min-h-0 flex-1 w-full p-3 overflow-auto bg-white scrollbar scrollbar-thumb-gray-300 scrollbar-track-white border rounded-lg border-gray-300 flex flex-col gap-2 items-center'>

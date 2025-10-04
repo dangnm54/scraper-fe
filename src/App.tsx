@@ -15,7 +15,7 @@ import { TabType } from './types/common';
 
 function App() {
 
-    const [currentTab, setCurrentTab] = React.useState<TabType>('form');
+    const [currentTab, setCurrentTab] = React.useState<TabType>('database');
     const [selectedFile, setSelectedFile] = React.useState<FileMetadata | null>(null);
     const [runButtonClickable, setRunButtonClickable] = React.useState<boolean>(true);
 
