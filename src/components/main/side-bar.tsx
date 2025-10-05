@@ -206,6 +206,12 @@ export default function SideBar(props: SideBar_props) {
             <span className="text-xs text-muted-foreground text-center">Copyright © 2025 Scrapi. <br /> All Rights Reserved.</span>
          </div>
 
+         {/* <div id='delete-all-overlay' className='fixed inset-0 z-50 bg-black/30 flex items-center justify-center'>
+            <div id='delete-all-dialog' className='h-fit w-fit flex bg-white border border-gray-300 rounded-lg p-4'>
+               hehe
+            </div>
+         </div> */}
+
       </div>
 
    )

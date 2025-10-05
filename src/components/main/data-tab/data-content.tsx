@@ -86,10 +86,10 @@ function DataContent(props: DataContent_props) {
 
 
    return (
-      <div id="data-content-main" className="min-w-0 min-h-0 flex-1 size-full flex flex-row" >    {/* need bg */}
+      <div id="data-content-main" className="min-w-0 min-h-0 flex-1 size-full flex flex-row" data-bg='need bg'>
 
          {/* Table section */}
-         <div id="table-area" className="min-w-0 min-h-0 flex-1 size-full p-5 flex flex-col">      {/* need bg */}
+         <div id="table-area" className="min-w-0 min-h-0 flex-1 size-full p-5 flex flex-col"  data-bg='need bg'>
 
             <div id="table-header" className="h-fit w-full p-5 border-2 rounded-tl-lg rounded-tr-lg flex flex-row flex-start items-center">
                <div id="search-bar" className="min-w-0 h-fit w-96 flex flex-row items-center relative">
@@ -104,9 +104,9 @@ function DataContent(props: DataContent_props) {
                </div>
             </div>
 
-            <div id="table-body" className="min-w-0 min-h-0 flex-1 size-full p-5 border-2 border-t-0 rounded-bl-lg rounded-br-lg">      {/* need bg */}
-               <div id='table-scroll-area' className='min-w-0 min-h-0 size-full overflow-auto border-1 border-gray-400 rounded-lg scrollbar scrollbar-thumb-gray-300 scrollbar-track-white scrollbar-corner-white'>       {/* need bg */}
-                  <table id="table-content" className="min-w-0 min-h-0 w-full h-fit text-sm border-collapse bg-white ">      {/* need bg */}
+            <div id="table-body" className="min-w-0 min-h-0 flex-1 size-full p-5 border-2 border-t-0 rounded-bl-lg rounded-br-lg" data-bg='need bg'>
+               <div id='table-scroll-area' className='min-w-0 min-h-0 size-full overflow-auto border-1 border-gray-400 rounded-lg scrollbar scrollbar-thumb-gray-300 scrollbar-track-white scrollbar-corner-white' data-bg='need bg'>
+                  <table id="table-content" className="min-w-0 min-h-0 w-full h-fit text-sm border-collapse bg-white " data-bg='need bg'>
 
                      <thead className="w-full h-fit sticky top-0 z-20">
                         <tr>
