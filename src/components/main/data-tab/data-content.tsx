@@ -160,9 +160,12 @@ function DataContent(props: DataContent_props) {
                                     )}
                                  >
                                     <div className="truncate">
-                                       {colIndex === 2 || colIndex === 16 ? (
+                                       { (colIndex === 2 || colIndex === 8 || colIndex === 17) && 
+                                          row[header] != null &&
+                                          String(row[header]) !== 'null'
+                                       ? (
                                           <a href={String(row[header])} target="_blank" rel="noopener noreferrer" className="text-blue-600 !underline">
-                                             {row[header] === null || String(row[header]) === 'null' ? '-' : String(row[header])}
+                                             {String(row[header])}
                                           </a>
                                        ) : (
                                           row[header] === null || String(row[header]) === 'null' ? '-' : String(row[header])
