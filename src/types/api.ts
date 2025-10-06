@@ -80,6 +80,21 @@ export type FileDetail_Response = {
 
 
 
+// delete-all-dialog ---------------------------------------------------
+
+
+export type DeleteAllPassword_Payload = {
+    password: string
+}
+
+
+export type DeleteAll_Response = {
+    deleted_file_cnt: number
+    deleted_row_cnt: number
+}
+
+
+
 // api client ---------------------------------------------------
 
 export interface API_Response<T> {

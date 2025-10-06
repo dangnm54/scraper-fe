@@ -3,8 +3,10 @@ import { cn } from "@/lib/utils"
 
 import { BugIcon, SearchCode, Database, RotateCcw as Refresh, BrushCleaning as Brush   } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { X } from 'lucide-react'
 
-import { FileMetadata, API_Result, FileList_Response } from '@/types/api'
+import { FileMetadata, API_Result, FileList_Response, DeleteAllPassword_Payload, DeleteAll_Response } from '@/types/api'
 import { TabType } from '@/types/common'
 import { apiClient_JSON } from "@/lib/api-client";
 
@@ -34,7 +36,10 @@ export default function SideBar(props: SideBar_props) {
    const [isError, setIsError] = useState<boolean>(false)
    const [errorMessage, setErrorMessage] = useState<string>('')
    const [refreshClickable, setRefreshClickable] = useState<boolean>(true)
-   
+   const [deleteClickable, setDeleteClickable] = useState<boolean>(true)
+   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false)
+   const [deletePassword, setDeletePassword] = useState<string>('')
+   const [deleteError, setDeleteError] = useState<string>('')
    
    const [showFile, setShowFile] = useState<boolean>(
       props.self_currentTab === 'database' ? true : false
@@ -72,12 +77,73 @@ export default function SideBar(props: SideBar_props) {
    }
 
 
+
    // refresh file list when switch to data tab
    useEffect( () => {
       if (props.self_currentTab === 'database') {
          fetchFiles()
       }
    }, [props.self_currentTab])
+
+
+
+   useEffect( () => {
+      if (fileList.length === 0) {
+         setDeleteClickable(false)
+      } else {
+         setDeleteClickable(true)
+      }
+   }, [fileList])
+
+
+
+   const closeDeleteDialog = () => {
+      setDeleteDialogOpen(false)
+      setDeletePassword('')
+      setDeleteError('')
+   }
+
+
+
+   const deleteAllFiles = async () => {
+
+      setDeleteError('')
+
+      if (!deletePassword) {
+         setDeleteError('Please enter password to delete all files')
+         return
+      }
+
+      const payload: DeleteAllPassword_Payload = {
+         password: deletePassword,
+      }
+
+      try {
+         const api_result: API_Result<DeleteAll_Response> = await apiClient_JSON(
+            '/api/data/delete-all', 
+            { method: 'POST', body: payload })
+
+         console.log(api_result)
+
+         if (!api_result.data) {
+            setDeletePassword('')
+            setDeleteError(api_result.message)
+            console.error(api_result.message)
+            return
+         }
+
+         setDeleteDialogOpen(false)
+         fetchFiles()
+      
+      } catch (error: Error | unknown) {
+         console.error('[side-bar] UnexpectedError:', error)
+         setDeleteError(error instanceof Error ? error.message : 'Unknown error')
+      
+      } finally {
+         setDeletePassword('')
+      }
+
+   }
 
 
 
@@ -139,8 +205,8 @@ export default function SideBar(props: SideBar_props) {
                   <span className='text-sm font-medium text-gray-600'>Files</span>
                   <div id='icon-group' className='flex flex-row flex-end gap-3'>
                      <Brush 
-                        onClick={undefined}
-                        className={`!size-4`}
+                        onClick={deleteClickable ? () => setDeleteDialogOpen(true) : undefined}
+                        className={`!size-4 ${deleteClickable ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
                      /> 
                      <Refresh 
                         onClick={refreshClickable ? fetchFiles : undefined}
@@ -206,11 +272,59 @@ export default function SideBar(props: SideBar_props) {
             <span className="text-xs text-muted-foreground text-center">Copyright © 2025 Scrapi. <br /> All Rights Reserved.</span>
          </div>
 
-         {/* <div id='delete-all-overlay' className='fixed inset-0 z-50 bg-black/30 flex items-center justify-center'>
-            <div id='delete-all-dialog' className='h-fit w-fit flex bg-white border border-gray-300 rounded-lg p-4'>
-               hehe
+
+         { deleteDialogOpen &&
+            <div 
+               id='delete-all-overlay' 
+               onClick={closeDeleteDialog}
+               className='fixed inset-0 z-50 bg-black/50 flex items-center justify-center'
+            >
+
+               <div 
+                  id='delete-all-dialog-main' 
+                  onClick={(e) => e.stopPropagation()}
+                  className='h-fit w-130 w-max-130 flex flex-col gap-5 bg-white border border-gray-300 rounded-lg p-5'>
+                  
+                  <div id='dialog-header' className='h-fit flex flex-row items-center justify-between'>
+                     <span className='text-lg font-semibold'>Delete all files</span>
+                     <X 
+                        onClick={closeDeleteDialog}
+                        className='size-5 cursor-pointer' />
+                  </div>
+
+                  <div id='dialog-body' className='flex flex-col items-start gap-2'>
+                     
+                     <span className='text-md text-gray-700'>This action will <b>delete all files</b> in database and <b>cannot</b> be <b>undo</b>.</span>
+                     <input 
+                        type='password'
+                        placeholder='Enter admin password'
+                        value={deletePassword}
+                        onChange={(e) => setDeletePassword(e.target.value)}
+                        className='w-full p-2 border border-gray-500 rounded-md' />
+                  </div>
+
+                  {deleteError &&
+                     <span 
+                        id='dialog-error' 
+                        className='h-fit w-full whitespace-pre-wrap break-words text-sm text-amber-600'
+                     >{deleteError}</span>
+                  }
+
+                  <div id='dialog-buttons' className='flex flex-row justify-end gap-3'>
+                     <Button 
+                        variant='default' className='cursor-pointer' 
+                        onClick={closeDeleteDialog}
+                     >Cancel</Button>
+                     
+                     <Button 
+                        variant='outline' className='cursor-pointer'
+                        onClick={deleteAllFiles}
+                     >Delete</Button>
+                  </div>
+
+               </div>
             </div>
-         </div> */}
+         }
 
       </div>
 
