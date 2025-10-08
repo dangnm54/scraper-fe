@@ -245,7 +245,7 @@ export default function SideBar(props: SideBar_props) {
                                        : 'text-gray-500 font-normal'
                                  )}
                               >
-                                 {file.file_name.slice(0, -4)}
+                                 {file.file_name}
                               </span>
                            
                               <span id='2nd-line' className="text-xs text-muted-foreground">{file.date_created}</span>

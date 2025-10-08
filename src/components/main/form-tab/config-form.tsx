@@ -24,10 +24,13 @@ type ConfigForm_props = {
 // ------------------------------------------------------------------------------------------------
 
 
+// auto get file_name from selected location
+
+
 export default function ConfigForm(props: ConfigForm_props) {
 
    // state for input
-   const [fileName, setFileName] = useState<string>('')
+   // const [fileName, setFileName] = useState<string>('')
    const [location, setLocation] = useState<string>('')
    const [numGuest, setNumGuest] = useState<string>('')
    const [numProperty, setNumProperty] = useState<string>('')
@@ -37,7 +40,7 @@ export default function ConfigForm(props: ConfigForm_props) {
 
    const runScraper = async (event: React.FormEvent<HTMLFormElement>) => {
       
-      if (!fileName || !location || !numGuest || !numProperty) {
+      if (!location || !numGuest || !numProperty) {
          alert('Please fill in all required fields')
          return
       }
@@ -46,6 +49,11 @@ export default function ConfigForm(props: ConfigForm_props) {
       event.preventDefault()  
 
       props.self_setRunButtonClickable(false)
+
+      const fileName = location
+         .toLowerCase()
+         .replace(/[^a-zA-Z0-9]/g, '_')
+         .replace(/_+/g, '_')
 
       //construct data payload
       const payload: ConfigForm_Payload = {
@@ -77,7 +85,7 @@ export default function ConfigForm(props: ConfigForm_props) {
          console.error('[config-form] UnexpectedError:', error)
       
       } finally {
-         setFileName('')
+         // setFileName('')
          setLocation('')
          setNumGuest('')
          setNumProperty('')
@@ -102,7 +110,7 @@ export default function ConfigForm(props: ConfigForm_props) {
             <form id='form-main' onSubmit={runScraper}>
                <CardContent id='card-content' className="flex flex-col gap-2">
 
-                  <div id='file-name-field' className="space-y-2 mb-5">
+                  {/* <div id='file-name-field' className="space-y-2 mb-5">
                      <Label htmlFor='location' className="text-xl font-medium text-gray-800">
                         File name 
                         <span className="text-red-500">*</span> 
@@ -117,7 +125,7 @@ export default function ConfigForm(props: ConfigForm_props) {
                            className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                      </div>
-                  </div>
+                  </div> */}
 
                   <div id='location-field' className="space-y-2 mb-5">
                      <Label htmlFor='location' className="text-xl font-medium text-gray-800">
@@ -174,6 +182,17 @@ export default function ConfigForm(props: ConfigForm_props) {
                   <div id='data-collect-group' className="flex flex-col gap-0.5 mb-5">
                      <Label className="text-xl font-medium text-gray-900 mb-2">Data to collect</Label>
                      <div className="grid grid-rows gap-3">
+
+                        <div id='field-item' className="flex items-center flex-start gap-2">
+                           <Checkbox
+                              id="basicData"
+                              checked={true}
+                              disabled={true}
+                              className="border-gray-700 bg-white size-4.5 !opacity-40"
+                           />
+                           <Label htmlFor="hostData" className="text-md font-normal !opacity-100">Basic data</Label>
+                        </div>
+
 
                         <div id='field-item' className="flex items-center flex-start gap-2">
                            <Checkbox
