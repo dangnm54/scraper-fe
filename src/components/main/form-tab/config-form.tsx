@@ -29,7 +29,6 @@ type ConfigForm_props = {
 
 export default function ConfigForm(props: ConfigForm_props) {
 
-   // state for input
    // const [fileName, setFileName] = useState<string>('')
    const [location, setLocation] = useState<string>('')
    const [numGuest, setNumGuest] = useState<string>('')
