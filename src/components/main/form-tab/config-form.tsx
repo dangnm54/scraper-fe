@@ -31,7 +31,7 @@ export default function ConfigForm(props: ConfigForm_props) {
 
    // const [fileName, setFileName] = useState<string>('')
    const [location, setLocation] = useState<string>('')
-   const [numGuest, setNumGuest] = useState<string>('')
+   const [numGuest, setNumGuest] = useState<string | null>(null)
    const [numProperty, setNumProperty] = useState<string>('')
    const [hostData, setHostData] = useState<boolean>(false)
    const [bookRate, setBookRate] = useState<boolean>(false)
@@ -39,7 +39,7 @@ export default function ConfigForm(props: ConfigForm_props) {
 
    const runScraper = async (event: React.FormEvent<HTMLFormElement>) => {
       
-      if (!location || !numGuest || !numProperty) {
+      if (!location || !numProperty) {
          alert('Please fill in all required fields')
          return
       }
@@ -58,7 +58,7 @@ export default function ConfigForm(props: ConfigForm_props) {
       const payload: ConfigForm_Payload = {
          file_name: fileName,
          location: location,
-         num_guest: parseInt(numGuest, 10), // radix 10 -> use number 0-9
+         num_guest: numGuest ? parseInt(numGuest, 10) : null, // radix 10 -> use number 0-9
          num_property: parseInt(numProperty, 10),
          collect_host_data: hostData,
          collect_booking_rate: bookRate,
@@ -86,7 +86,7 @@ export default function ConfigForm(props: ConfigForm_props) {
       } finally {
          // setFileName('')
          setLocation('')
-         setNumGuest('')
+         setNumGuest(null)
          setNumProperty('')
          setHostData(false)
          setBookRate(false)
@@ -145,15 +145,14 @@ export default function ConfigForm(props: ConfigForm_props) {
 
                   <div id='guest-num-field' className="space-y-2 mb-5">
                      <Label htmlFor='numProperty' className="text-xl font-medium text-gray-800">
-                        Number of guests 
-                        <span className="text-red-500">*</span> 
+                        Number of guests
                      </Label>
                      <div className="relative flex items-center gap-2">
                         <Input
                            id='numGuest'
                            type='number'
                            placeholder='eg: 2'
-                           value={numGuest}
+                           value={numGuest ?? ''}
                            onChange={(e) => setNumGuest(e.target.value)}
                            className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
