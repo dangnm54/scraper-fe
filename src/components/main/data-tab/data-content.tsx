@@ -83,6 +83,22 @@ function DataContent(props: DataContent_props) {
 
 
 
+   const formatValue =(header: string, value: any) => {
+      if (value === null || String(value) === 'null') {
+         return '-'
+      }
+
+      if (header === 'nightly_price') {
+         return new Intl.NumberFormat('vi-VN', { 
+            style: 'currency', 
+            currency: 'VND' 
+         }).format(Number(value))
+      }
+
+      return String(value)
+   }
+
+
 
 
    return (
@@ -160,7 +176,7 @@ function DataContent(props: DataContent_props) {
                                     )}
                                  >
                                     <div className="truncate">
-                                       { (colIndex === 2 || colIndex === 8 || colIndex === 17) && 
+                                       { (colIndex === 2 || colIndex === 8 || colIndex === 18) && 
                                           row[header] != null &&
                                           String(row[header]) !== 'null'
                                        ? (
@@ -168,7 +184,7 @@ function DataContent(props: DataContent_props) {
                                              {String(row[header])}
                                           </a>
                                        ) : (
-                                          row[header] === null || String(row[header]) === 'null' ? '-' : String(row[header])
+                                          formatValue(header, row[header])
                                        )}
                                     </div>
 
