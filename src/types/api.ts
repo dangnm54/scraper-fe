@@ -17,7 +17,7 @@ export type FileList_Response = FileMetadata[]
 
 export type ConfigForm_Payload = {
     file_name: string
-    location: string
+    search_url: string
     num_guest: number | null
     num_property: number
     collect_host_data?: boolean

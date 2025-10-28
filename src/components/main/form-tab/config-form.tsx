@@ -30,7 +30,7 @@ type ConfigForm_props = {
 export default function ConfigForm(props: ConfigForm_props) {
 
    // const [fileName, setFileName] = useState<string>('')
-   const [location, setLocation] = useState<string>('')
+   const [searchUrl, setSearchUrl] = useState<string>('')
    const [numGuest, setNumGuest] = useState<string | null>(null)
    const [numProperty, setNumProperty] = useState<string>('')
    const [hostData, setHostData] = useState<boolean>(false)
@@ -39,25 +39,74 @@ export default function ConfigForm(props: ConfigForm_props) {
 
    const runScraper = async (event: React.FormEvent<HTMLFormElement>) => {
       
-      if (!location || !numProperty) {
+      if (!searchUrl || !numProperty) {
          alert('Please fill in all required fields')
          return
       }
+
+      // ----------------------------------------
 
       // prevent full page reload when button in form is clicked
       event.preventDefault()  
 
       props.self_setRunButtonClickable(false)
 
-      const fileName = location
-         .toLowerCase()
-         .replace(/[^a-zA-Z0-9]/g, '_')
-         .replace(/_+/g, '_')
+      // ----------------------------------------
 
+      function getFileName(url: string) {
+
+         try {
+            const wordList: string[] = url.split('/')
+            const urlText: string = wordList[4]
+
+            // ----------------------------------------
+
+            const decodedText: string = decodeURIComponent(urlText)
+            let vnDecodedText: string = decodedText.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+            const replacedText: Record<string, string> = {
+               'đ': 'd', 'Đ': 'D',
+               'ă': 'a', 'Ă': 'A',
+               'â': 'a', 'Â': 'A',
+               'ê': 'e', 'Ê': 'E',
+               'ô': 'o', 'Ô': 'O',
+               'ơ': 'o', 'Ơ': 'O',
+               'ư': 'u', 'Ư': 'U',
+            }
+
+            for (const [vnChar, enChar] of Object.entries(replacedText)) {
+               vnDecodedText = vnDecodedText.replace(new RegExp(vnChar, 'g'), enChar)
+            }
+            vnDecodedText = vnDecodedText.toLowerCase()
+
+            // ----------------------------------------
+
+            let fileName: string
+
+            if (vnDecodedText.includes('nearby')) {
+               fileName = 'nearby'
+            }
+            else {
+               const fileName0: string = vnDecodedText.replace(/--/g, '-')
+               fileName = fileName0.replace(/-/g, '_')
+            }
+
+            return fileName
+
+         } catch (error) {
+            console.error('[config-form | getFileName] Error getting file name:', error)
+            return 'unknown'
+         }
+      }
+
+      // ----------------------------------------
+
+      const fileName: string = getFileName(searchUrl)
+         
       //construct data payload
       const payload: ConfigForm_Payload = {
          file_name: fileName,
-         location: location,
+         search_url: searchUrl,
          num_guest: numGuest ? parseInt(numGuest, 10) : null, // radix 10 -> use number 0-9
          num_property: parseInt(numProperty, 10),
          collect_host_data: hostData,
@@ -66,7 +115,7 @@ export default function ConfigForm(props: ConfigForm_props) {
 
       console.log("Sent payload to BE", payload)
 
-      // make POST request
+      // ----------------------------------------
 
       try {
          const api_result: API_Result<RunScraper_Response> = await apiClient_JSON(
@@ -85,7 +134,7 @@ export default function ConfigForm(props: ConfigForm_props) {
       
       } finally {
          // setFileName('')
-         setLocation('')
+         setSearchUrl('')
          setNumGuest(null)
          setNumProperty('')
          setHostData(false)
@@ -94,7 +143,6 @@ export default function ConfigForm(props: ConfigForm_props) {
       }
       
    }
-
 
 
    return (
@@ -128,16 +176,16 @@ export default function ConfigForm(props: ConfigForm_props) {
 
                   <div id='location-field' className="space-y-2 mb-5">
                      <Label htmlFor='location' className="text-xl font-medium text-gray-800">
-                        Location 
+                        Search URL 
                         <span className="text-red-500">*</span> 
                      </Label>
                      <div className="relative flex items-center gap-2">
                         <Input
                            id='location'
                            type='text'
-                           placeholder='eg: District 1, HCM'
-                           value={location}
-                           onChange={(e) => setLocation(e.target.value)}
+                           placeholder='url of the search result page...'
+                           value={searchUrl}
+                           onChange={(e) => setSearchUrl(e.target.value)}
                            className="h-9 w-65 rounded-sm border-gray-400 bg-white text-lg placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                      </div>
