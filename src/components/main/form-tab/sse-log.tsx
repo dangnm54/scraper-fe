@@ -131,16 +131,14 @@ export default function SSELog(props: SSELog_props) {
                     <h2 className="text-lg font-medium text-gray-800">Server Logs</h2>
                 </div>
 
-                <div className='h-full w-fit flex flex-row justify-end items-center gap-5 bg-yellow-300'>
+                <div className='h-full w-fit flex flex-row justify-end items-center gap-5'>
 
-                    {/* { eventSourceRef.current && eventSourceRef.current.readyState === EventSource.OPEN && ( */}
                     <div
                         title='Cancel scraping process'
                         className="size-5 cursor-pointer text-red-400 hover:text-red-600"
                     >
                         <CircleStop onClick={cancelScraping}/>
                     </div>
-                    {/* )} */}
 
                     <div 
                         title="Clean message in log" 
