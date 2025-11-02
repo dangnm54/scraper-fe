@@ -1,9 +1,10 @@
 // import * as React from "react";
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { MonitorCog, BrushCleaning } from "lucide-react";
+import { MonitorCog, BrushCleaning, CircleStop } from "lucide-react";
 
 import { TabType } from '@/types/common'
-import { api_base_url } from "@/lib/api-client";
+import { api_base_url, apiClient_JSON } from "@/lib/api-client";
+import { API_Result } from "@/types/api";
 
 // ------------------------------------------------------------------------------------------------
 
@@ -99,7 +100,24 @@ export default function SSELog(props: SSELog_props) {
     } 
 
 
+    const cancelScraping = async () => {
 
+        try {
+            const api_result: API_Result<string> = await apiClient_JSON(
+                '/api/cancel',
+                {method: 'POST'}
+            )
+
+            console.log(api_result)
+
+            if (!api_result.data) {
+                console.error(api_result.message)
+            }
+
+        } catch (error) {
+            console.error('[sse-log] Error:', error)
+        }
+    }
 
 
 
@@ -107,19 +125,33 @@ export default function SSELog(props: SSELog_props) {
         <div id='sse-log-main' className="min-h-0 min-w-0 h-full w-3/5 overflow-hidden border-2 border-gray-300 rounded-lg flex flex-col">
             
             {/* Header */}
-            <div id='log-header' className="h-fit w-full p-5 border-b-2 flex flex-row items-center justify-between gap-3"> 
+            <div id='log-header' className="h-fit w-full p-5 border-b-2 flex flex-row items-center justify-between"> 
                 <div id='left-content' className='flex flex-row items-center justify-start gap-3'>
                     <MonitorCog className="size-5"/>
                     <h2 className="text-lg font-medium text-gray-800">Server Logs</h2>
                 </div>
 
-                <div 
-                    title="Clean message in log" 
-                    className="size-5 cursor-pointer hover:text-blue-500"
-                    hidden={!brushClickable}
-                >
-                    <BrushCleaning onClick={cleanLog}/>
+                <div className='h-full w-fit flex flex-row justify-end items-center gap-5 bg-yellow-300'>
+
+                    { eventSourceRef.current && eventSourceRef.current.readyState === EventSource.OPEN && (
+                        <div
+                            title='Cancel scraping process'
+                            className="size-5 cursor-pointer text-red-400 hover:text-red-600"
+                        >
+                            <CircleStop onClick={cancelScraping}/>
+                        </div>
+                    )}
+
+                    <div 
+                        title="Clean message in log" 
+                        className="size-5 cursor-pointer hover:text-blue-500"
+                        hidden={!brushClickable}
+                    >
+                        <BrushCleaning onClick={cleanLog}/>
+                    </div>
+
                 </div>
+
             </div>
 
             {/* Content */}

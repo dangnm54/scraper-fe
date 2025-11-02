@@ -33,8 +33,8 @@ export default function ConfigForm(props: ConfigForm_props) {
    const [searchUrl, setSearchUrl] = useState<string>('')
    const [numGuest, setNumGuest] = useState<string | null>(null)
    const [numProperty, setNumProperty] = useState<string>('')
-   const [hostData, setHostData] = useState<boolean>(false)
-   const [bookRate, setBookRate] = useState<boolean>(false)
+   const [hostData, setHostData] = useState<boolean>(true)
+   const [bookRate, setBookRate] = useState<boolean>(true)
    
 
    const runScraper = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -137,8 +137,8 @@ export default function ConfigForm(props: ConfigForm_props) {
          setSearchUrl('')
          setNumGuest(null)
          setNumProperty('')
-         setHostData(false)
-         setBookRate(false)
+         setHostData(true)
+         setBookRate(true)
          props.self_setRunButtonClickable(true)
       }
       
