@@ -134,10 +134,17 @@ export default function SSELog(props: SSELog_props) {
                 <div className='h-full w-fit flex flex-row justify-end items-center gap-5'>
 
                     <div
-                        title='Cancel scraping process'
-                        className="size-5 cursor-pointer text-red-400 hover:text-red-600"
+                        title={`${eventSourceRef.current && eventSourceRef.current.readyState === EventSource.OPEN 
+                            ? 'Cancel scraping process' 
+                            : 'No scraping in process to cancel'}
+                        `}
+                        className={`
+                            size-5 text-red-400 
+                            ${eventSourceRef.current && eventSourceRef.current.readyState === EventSource.OPEN 
+                                ? 'cursor-pointer hover:text-red-600' 
+                                : 'cursor-not-allowed opacity-50'}`}
                     >
-                        <CircleStop onClick={cancelScraping}/>
+                        <CircleStop onClick={ eventSourceRef.current && eventSourceRef.current.readyState === EventSource.OPEN ? cancelScraping : undefined}/>
                     </div>
 
                     <div 
